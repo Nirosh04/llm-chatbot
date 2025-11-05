@@ -25,18 +25,13 @@ const fab_color = Color.fromARGB(255, 80, 150, 250);         // bright azure acc
 
 
 import 'package:flutter/material.dart';
-import 'backend/python_backend.dart';
 import 'dart:math';
+import 'backend/python_backend.dart' as python_backend;
+import 'frontend/atoms.dart' as atoms; // meant for colors and buttons
 
 
-const me_chat_color = Color.fromARGB(255, 180, 215, 255);   // soft azure bubble
-const llm_chat_color = Color.fromARGB(255, 230, 240, 255);  // pale blue-white bubble
-const background_color = Color.fromARGB(255, 245, 250, 255); // near-white with azure hint
-const bar_header_color = Color.fromARGB(255, 220, 235, 255); // light azure header
-const bar_color = Color.fromARGB(255, 220, 235, 255);
-const text_color = Color.fromARGB(255, 25, 40, 70);          // deep navy text
-const fab_color = Color.fromARGB(255, 100, 160, 255);        // bright azure accent
-const icon_color = bar_color;
+
+
 
 void main() {
   runApp(MyApp());
@@ -71,14 +66,14 @@ Widget turnStringToChatBubble(String message, bool isMe) {
         margin: const EdgeInsets.symmetric(vertical: 6),
         padding: const EdgeInsets.all(12),
         decoration: BoxDecoration(
-          color: isMe ? me_chat_color : llm_chat_color,
+          color: isMe ? atoms.meChatColor : atoms.llmChatColor,
           borderRadius: BorderRadius.circular(15),
         ),
         child: Text(
           message,
           style: const TextStyle(
             fontSize: 16,
-            color: text_color,
+            color: atoms.textColor,
           ),
         ),
       ),
@@ -116,7 +111,7 @@ class _MyAppState extends State<MyApp> {
     return MaterialApp(
       debugShowCheckedModeBanner: true,
       home: Scaffold(
-        backgroundColor: background_color,
+        backgroundColor: atoms.backgroundColor,
         // Sidebar / Drawer
         drawer: Drawer(
           child: ListView(
@@ -124,20 +119,20 @@ class _MyAppState extends State<MyApp> {
             children: [
               const DrawerHeader(
                 decoration: BoxDecoration(
-                  color: bar_header_color,
+                  color: atoms.barHeaderColor,
                 ),
                 child: Text(
                   'Sidebar Menu',
                   style: TextStyle(
-                    color: text_color,
+                    color: atoms.textColor,
                     fontSize: 24,
                   ),
                 ),
               ),
               ListTile(
                 leading: const Icon(Icons.home),
-                title: const Text('Home'),
-                onTap: () {},
+                title: const Text('Test Dummy Server'),
+                onTap: () {},//python_backend.getSignalCheck();},
               ),
               ListTile(
                 leading: const Icon(Icons.person),
@@ -159,7 +154,7 @@ class _MyAppState extends State<MyApp> {
         ),
         // AppBar with slightly different color
         appBar: AppBar(
-          backgroundColor: background_color, // slightly different
+          backgroundColor: atoms.backgroundColor, // slightly different
           title: const Center(
             child: Text("Chat UI Example"),
           ),
@@ -179,19 +174,19 @@ class _MyAppState extends State<MyApp> {
             // Bottom input bar
             Container(
               padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 10),
-              color: bar_color,
+              color: atoms.barColor,
               child: Row(
                 children: [
                   // Text field expands to fill available space
                   Expanded(
                     child: TextField(
-                      style: const TextStyle(color: text_color),
-                      cursorColor: fab_color,
+                      style: const TextStyle(color: atoms.textColor),
+                      cursorColor: atoms.fabColor,
                       decoration: InputDecoration(
                         hintText: "Type a message...",
-                        hintStyle: TextStyle(color: text_color.withOpacity(0.6)),
+                        hintStyle: TextStyle(color: atoms.textColor.withOpacity(0.6)),
                         filled: true,
-                        fillColor: background_color,
+                        fillColor: atoms.backgroundColor,
                         contentPadding: const EdgeInsets.symmetric(
                             horizontal: 12, vertical: 10),
                         border: OutlineInputBorder(
@@ -211,19 +206,12 @@ class _MyAppState extends State<MyApp> {
                         );
                       });
                     },
-                    icon: const Icon(Icons.send, color: icon_color),
+                    icon: const Icon(Icons.send, color: atoms.iconColor),
                     style: IconButton.styleFrom(
-                      backgroundColor: fab_color,
+                      backgroundColor: atoms.fabColor,
                       shape: const StadiumBorder(), // Perfect middle ground
                       padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
                     ),
-                  ),
-                  IconButton(
-                    onPressed: () {
-                      getSignalCheck();
-                    },
-                    icon: const Icon(Icons.web, color: Color.fromARGB(255, 115, 167, 235)),
-                  
                   ),
                 ],
               ),

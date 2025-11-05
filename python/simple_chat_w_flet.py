@@ -1,5 +1,22 @@
 import flet as ft
 
+
+r'''
+
+
+cd "C:\Users\...\llm_chatbot\python"
+venv\Scripts\activate
+python simple_chat_w_flet.py
+
+
+
+cd "C:\Users\...\llm_chatbot\python"
+venv\Scripts\activate
+python flask_server_app.py
+
+'''
+
+
 def main(page: ft.Page):
     page.title = "Simple Chatbot (Flet)"
     page.scroll = "auto"
@@ -11,8 +28,8 @@ def main(page: ft.Page):
         expand=True,
         border=ft.InputBorder.OUTLINE,
         text_align=ft.TextAlign.LEFT,
-        value="",
-    )
+        value="Hello! How can I help you?\n" + "-"*100 + "\n",    
+        )
 
     # User input row
     user_input = ft.TextField(
