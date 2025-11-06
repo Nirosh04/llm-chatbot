@@ -16,50 +16,95 @@ python flask_server_app.py
 
 '''
 
+import flet as ft
 
 def main(page: ft.Page):
-    page.title = "Simple Chatbot (Flet)"
-    page.scroll = "auto"
+    page.title = "Chat Bubble Example"
+    page.scroll = "none"
 
-    # Chat display takes all available space
-    chat_display = ft.TextField(
-        multiline=True,
-        read_only=True,
+    # Scrollable chat area
+    chat_column = ft.Column(
         expand=True,
-        border=ft.InputBorder.OUTLINE,
-        text_align=ft.TextAlign.LEFT,
-        value="Hello! How can I help you?\n" + "-"*100 + "\n",    
-        )
+        spacing=5,
+        scroll="auto",
+        horizontal_alignment=ft.CrossAxisAlignment.STRETCH,  # stretch rows to full width
+    )
 
-    # User input row
+    # User input
     user_input = ft.TextField(
         hint_text="Type your message...",
         expand=True
     )
 
     def send_message(e):
-        if user_input.value.strip():
-            chat_display.value += user_input.value + "\n" + "-" * 100 + "\n"
-            user_input.value = ""
-            page.update()
+        message = user_input.value.strip()
+        if not message:
+            return
+
+        # Add user's message (right aligned)
+        chat_column.controls.append(
+            ft.Row(
+                [
+                    ft.Container(
+                        ft.Text(message),
+                        padding=ft.padding.all(10),
+                        bgcolor=ft.Colors.BLUE_GREY_700,
+                        border_radius=10,
+                        width=300
+                    )
+                ],
+                alignment=ft.MainAxisAlignment.END
+            )
+        )
+
+        # Chatbot response (left aligned)
+        chatbot_message = "chatbot answer - dummy answer - hello how can I help??"
+        chat_column.controls.append(
+            ft.Row(
+                [
+                    ft.Container(
+                        ft.Text(chatbot_message),
+                        padding=ft.padding.all(10),
+                        bgcolor=ft.Colors.GREY_700,
+                        border_radius=10,
+                        width=300
+                    )
+                ],
+                alignment=ft.MainAxisAlignment.START
+            )
+        )
+
+        user_input.value = ""
+        page.update()
+        chat_column.scroll_to(offset=99999, duration=300)
 
     send_button = ft.ElevatedButton("Send", on_click=send_message)
 
-    input_row = ft.Row(
-        [user_input, send_button],
-        alignment=ft.MainAxisAlignment.SPACE_BETWEEN,
+    # Input row
+    input_row = ft.Container(
+        ft.Row([user_input, send_button]),
+        padding=ft.padding.all(10),
+        bgcolor=ft.Colors.GREY_900,
     )
 
-    # Column layout: chat_display expands, input_row stays at bottom
-    page.add(
-        ft.Column(
-            [
-                chat_display,
-                input_row
-            ],
-            expand=True
-        )
+    # Chat area container — keeps shape even when empty
+    chat_area = ft.Container(
+        content=chat_column,
+        expand=True,
+        padding=10,
+        border=ft.border.all(1, ft.Colors.GREY_800),
+        border_radius=10,
+        bgcolor=ft.Colors.BLACK12,
+        alignment=ft.alignment.top_center,
+        height=page.height,  # keeps it full size
     )
+
+    # Layout
+    layout = ft.Column(
+        [chat_area, input_row],
+        expand=True
+    )
+
+    page.add(layout)
 
 ft.app(target=main)
-

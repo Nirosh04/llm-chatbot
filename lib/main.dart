@@ -84,6 +84,49 @@ Widget turnStringToChatBubble(String message, bool isMe) {
 
 
 
+class CustomTextField extends StatelessWidget {
+  final TextEditingController? controller;
+  final ValueChanged<String>? onChanged;
+  final String hintText;
+  final Color textColor;
+  final Color cursorColor;
+  final Color backgroundColor;
+
+  const CustomTextField({
+    super.key,
+    this.controller,
+    this.onChanged,
+    this.hintText = "Type a message...",
+    required this.textColor,
+    required this.cursorColor,
+    required this.backgroundColor,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return TextField(
+      controller: controller,
+      onChanged: onChanged, // not needed for our application anyway
+      style: TextStyle(color: textColor),
+      cursorColor: cursorColor,
+      decoration: InputDecoration(
+        hintText: hintText,
+        hintStyle: TextStyle(color: textColor.withOpacity(0.6)),
+        filled: true,
+        fillColor: backgroundColor,
+        contentPadding:
+            const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
+        border: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(20),
+          borderSide: BorderSide.none,
+        ),
+      ),
+    );
+  }
+}
+
+
+
 // Generate random dummy text
 String getRandomText() {
   
@@ -132,7 +175,16 @@ class _MyAppState extends State<MyApp> {
               ListTile(
                 leading: const Icon(Icons.home),
                 title: const Text('Test Dummy Server'),
-                onTap: () {},//python_backend.getSignalCheck();},
+                onTap: () {python_backend.getSignalCheck();},
+                //onTap: () {}, // this line is in case one wants to disable the http side temporarily
+
+              ),
+              ListTile(
+                leading: const Icon(Icons.home),
+                title: const Text('Test LLM response'),
+                onTap: () {python_backend.getLLMResponseFromServer('random user text - messageController has to be implemented');},
+                //onTap: () {}, // this line is in case one wants to disable the http side temporarily
+
               ),
               ListTile(
                 leading: const Icon(Icons.person),
@@ -179,22 +231,12 @@ class _MyAppState extends State<MyApp> {
                 children: [
                   // Text field expands to fill available space
                   Expanded(
-                    child: TextField(
-                      style: const TextStyle(color: atoms.textColor),
+                    child: CustomTextField(
+                      textColor: atoms.textColor,
                       cursorColor: atoms.fabColor,
-                      decoration: InputDecoration(
-                        hintText: "Type a message...",
-                        hintStyle: TextStyle(color: atoms.textColor.withOpacity(0.6)),
-                        filled: true,
-                        fillColor: atoms.backgroundColor,
-                        contentPadding: const EdgeInsets.symmetric(
-                            horizontal: 12, vertical: 10),
-                        border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(20),
-                          borderSide: BorderSide.none,
-                        ),
-                      ),
+                      backgroundColor: atoms.backgroundColor,
                     ),
+
                   ),
                   const SizedBox(width: 8),
                   // Send button

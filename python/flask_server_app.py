@@ -32,36 +32,16 @@ app = Flask(__name__)
 ███████ ██ ██   ███ ██ ██  ██ ███████ ██             ██    █████   ███████    ██    
      ██ ██ ██    ██ ██  ██ ██ ██   ██ ██             ██    ██           ██    ██    
 ███████ ██  ██████  ██   ████ ██   ██ ███████        ██    ███████ ███████    ██    
-                                                                                    
-
-@app.route('/check-text-exchange', methods=['POST'])
-def check_text_exchange():
-    try:
-        # Retrieve image bytes from the request body
-        text_bytes = request.data
-
-        # implement missing code
-
-        # Convert the processed image back to bytes
-        byte_io = io.BytesIO()
-        byte_io.seek(0)
-
-        # Return the processed image as a binary response
-        return send_file(
-            byte_io,
-            mimetype='text????',
-            as_attachment=False  # Optionally, use True to trigger download
-        )
-    except Exception as e:
-        return jsonify({'error': str(e)}), 500                                                                            
+                                                                                                                          
 """
     
 
 
-@app.route('/check_signal', methods=['POST'])
+@app.route('/check_signal', methods=['POST']) # creates the jsonified value "prediction:2" and the server sends it back to dart backend
 def check_signal():
     # Return a single number in a JSON response
-    return jsonify({'prediction': 2})
+
+    return jsonify({'prediction': 1})
 
 
 
@@ -73,37 +53,13 @@ def check_signal():
 """
 
 
-███    ███  ██████  ██████  ███████ ██           ██████  ██    ██ ████████ ██████  ██    ██ ████████ 
-████  ████ ██    ██ ██   ██ ██      ██          ██    ██ ██    ██    ██    ██   ██ ██    ██    ██    
-██ ████ ██ ██    ██ ██   ██ █████   ██          ██    ██ ██    ██    ██    ██████  ██    ██    ██    
-██  ██  ██ ██    ██ ██   ██ ██      ██          ██    ██ ██    ██    ██    ██      ██    ██    ██    
-██      ██  ██████  ██████  ███████ ███████      ██████   ██████     ██    ██       ██████     ██    
+    ██████  ██    ██ ████████ ██████  ██    ██ ████████ 
+   ██    ██ ██    ██    ██    ██   ██ ██    ██    ██    
+   ██    ██ ██    ██    ██    ██████  ██    ██    ██    
+   ██    ██ ██    ██    ██    ██      ██    ██    ██    
+    ██████   ██████     ██    ██       ██████     ██    
                                                                                                      
                                                                                                      
-
-
-
-
-@app.route('/get-model-output', methods=['POST'])
-def get_model_output():
-    try:
-        # Retrieve image bytes from the request body
-        image_bytes = request.data
-
-        # implement ... 
-
-
-        byte_io = io.BytesIO(buffer)
-
-        # Return the processed image as a binary response
-        return send_file(
-            byte_io,
-            mimetype='text????',
-            as_attachment=False  # Optionally, use True to trigger download
-        )
-    except Exception as e:
-        return jsonify({'error': str(e)}), 500
-
 
 """
 
@@ -154,6 +110,23 @@ def set_model():
     except Exception as e:
         return jsonify({'error': str(e)}), 500
     
+
+
+
+@app.route('/get-llm-response', methods=['POST'])
+def get_llm_response():
+    try:        
+        
+        data = request.get_json()
+        user_input = data.get('input', '')
+
+        # TODO: replace with real LLM call
+        response_text = f"Dummy answer for: {user_input[:5]}..."
+        response = 'dummy answer to test connection to python - implement llm answer'
+
+        return jsonify({'output': response})
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
 
 
 
