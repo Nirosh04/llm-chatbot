@@ -54,5 +54,7 @@ ios/
 # Python folder rules
 python/venv/
 
-
+# my info
 my_info_llm_chatbot.txt
+analysis_options.yaml
+pubspec.lock.yaml

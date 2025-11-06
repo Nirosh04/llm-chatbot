@@ -1,6 +1,7 @@
 # llm_chatbot
 
-A new Flutter project.
+llm_chatbot is a project that integrates a Flutter frontend with a Python backend. Flutter provides the main cross-platform frontend, while Flet offers a lightweight Python-based frontend for users who do not have Flutter installed. The backend is powered by Flask and can host language model interactions.
+
 
 ## Folder structure
 
