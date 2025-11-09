@@ -1,6 +1,9 @@
-from flask import Flask, request, jsonify, send_file
+from fastapi import FastAPI, HTTPException, UploadFile, File
+from fastapi.responses import FileResponse, JSONResponse
+from pydantic import BaseModel
 import base64
 import os
+from typing import Optional
 
 r'''
 
@@ -13,16 +16,11 @@ python simple_chat_w_flet.py
 
 cd "C:\Users\...\llm_chatbot\python"
 venv\Scripts\activate
-python flask_server_app.py
+python fastapi_server_app.py
 
 '''
 
-
-
-
-app = Flask(__name__)
-
-
+app = FastAPI()
 
 """
 
@@ -34,21 +32,14 @@ app = Flask(__name__)
 ███████ ██  ██████  ██   ████ ██   ██ ███████        ██    ███████ ███████    ██    
                                                                                                                           
 """
-    
 
+class SignalResponse(BaseModel):
+    prediction: int
 
-@app.route('/check_signal', methods=['POST']) # creates the jsonified value "prediction:2" and the server sends it back to dart backend
-def check_signal():
+@app.post('/check_signal', response_model=SignalResponse)
+async def check_signal():
     # Return a single number in a JSON response
-
-    return jsonify({'prediction': 1})
-
-
-
-
-
-
-
+    return SignalResponse(prediction=1)
 
 """
 
@@ -63,16 +54,17 @@ def check_signal():
 
 """
 
+class ModelsResponse(BaseModel):
+    models: list[str]
 
-
-@app.route('/list-models', methods=['GET'])
-def list_models():
+@app.get('/list-models', response_model=ModelsResponse)
+async def list_models():
     try:
         models_dir = './llm_models'
         filter_string = 'llm'  # Replace with the specific substring you want to filter for
 
         if not os.path.exists(models_dir):
-            return jsonify({'error': 'Models directory not found'}), 404
+            raise HTTPException(status_code=404, detail='Models directory not found')
 
         # Get only files with the specified substring in their name
         models = [
@@ -80,67 +72,63 @@ def list_models():
             if os.path.isfile(os.path.join(models_dir, f)) and filter_string in f
         ]
 
-        return jsonify({'models': models})
+        return ModelsResponse(models=models)
     except Exception as e:
-        return jsonify({'error': str(e)}), 500
-    
+        raise HTTPException(status_code=500, detail=str(e))
 
-    
-@app.route('/set-model', methods=['POST'])
-def set_model():
+class SetModelRequest(BaseModel):
+    model_name: str
+
+class SetModelResponse(BaseModel):
+    success: bool
+    message: str
+
+@app.post('/set-model', response_model=SetModelResponse)
+async def set_model(request: SetModelRequest):
     try:
-        data = request.get_json()
-        model_name = data.get('model_name', None)
+        model_name = request.model_name
 
         if not model_name:
-            return jsonify({'error': 'No model name provided'}), 400
+            raise HTTPException(status_code=400, detail='No model name provided')
 
         models_dir = 'llm_models'
         model_path = os.path.join(models_dir, model_name)
 
         if not os.path.isfile(model_path):
-            return jsonify({'error': f'Model {model_name} does not exist'}), 404
+            raise HTTPException(status_code=404, detail=f'Model {model_name} does not exist')
 
         # model as to actually be set
 
-
         # Simulate model loading
         print(f"Model {model_name} loaded successfully.")
-        return jsonify({'success': True, 'message': f'Model {model_name} set successfully'})
+        return SetModelResponse(
+            success=True, 
+            message=f'Model {model_name} set successfully'
+        )
+    except HTTPException:
+        raise
     except Exception as e:
-        return jsonify({'error': str(e)}), 500
-    
+        raise HTTPException(status_code=500, detail=str(e))
 
+class LLMRequest(BaseModel):
+    input: str
 
+class LLMResponse(BaseModel):
+    output: str
 
-@app.route('/get-llm-response', methods=['POST'])
-def get_llm_response():
+@app.post('/get-llm-response', response_model=LLMResponse)
+async def get_llm_response(request: LLMRequest):
     try:        
-        
-        data = request.get_json()
-        user_input = data.get('input', '')
+        user_input = request.input
 
         # TODO: replace with real LLM call
         response_text = f"Dummy answer for: {user_input[:5]}..."
         response = 'dummy answer to test connection to python - implement llm answer'
 
-        return jsonify({'output': response})
+        return LLMResponse(output=response)
     except Exception as e:
-        return jsonify({'error': str(e)}), 500
-
-
+        raise HTTPException(status_code=500, detail=str(e))
 
 if __name__ == '__main__':
-    app.run(host='127.0.0.1', port=5000)
-
-
-
-
-
-
-
-
-
-
-
-
+    import uvicorn
+    uvicorn.run(app, host='127.0.0.1', port=5000)
