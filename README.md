@@ -1,6 +1,6 @@
 # llm_chatbot
 
-llm_chatbot is a project that integrates a Flutter frontend with a Python backend. Flutter provides the main cross-platform frontend, while Flet offers a lightweight Python-based frontend for users who do not have Flutter installed. The backend is powered by Flask and can host language model interactions.
+llm_chatbot is a project that integrates a Flutter frontend with a Python backend. Flutter provides the main cross-platform frontend, while Flet offers a lightweight Python-based frontend for users who do not have Flutter installed. The backend is powered by Fastapi and can host language model interactions.
 
 
 ## Folder structure
@@ -22,17 +22,17 @@ Python backend:
 ```
 llm_chatbot/
 └── python/
-    ├── flask_server_app.py        # Flask server application
+    ├── fastapi_server_app.py        # Fastapi server application
     ├── simple_chat_w_flet.py     # Simple chat interface using Flet
     ├── llm_models/                # Folder for language model scripts or weights
-    ├── venv/                      # Python virtual environment - for now mainly flet and flask
+    ├── venv/                      # Python virtual environment - for now mainly flet, fastapi and uvicorn
     └── README.md                  # Project documentation
 ```
 
 
 ## Environment for python
 
-flet and flask are needed. For now that's it.
+flet, fastapi and uvicorn are needed. For now that's it.
 
 ## Environment for Flutter
 
@@ -58,10 +58,10 @@ python simple_chat_w_flet.py
 
 
 
-## Start Python Flask Server
+## Start Python Fastapi Server
 ```
 cd "C:\Users\...your_path...\llm_chatbot\python"
 venv\Scripts\activate
-python flask_server_app.py
+python fastapi_server_app.py
 ```
 
