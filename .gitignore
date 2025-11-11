@@ -27,7 +27,7 @@ migrate_working_dir/
 1_frontend/.flutter-plugins-dependencies
 1_frontend/.pub-cache/
 1_frontend/.pub/
-/build/
+1_frontend/build/
 
 # Symbolication / obfuscation
 app.*.symbols
