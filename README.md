@@ -5,6 +5,21 @@ llm_chatbot is a project that integrates a Flutter frontend with a Python backen
 
 ## Folder structure
 
+General structure:
+
+```
+llm_chatbot/
+│
+├── 1_frontend/         # Flutter app source code
+├── 2_integration/      # Python FastAPI integration server
+├── 3_backend/          # Python backend services / logic
+├── venv/               # Python virtual environment
+├── .gitignore          # Git ignore rules
+├── README.md           # This file
+└── my_info_llm_chatbot.txt  # Personal notes / info
+```
+
+
 Flutter part:
 ```
 1_frontend/
