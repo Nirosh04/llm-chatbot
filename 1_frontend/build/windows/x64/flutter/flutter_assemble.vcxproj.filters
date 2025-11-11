@@ -1,0 +1,20 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="17.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <CustomBuild Include="C:\Users\Leon Koch\Desktop\code_Freizeit\flutter_projects\llm_chatbot\1_frontend\build\windows\x64\CMakeFiles\67b72594629e3bbcbed32d32c37130f8\flutter_windows.dll.rule">
+      <Filter>CMake Rules</Filter>
+    </CustomBuild>
+    <CustomBuild Include="C:\Users\Leon Koch\Desktop\code_Freizeit\flutter_projects\llm_chatbot\1_frontend\build\windows\x64\CMakeFiles\fcd27c08219e758df371b65012f2efad\flutter_assemble.rule">
+      <Filter>CMake Rules</Filter>
+    </CustomBuild>
+    <CustomBuild Include="C:\Users\Leon Koch\Desktop\code_Freizeit\flutter_projects\llm_chatbot\1_frontend\windows\flutter\CMakeLists.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="C:\Users\Leon Koch\Desktop\code_Freizeit\flutter_projects\llm_chatbot\1_frontend\build\windows\x64\flutter\CMakeFiles\flutter_assemble" />
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="CMake Rules">
+      <UniqueIdentifier>{EB95732D-F725-364C-9D82-C2E019E6B017}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+</Project>

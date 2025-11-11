@@ -7,7 +7,7 @@ llm_chatbot is a project that integrates a Flutter frontend with a Python backen
 
 Flutter part:
 ```
-llm_chatbot/
+1_frontend/
 └── lib/
     ├── main.dart                  # Main entry point for the Flutter app
     ├── frontend/                  # Flutter frontend components
@@ -17,22 +17,30 @@ llm_chatbot/
         └── python_backend.dart    # Dart script to communicate with Python backend
 ```
 
+Python Integration (fastapi server):
+```
+llm_chatbot/
+└── 2_integration/
+    ├── fastapi_server_app.py        # Fastapi server application
+```
+
 
 Python backend:
 ```
 llm_chatbot/
-└── python/
-    ├── fastapi_server_app.py        # Fastapi server application
-    ├── simple_chat_w_flet.py     # Simple chat interface using Flet
+└── 3_backend/
+    ├── simple_chat_w_flet.py      # Simple chat interface using Flet
+    ├── llm_service.py             # Main Script for using the llm
     ├── llm_models/                # Folder for language model scripts or weights
-    ├── venv/                      # Python virtual environment - for now mainly flet, fastapi and uvicorn
+    ├── venv/                      # Python virtual environment
+    ├── config.yml/                # YAML for configuration
     └── README.md                  # Project documentation
 ```
 
 
 ## Environment for python
 
-flet, fastapi and uvicorn are needed. For now that's it.
+For now: flet, fastapi, uvicorn, yaml, 
 
 ## Environment for Flutter
 
@@ -41,27 +49,24 @@ The IDE VSCODE is required. USE Visual Studio Installer 2022 (not 2019)
 
 ## Start Flutter app
 ```
-cd C:\Users\...your_path...\llm_chatbot
+cd C:\Users\...your_path...\llm_chatbot\1_frontend\
 flutter run
 1
  ```
 
-
-
 ## Start Flet app
 ```
-cd "C:\Users\...your_path...\llm_chatbot\python"
+cd "C:\Users\...your_path...\llm_chatbot\"
 venv\Scripts\activate
+cd 3_backend
 python simple_chat_w_flet.py
 ```
 
-
-
-
 ## Start Python Fastapi Server
 ```
-cd "C:\Users\...your_path...\llm_chatbot\python"
+cd "C:\Users\...your_path...\llm_chatbot\"
 venv\Scripts\activate
+cd 2_integration
 python fastapi_server_app.py
 ```
 

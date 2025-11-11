@@ -10,51 +10,47 @@
 .svn/
 migrate_working_dir/
 
-# IntelliJ related
+# IntelliJ / JetBrains IDE
 *.iml
 *.ipr
 *.iws
 .idea/
 
-# The .vscode folder contains launch configuration and tasks you configure in
-# VS Code which you may wish to be included in version control, so this line
-# is commented out by default.
+# VS Code (optional)
 #.vscode/
 
 # Flutter/Dart/Pub related
-**/doc/api/
-**/ios/Flutter/.last_build_id
-.dart_tool/
-.flutter-plugins
-.flutter-plugins-dependencies
-.pub-cache/
-.pub/
+1_frontend/**/doc/api/
+1_frontend/**/ios/Flutter/.last_build_id
+1_frontend/.dart_tool/
+1_frontend/.flutter-plugins
+1_frontend/.flutter-plugins-dependencies
+1_frontend/.pub-cache/
+1_frontend/.pub/
 /build/
 
-# Symbolication related
+# Symbolication / obfuscation
 app.*.symbols
-
-# Obfuscation related
 app.*.map.json
 
-# Android Studio will place build artifacts here
-/android/app/debug
-/android/app/profile
-/android/app/release
+# Android Studio build artifacts
+1_frontend/android/app/debug
+1_frontend/android/app/profile
+1_frontend/android/app/release
 
-# added ignores
-android/
-linux/
-macos/
-windows/
-web/
-test/
-ios/
+# Platform folders (inside 1_frontend)
+1_frontend/android/
+1_frontend/linux/
+1_frontend/macos/
+1_frontend/windows/
+1_frontend/web/
+1_frontend/test/
+1_frontend/ios/
 
 # Python folder rules
-python/venv/
+venv/
 
-# my info
+# Personal files
 my_info_llm_chatbot.txt
-pubspec.lock
+1_frontend/pubspec.lock
 .metadata

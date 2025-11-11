@@ -1,0 +1,23 @@
+# test run settings
+use_dummy_model: true
+
+# paths
+llm_path: 
+
+# llm settings
+max_token_nr: 4096
+max_conversation_history: 10  # number of messages to keep in context
+llm_temperature: 0.6
+request_timeout: 60
+
+# logger 
+log_level: "INFO"  # DEBUG, INFO, WARNING, ERROR
+
+
+# database backend
+activate_simplified_csv_database: True
+csv_database_path: "./data.csv"
+
+# sql backend
+sql_database_path: "./data.db"
+
