@@ -10,13 +10,12 @@ General structure:
 ```
 llm_chatbot/
 │
-├── 1_frontend/         # Flutter app source code
-├── 2_integration/      # Python FastAPI integration server
-├── 3_backend/          # Python backend services / logic
-├── venv/               # Python virtual environment
-├── .gitignore          # Git ignore rules
-├── README.md           # This file
-└── my_info_llm_chatbot.txt  # Personal notes / info
+├── 1_frontend/             # Flutter app source code
+├── 2_integration/          # Python FastAPI integration server
+├── 3_backend/              # Python backend services / logic
+├── venv/                   # Python virtual environment 
+├── .gitignore              # Git ignore rules
+└── README.md               # This file
 ```
 
 
@@ -55,7 +54,8 @@ llm_chatbot/
 
 ## Environment for python
 
-For now: flet, fastapi, uvicorn, yaml, 
+For now: flet, fastapi, uvicorn, yaml, etc.
+backend: ollama 
 
 ## Environment for Flutter
 
@@ -63,6 +63,7 @@ Search for FLutter install tutorial.
 The IDE VSCODE is required. USE Visual Studio Installer 2022 (not 2019)
 
 ## Start Flutter app
+Keep in mind: To successfully connect to the python backend you need to activate the fastapi server (see below: "Start Python Fastapi Server")
 ```
 cd C:\Users\...your_path...\llm_chatbot\1_frontend\
 flutter run
@@ -70,6 +71,7 @@ flutter run
  ```
 
 ## Start Flet app
+Keep in mind: This is a a dummy frontend for the backend group. The final product won't include flet.
 ```
 cd "C:\Users\...your_path...\llm_chatbot\"
 venv\Scripts\activate
@@ -78,10 +80,30 @@ python simple_chat_w_flet.py
 ```
 
 ## Start Python Fastapi Server
+Keep in mind: activate or deactivate sql database in fastapi_server_w_db.py (at the top of the script) if needed.
 ```
 cd "C:\Users\...your_path...\llm_chatbot\"
 venv\Scripts\activate
 cd 2_integration
-python fastapi_server_app.py
+uvicorn fastapi_server_w_db:app --host 127.0.0.1 --port 5000 --reload
 ```
 
+
+
+
+## Coding Conventions
+
+To maintain a clean and maintainable codebase, the following conventions are used throughout this project:
+
+### Logging
+- Use `logger.info()` and `logger.debug()` **instead of** `print()`.
+- This ensures:
+  - More control over output levels and verbosity.
+  - Easier integration with monitoring and debugging tools.
+  - Alignment with widely adopted practices in professional software projects.
+
+### Configuration Management
+- All adjustable settings are stored in `config.yaml`.
+- This allows:
+  - Modifying configuration values without searching through the codebase.
+  - Easier sharing and version control of configuration settings.

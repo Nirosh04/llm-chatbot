@@ -54,3 +54,20 @@ venv/
 my_info_llm_chatbot.txt
 1_frontend/pubspec.lock
 .metadata
+
+
+
+
+# for database
+
+# Python-generated files
+**/__pycache__/
+**/*.py[oc]
+**/build/
+**/dist/
+**/wheels/
+**/*.egg-info
+
+# Virtual environments
+**/.venv
+

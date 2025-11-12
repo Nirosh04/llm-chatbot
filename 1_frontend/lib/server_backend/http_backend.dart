@@ -9,7 +9,12 @@ import 'dart:typed_data';
 import 'package:http/http.dart' as http;
 import 'dart:io';
 import 'dart:async';
+import 'dart:developer' as dev;
 
+
+
+// Assign a session ID string
+String sessionIdStr = "11111111";
 
 
 Future<void> getSignalCheck() async {
@@ -21,18 +26,18 @@ Future<void> getSignalCheck() async {
       headers: {'Content-Type': 'application/json'}, // Optional for this case
     );
 
-    print('Server status: ${response.statusCode}');
-    print('Server response body: "${response.body}"');
+    dev.log('Server status: ${response.statusCode}');
+    dev.log('Server response body: "${response.body}"');
 
 
     if (response.statusCode == 200) {
       final prediction = jsonDecode(response.body)['prediction'];
-      print('Signal check: $prediction (1=successful test)');
+      dev.log('Signal check: $prediction (1=successful test)');
     } else {
-      print('Error: ${response.body}');
+      dev.log('Error: ${response.body}');
     }
   } catch (e) {
-    print('Connection error: $e');
+    dev.log('Connection error: $e');
   }
 }
 
@@ -53,19 +58,48 @@ process data with server by given option
 */
 
 
+Future<String> createSession() async {
+  try {
+    // Define the server URL for creating a new session
+    Uri url = Uri.parse('http://127.0.0.1:5000/api/sessions');
+
+    // Make the POST request
+    final response = await http.post(
+      url,
+      headers: {'Content-Type': 'application/json'},
+    );
+
+    // Check the server's response
+    if (response.statusCode == 200) {
+      // Parse the JSON response
+      final jsonResponse = jsonDecode(response.body);
+      
+      final sessionId = jsonResponse['session_id'] ?? '';
+      dev.log('Created new session: $sessionId');
+      
+      return sessionId;
+    } else {
+      throw Exception('Failed to create session. Status code: ${response.statusCode}');
+    }
+  } catch (e) {
+    dev.log('Error in createSession: $e');
+    rethrow;
+  }
+}
+
+
 
 
 Future<Map<String, dynamic>> getLLMResponseFromServer(String userText) async {
   try {
   // Define the server URL for LLM/text response
-    Uri url = Uri.parse('http://127.0.0.1:5000/get-llm-response');
-
+  Uri url = Uri.parse('http://127.0.0.1:5000/api/sessions/${sessionIdStr}/get-llm-response');
 
   // Make the POST request with JSON body
   final response = await http.post(
     url,
     headers: {'Content-Type': 'application/json'},
-    body: jsonEncode({'input': userText}),
+    body: jsonEncode({'content': userText}),
   );
 
   // Check the server's response
@@ -74,7 +108,7 @@ Future<Map<String, dynamic>> getLLMResponseFromServer(String userText) async {
     final jsonResponse = jsonDecode(response.body);
 
 
-    print('Signal check for LLM answer: ""${jsonResponse['output']}"" ');
+    dev.log('Signal check for LLM answer: ""${jsonResponse['output']}"" ');
 
     // Return JSONified response as input/output structure
     return {
@@ -87,13 +121,13 @@ Future<Map<String, dynamic>> getLLMResponseFromServer(String userText) async {
   
 
   } catch (e) {
-  print('Error in getLLMResponseFromServer: $e');
+  dev.log('Error in getLLMResponseFromServer: $e');
   rethrow;
   }
 }
 
 
-
+/// this function is not used yet (there will probably only be one model anyway)
 /// Fetch the list of available models from the backend.
 Future<List<String>> fetchModels() async {
   final uri = Uri.parse('http://127.0.0.1:5000/list-models');
@@ -112,7 +146,7 @@ Future<List<String>> fetchModels() async {
 
 
 
-
+/// this function is not used yet (there will probably only be one model anyway)
 /// Set the selected model on the backend.
 Future<void> setModel(String modelName) async {
   final uri = Uri.parse('http://127.0.0.1:5000/set-model');

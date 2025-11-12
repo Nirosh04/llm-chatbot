@@ -12,21 +12,12 @@ TO-DO:
 
 
 
-
-const me_chat_color = Color.fromARGB(255, 40, 100, 160);     // deep azure for your messages
-const llm_chat_color = Color.fromARGB(255, 30, 45, 70);      // dark navy bubble
-const background_color = Color.fromARGB(255, 15, 20, 30);    // near-black background
-const bar_header_color = Color.fromARGB(255, 148, 158, 173);    // darker header
-const bar_color = Color.fromARGB(255, 25, 35, 50);
-const text_color = Color.fromARGB(255, 220, 235, 255);       // soft off-white text
-const fab_color = Color.fromARGB(255, 80, 150, 250);         // bright azure accent
-
 */
 
 
 import 'package:flutter/material.dart';
 import 'dart:math';
-import 'backend/python_backend.dart' as python_backend;
+import 'server_backend/http_backend.dart' as python_backend;
 import 'frontend/atoms.dart' as atoms; // meant for colors and buttons
 
 
@@ -174,17 +165,21 @@ class _MyAppState extends State<MyApp> {
               ),
               ListTile(
                 leading: const Icon(Icons.home),
-                title: const Text('Test Dummy Server'),
+                title: const Text('Test - Signal check'),
                 onTap: () {python_backend.getSignalCheck();},
                 //onTap: () {}, // this line is in case one wants to disable the http side temporarily
-
+              ),
+              ListTile(
+                leading: const Icon(Icons.home),
+                title: const Text('Test - Create session'),
+                onTap: () {python_backend.createSession();},
+                //onTap: () {}, // this line is in case one wants to disable the http side temporarily
               ),
               ListTile(
                 leading: const Icon(Icons.home),
                 title: const Text('Test LLM response'),
                 onTap: () {python_backend.getLLMResponseFromServer('random user text - messageController has to be implemented');},
                 //onTap: () {}, // this line is in case one wants to disable the http side temporarily
-
               ),
               ListTile(
                 leading: const Icon(Icons.person),
