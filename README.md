@@ -80,7 +80,7 @@ python simple_chat_w_flet.py
 ```
 
 ## Start Python Fastapi Server
-Keep in mind: activate or deactivate sql database in fastapi_server_w_db.py (at the top of the script) if needed.
+Keep in mind: activate or deactivate sql database in fastapi_server_w_db.py (at the top of the script - simplified_db_version = True) if needed.
 ```
 cd "C:\Users\...your_path...\llm_chatbot\"
 venv\Scripts\activate
@@ -101,6 +101,7 @@ To maintain a clean and maintainable codebase, the following conventions are use
   - More control over output levels and verbosity.
   - Easier integration with monitoring and debugging tools.
   - Alignment with widely adopted practices in professional software projects.
+- also in flutter: use dev.log() instead of print()
 
 ### Configuration Management
 - All adjustable settings are stored in `config.yaml`.
