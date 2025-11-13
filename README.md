@@ -102,7 +102,6 @@ To maintain a clean and maintainable codebase, the following conventions are use
   - More control over output levels and verbosity.
   - Easier integration with monitoring and debugging tools.
   - Alignment with widely adopted practices in professional software projects.
-- also in flutter: use dev.log() instead of print()
 
 ### Configuration Management
 - All adjustable settings are stored in `config.yaml`.
