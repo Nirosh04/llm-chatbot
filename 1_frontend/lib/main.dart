@@ -8,10 +8,6 @@ flutter run
 
 
 
-TO-DO:
-
-
-
 */
 
 
@@ -19,6 +15,7 @@ import 'package:flutter/material.dart';
 import 'dart:math';
 import 'server_backend/http_backend.dart' as python_backend;
 import 'frontend/atoms.dart' as atoms; // meant for colors and buttons
+import 'dart:developer' as dev;
 
 
 
@@ -135,10 +132,16 @@ class MyApp extends StatefulWidget {
 
 class _MyAppState extends State<MyApp> {
   // Move your chatList and other variables here
+  final TextEditingController _messageController = TextEditingController();
+
   List<Widget> chatList = List.generate(20, (index) {
     bool isMe = index % 2 == 0;
     return turnStringToChatBubble(getRandomText(), isMe);
   });
+
+  bool sessionIdCreated = false;
+  String? sessionId; // Declare variable outside
+
 
   @override
   Widget build(BuildContext context) {
@@ -172,14 +175,38 @@ class _MyAppState extends State<MyApp> {
               ListTile(
                 leading: const Icon(Icons.home),
                 title: const Text('Test - Create session'),
-                onTap: () {python_backend.createSession();},
+                onTap: () async {
+                  final sessionId = await python_backend.createSession();
+                  print('Session created: $sessionId');
+                },
                 //onTap: () {}, // this line is in case one wants to disable the http side temporarily
               ),
               ListTile(
                 leading: const Icon(Icons.home),
                 title: const Text('Test LLM response'),
-                onTap: () {python_backend.getLLMResponseFromServer('random user text - messageController has to be implemented');},
-                //onTap: () {}, // this line is in case one wants to disable the http side temporarily
+                onTap: () async {
+
+                  if (!sessionIdCreated) {
+                    sessionId = await python_backend.createSession();
+                    sessionIdCreated = true;
+                  }
+
+                  final response = await python_backend.getLLMResponseFromServer(
+                    sessionId,
+                    'random user text - messageController has to be implemented'
+                  );
+                  
+                  // Now you can access the map data
+                  print('LLM Response: ${response['ai_response']}');
+                  
+                  // Or, for example, show it in a dialog/snackbar:
+                  // if (!mounted) return; // Widget might have been removed
+                  setState(() {
+                    chatList.add(
+                      turnStringToChatBubble(response['ai_response'], false)
+                    );
+                  });
+                },
               ),
               ListTile(
                 leading: const Icon(Icons.person),
@@ -227,6 +254,7 @@ class _MyAppState extends State<MyApp> {
                   // Text field expands to fill available space
                   Expanded(
                     child: CustomTextField(
+                      controller: _messageController,
                       textColor: atoms.textColor,
                       cursorColor: atoms.fabColor,
                       backgroundColor: atoms.backgroundColor,
@@ -236,12 +264,36 @@ class _MyAppState extends State<MyApp> {
                   const SizedBox(width: 8),
                   // Send button
                   IconButton(
-                    onPressed: () {
+                    onPressed: () async {
+                      final messageText = _messageController.text.trim();
                       setState(() {
                         chatList.add(
-                          turnStringToChatBubble('message controller not installed yet - but adding chatbubble works', true)
+                          turnStringToChatBubble(messageText, true)
                         );
                       });
+                      _messageController.clear(); // Clear input after sending
+
+                      if (!sessionIdCreated) {
+                        sessionId = await python_backend.createSession();
+                        sessionIdCreated = true;
+                      }
+
+                      final response = await python_backend.getLLMResponseFromServer(
+                        sessionId,
+                        messageText
+                      );
+                      
+                      // Now you can access the map data
+                      print('LLM Response: ${response['ai_response']}');
+                      
+                      // Or, for example, show it in a dialog/snackbar:
+                      // if (!mounted) return; // Widget might have been removed
+                      setState(() {
+                        chatList.add(
+                          turnStringToChatBubble(response['ai_response'], false)
+                        );
+                      });
+
                     },
                     icon: const Icon(Icons.send, color: atoms.iconColor),
                     style: IconButton.styleFrom(

@@ -26,18 +26,18 @@ Future<void> getSignalCheck() async {
       headers: {'Content-Type': 'application/json'}, // Optional for this case
     );
 
-    dev.log('Server status: ${response.statusCode}');
-    dev.log('Server response body: "${response.body}"');
+    print('Server status: ${response.statusCode}');
+    print('Server response body: "${response.body}"');
 
 
     if (response.statusCode == 200) {
       final prediction = jsonDecode(response.body)['prediction'];
-      dev.log('Signal check: $prediction (1=successful test)');
+      print('Signal check: $prediction (1=successful test)');
     } else {
-      dev.log('Error: ${response.body}');
+      print('Error: ${response.body}');
     }
   } catch (e) {
-    dev.log('Connection error: $e');
+    print('Connection error: $e');
   }
 }
 
@@ -75,14 +75,14 @@ Future<String> createSession() async {
       final jsonResponse = jsonDecode(response.body);
       
       final sessionId = jsonResponse['session_id'] ?? '';
-      dev.log('Created new session: $sessionId');
+      print('Created new session: $sessionId');
       
       return sessionId;
     } else {
       throw Exception('Failed to create session. Status code: ${response.statusCode}');
     }
   } catch (e) {
-    dev.log('Error in createSession: $e');
+    print('Error in createSession: $e');
     rethrow;
   }
 }
@@ -90,10 +90,10 @@ Future<String> createSession() async {
 
 
 
-Future<Map<String, dynamic>> getLLMResponseFromServer(String userText) async {
+Future<Map<String, dynamic>> getLLMResponseFromServer(dynamic sessionId, String userText) async {
   try {
   // Define the server URL for LLM/text response
-  Uri url = Uri.parse('http://127.0.0.1:5000/api/sessions/${sessionIdStr}/get-llm-response');
+  Uri url = Uri.parse('http://127.0.0.1:5000/api/sessions/${sessionId}/get-llm-response');
 
   // Make the POST request with JSON body
   final response = await http.post(
@@ -107,21 +107,19 @@ Future<Map<String, dynamic>> getLLMResponseFromServer(String userText) async {
     // Parse the JSON response
     final jsonResponse = jsonDecode(response.body);
 
-
-    dev.log('Signal check for LLM answer: ""${jsonResponse['output']}"" ');
+    print('Server returned JSON keys: ${jsonResponse.keys.toList()}');
+    print('Signal check for LLM answer: ""${jsonResponse['reply']}"" ');
 
     // Return JSONified response as input/output structure
     return {
-      'input': userText,
-      'output': jsonResponse['output'] ?? ''
+      'ai_response': jsonResponse['reply'] ?? ''
     };
   } else {
     throw Exception('Failed to fetch LLM response. Status code: ${response.statusCode}');
   }
   
-
   } catch (e) {
-  dev.log('Error in getLLMResponseFromServer: $e');
+  print('Error in getLLMResponseFromServer: $e');
   rethrow;
   }
 }

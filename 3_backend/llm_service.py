@@ -1,6 +1,6 @@
 import yaml
 import logging
-from utils import load_config, setup_logger
+import utils
 
 
 def get_llm_output(user_input):
@@ -10,8 +10,8 @@ def get_llm_output(user_input):
 
 
 # Load config and create logger when imported
-config = load_config()
-logger = setup_logger()
+config = utils.load_config()
+logger = utils.setup_logger()
 
 
 logger.info('logger (info) test 1')

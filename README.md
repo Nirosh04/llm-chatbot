@@ -27,8 +27,8 @@ Flutter part:
     ├── frontend/                  # Flutter frontend components
     │   ├── atoms.dart             # Atomic UI components
     │   └── utils_components.dart  # Utility UI components
-    └── backend/                   # Backend integration scripts
-        └── python_backend.dart    # Dart script to communicate with Python backend
+    └── server_backend/                   # Backend integration scripts
+        └── http_backend.dart    # Dart script to communicate with Python backend
 ```
 
 Python Integration (fastapi server):
@@ -36,6 +36,7 @@ Python Integration (fastapi server):
 llm_chatbot/
 └── 2_integration/
     ├── fastapi_server_app.py        # Fastapi server application
+    ├── database/        # database files in sql
 ```
 
 
