@@ -72,6 +72,64 @@ Widget turnStringToChatBubble(String message, bool isMe) {
 
 
 
+class HomeGreeting extends StatelessWidget {
+  const HomeGreeting({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    // Get the full height of the screen
+    final height = MediaQuery.of(context).size.height;
+
+    return SizedBox(
+      height: height, // take full screen height
+      width: double.infinity,
+      child: const Center( // center the child vertically and horizontally
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 32),
+          child: Column(
+            mainAxisSize: MainAxisSize.min, // only take as much height as needed
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: const [
+              Icon(Icons.auto_awesome, size: 48, color: atoms.fabColor),
+              SizedBox(height: 24),
+              Text(
+                'Willkommen!',
+                style: TextStyle(
+                  fontSize: 36,
+                  fontWeight: FontWeight.w600,
+                  color: atoms.textColor,
+                ),
+              ),
+              SizedBox(height: 16),
+              Text(
+                'Ich bin Ihr digitaler Begleiter für die Wartezeit.',
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                  fontSize: 26,
+                  fontWeight: FontWeight.w600,
+                  color: atoms.textColor,
+                ),
+              ),
+              SizedBox(height: 12),
+              Text(
+                'Wie geht es Ihnen? Tippen Sie einfach los, ich höre Ihnen zu',
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                  fontSize: 24,
+                  color: atoms.textColor,
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+
+
 class CustomTextField extends StatelessWidget {
   final TextEditingController? controller;
   final ValueChanged<String>? onChanged;
@@ -134,10 +192,7 @@ class _MyAppState extends State<MyApp> {
   // Move your chatList and other variables here
   final TextEditingController _messageController = TextEditingController();
 
-  List<Widget> chatList = List.generate(20, (index) {
-    bool isMe = index % 2 == 0;
-    return turnStringToChatBubble(getRandomText(), isMe);
-  });
+  List<Widget> chatList = [];
 
   bool sessionIdCreated = false;
   String? sessionId; // Declare variable outside
@@ -193,7 +248,7 @@ class _MyAppState extends State<MyApp> {
 
                   final response = await python_backend.getLLMResponseFromServer(
                     sessionId,
-                    'random user text - messageController has to be implemented'
+                    'Hello model. Help. My back aches.'
                   );
                   
                   // Now you can access the map data
@@ -240,8 +295,9 @@ class _MyAppState extends State<MyApp> {
               child: SingleChildScrollView(
                 reverse: true, // so newest messages appear at the bottom
                 child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.stretch,
-                  children: chatList
+                  children: chatList.isEmpty 
+                    ? [const HomeGreeting()] // show HomeGreeting if chatList is empty
+                    : chatList,        // otherwise show the chat messages
                 ),
               ),
             ),

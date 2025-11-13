@@ -1,7 +1,10 @@
 import yaml
 import logging
+import os
 
-def load_config(config_path="llm_backend/config.yml"):
+config_path = os.path.join(os.path.dirname(__file__), "config.yml")
+
+def load_config(config_path=config_path):
     """Load YAML configuration file"""
     with open(config_path, 'r') as file:
         config = yaml.safe_load(file)
@@ -10,21 +13,16 @@ def load_config(config_path="llm_backend/config.yml"):
 def setup_logger(name=__name__):
     """Setup and return a logger"""
     logger = logging.getLogger(name)
-    logger.setLevel(logging.INFO)
-    
-    # Create console handler
-    handler = logging.StreamHandler()
-    handler.setLevel(logging.INFO)
-    
-    # Create formatter
-    formatter = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')
-    handler.setFormatter(formatter)
-    
-    # Add handler to logger
-    logger.addHandler(handler)
-    
-    return logger
 
+    if not logger.hasHandlers():  # only add handler once
+        handler = logging.StreamHandler()
+        formatter = logging.Formatter("%(asctime)s - %(name)s - %(levelname)s - %(message)s")
+        handler.setFormatter(formatter)
+        logger.addHandler(handler)
+        logger.setLevel(logging.INFO)
+        logger.propagate = False  # prevent double logging to root
+
+    return logger
 
 def get_llm_output(user_input):
     llm_output = f'got user input "{user_input[:8]}"...\nDUMMY ANSWER - implement real model' 

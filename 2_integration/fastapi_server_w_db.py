@@ -8,11 +8,21 @@ import logging
 import psycopg2
 from psycopg2.extras import RealDictCursor
 import uvicorn
+import sys
+sys.path.append(os.path.abspath('../3_backend')) # to import llm service
+import llm_service
+llm_svc = llm_service.LLMService() 
+
 
 
 # Configure logging
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
+
+
+logger.info(llm_service.test())
+
+
 
 # Create the FastAPI app
 app = FastAPI(
@@ -155,7 +165,10 @@ async def send_message(session_id: str, message: Message):
         })
 
         # Simulate AI response
-        ai_response = f"AI response to: {message.content} (this is a simulated response)"
+        #ai_response = f"AI response to: {message.content} (this is a simulated response)"
+        ai_response = llm_svc.generate(message.content)
+
+
         ai_msg_id = get_session_id(simplified_db_mode)
         session["messages"].append({
             "id": ai_msg_id,
