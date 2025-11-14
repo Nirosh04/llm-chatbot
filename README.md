@@ -55,8 +55,19 @@ llm_chatbot/
 
 ## Environment for python
 
-For now: flet, fastapi, uvicorn, yaml, etc.
-backend: ollama 
+For now: see requriements.txt
+
+
+## Ollama model environment
+
+Go to the official Ollama website to download ollama program.
+llama3.2:1b is the smallest model - 1.3GB.
+```
+ollama --version
+ollama pull llama3.2:1b 
+ollama run llama3.2:1b
+ollama list
+```
 
 ## Environment for Flutter
 
@@ -81,7 +92,7 @@ python simple_chat_w_flet.py
 ```
 
 ## Start Python Fastapi Server
-Keep in mind: activate or deactivate sql database in fastapi_server_w_db.py (at the top of the script - simplified_db_version = True) if needed.
+Keep in mind: activate or deactivate sql database in fastapi_server_w_db.py (at the top of the script - simplified_db_version = True) if needed. And also: the ollama model specified n config.yaml has to be downloaded.
 ```
 cd "C:\Users\...your_path...\llm_chatbot\"
 venv\Scripts\activate
