@@ -452,3 +452,6 @@ async def health_check():
         raise HTTPException(status_code=503, detail=f"Database connection failed: {e}")
 
 
+if __name__ == '__main__':
+    import uvicorn
+    uvicorn.run(app,host='127.0.0.1', port=5000)
