@@ -85,12 +85,12 @@ class HomeGreeting extends StatelessWidget {
       width: double.infinity,
       child: const Center( // center the child vertically and horizontally
         child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 32),
+          padding: EdgeInsets.symmetric(horizontal: 32),
           child: Column(
             mainAxisSize: MainAxisSize.min, // only take as much height as needed
             mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.center,
-            children: const [
+            children: [
               Icon(Icons.auto_awesome, size: 48, color: atoms.fabColor),
               SizedBox(height: 24),
               Text(
