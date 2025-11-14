@@ -9,6 +9,8 @@ import psycopg2
 from psycopg2.extras import RealDictCursor
 import uvicorn
 import sys
+from fastapi.middleware.cors import CORSMiddleware
+
 sys.path.append(os.path.abspath('../3_backend')) # to import llm service
 import llm_service
 llm_svc = llm_service.LLMService() 
@@ -30,7 +32,12 @@ app = FastAPI(
     description="API for managing patient sessions and AI-assisted anamnesis.",
     version="1.0.0",
 )
-
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 
 def get_session_id(simplified_db_modality = True):
@@ -105,7 +112,7 @@ class SessionDetail(BaseModel):
 
 # check signal 
 
-@app.post('/check_signal', response_model=SignalResponse)
+@app.api_route("/check_signal", methods=["POST", "OPTIONS"], response_model=SignalResponse)
 async def check_signal():
     # Return a single number in a JSON response
     return SignalResponse(prediction=1)
@@ -116,7 +123,7 @@ async def check_signal():
 
 
 
-@app.post("/api/sessions", response_model=SessionResponse)
+@app.api_route("/api/sessions", methods=["POST", "OPTIONS"], response_model=SessionResponse)
 async def create_session():
     """Create a new patient session."""
     if simplified_db_mode:
@@ -146,7 +153,7 @@ async def create_session():
         conn.close()
 
 
-@app.post("/api/sessions/{session_id}/get-llm-response", response_model=ModelReply)
+@app.api_route("/api/sessions/{session_id}/get-llm-response", methods=["POST", "OPTIONS"], response_model=ModelReply)
 async def send_message(session_id: str, message: Message):
     """Send patient message and receive AI reply."""
     if simplified_db_mode:
@@ -211,7 +218,7 @@ async def send_message(session_id: str, message: Message):
         conn.close()
 
 
-@app.get("/api/sessions/{session_id}", response_model=SessionDetail)
+@app.api_route("/api/sessions/{session_id}", methods=["GET", "OPTIONS"], response_model=SessionDetail)
 async def get_session(session_id: str):
     """Get session details and messages."""
     if simplified_db_mode:
@@ -257,7 +264,7 @@ async def get_session(session_id: str):
         conn.close()
 
 
-@app.delete("/api/sessions/{session_id}")
+@app.api_route("/api/sessions/{session_id}", methods=["DELETE", "OPTIONS"])
 async def delete_session(session_id: str):
     """Delete session and associated data."""
     if simplified_db_mode:
@@ -285,7 +292,7 @@ async def delete_session(session_id: str):
         conn.close()
 
 
-@app.get("/health")
+@app.api_route("/health", methods=["GET", "OPTIONS"])
 async def health_check():
     """Health check endpoint to verify database connection."""
     if simplified_db_mode:
