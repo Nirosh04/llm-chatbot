@@ -55,17 +55,15 @@ llm_chatbot/
 
 ## Environment for python
 
-For now: see requriements.txt
+Fsee requirements.txt
 
 
 ## Ollama model environment
 
-Go to the official Ollama website to download ollama program.
+Go to the official Ollama website to download the ollama program.
 llama3.2:1b is the smallest model - 1.3GB.
 ```
-ollama --version
 ollama pull llama3.2:1b 
-ollama run llama3.2:1b
 ollama list
 ```
 
@@ -87,7 +85,7 @@ Keep in mind: This is a a dummy frontend for the backend group. The final produc
 ```
 cd "C:\Users\...your_path...\llm_chatbot\"
 venv\Scripts\activate
-cd 3_backend
+cd 3_backend/dummy_frontend
 python simple_chat_w_flet.py
 ```
 

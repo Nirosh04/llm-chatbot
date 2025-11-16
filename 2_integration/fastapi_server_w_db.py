@@ -34,10 +34,11 @@ app = FastAPI(
 )
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],
+    allow_origins=["*"], # this needs to be changed for security purposes (okay for development though) --> only whitelist frontend domain
     allow_methods=["*"],
     allow_headers=["*"],
 )
+
 
 
 def get_session_id(simplified_db_modality = True):

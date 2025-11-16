@@ -150,6 +150,27 @@ class LLMService:
             pass
         return last.strip() if last else "Sorry, I couldn't generate a response right now."
 
+
+    def get_transcript(self) -> str:
+        """
+        Return the full conversation as a readable transcript using
+        Patient (user) and Lumee (assistant) as fixed role names.
+        """
+        role_map = {
+            "user": "Patient",
+            "assistant": "Lumee",
+            "system": "System"
+        }
+
+        lines = []
+
+        for msg in self.conversation.history:
+            role = msg.get("role", "user")
+            role = role_map.get(role, role)
+            lines.append(f"{role}: {msg.get('content', '')}")
+
+        return "\n".join(lines)
+
     def reset(self) -> None:
         self.conversation.reset()
 
