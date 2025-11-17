@@ -13,9 +13,6 @@ import 'dart:developer' as dev;
 
 
 
-// Assign a session ID string
-String sessionIdStr = "11111111";
-
 
 Future<void> getSignalCheck() async {
   final url = Uri.parse('http://127.0.0.1:5000/check_signal');
