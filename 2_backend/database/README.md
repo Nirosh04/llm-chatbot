@@ -22,7 +22,7 @@ pip install -r requirements.txt
 ```
 ### 3. Run the Application
 ```bash
-uvicorn main:app --reload
+uvicorn main:app --reload - this is outdated - look at main README.md in root folder
 ```
 ### 4. View API Documentation
 Open your browser and go to:

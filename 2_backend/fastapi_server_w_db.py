@@ -1,22 +1,20 @@
+
 from fastapi import FastAPI, HTTPException
-from pydantic import BaseModel
+from pydantic import BaseModel, Field
 import os
-from typing import List
+from typing import List, Optional
 import uuid
 from datetime import datetime, timezone
 import logging
 import psycopg2
 from psycopg2.extras import RealDictCursor
 import uvicorn
-import sys
 from fastapi.middleware.cors import CORSMiddleware
-
-sys.path.append(os.path.abspath('../3_backend')) # to import llm service
 import llm_service
 llm_svc = llm_service.LLMService() 
 
-
-
+import utils
+config = utils.load_config()
 # Configure logging
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
@@ -57,7 +55,7 @@ def get_session_id(simplified_db_modality = True):
 # -----------------------------------------------------------------------------
 
 # Flag for simplified mode
-simplified_db_mode = True
+simplified_db_mode = config['activate_simplified_dict_database']
 
 
 
@@ -106,12 +104,24 @@ class SessionDetail(BaseModel):
     session_id: str
     messages: List[MessageResponse]
 
+class SummaryResponse(BaseModel):
+    summary: str
+    created_at: datetime
+
+
+
+class ResetResponse(BaseModel):
+    reset: bool
+    session_id: str
+    message: str
+
+
 
 # -----------------------------------------------------------------------------
 # ROUTES
 # -----------------------------------------------------------------------------
 
-# check signal 
+# ========== CHECK SIGNAL ==========
 
 @app.api_route("/check_signal", methods=["POST", "OPTIONS"], response_model=SignalResponse)
 async def check_signal():
@@ -121,8 +131,7 @@ async def check_signal():
 
 
 
-
-
+# ========== CREATE SESSIONS ==========
 
 @app.api_route("/api/sessions", methods=["POST", "OPTIONS"], response_model=SessionResponse)
 async def create_session():
@@ -153,6 +162,9 @@ async def create_session():
     finally:
         conn.close()
 
+
+
+# ========== GET LLM RESPONSE ==========
 
 @app.api_route("/api/sessions/{session_id}/get-llm-response", methods=["POST", "OPTIONS"], response_model=ModelReply)
 async def send_message(session_id: str, message: Message):
@@ -219,6 +231,10 @@ async def send_message(session_id: str, message: Message):
         conn.close()
 
 
+
+
+# ========== GET SESSION DETAILS ==========
+
 @app.api_route("/api/sessions/{session_id}", methods=["GET", "OPTIONS"], response_model=SessionDetail)
 async def get_session(session_id: str):
     """Get session details and messages."""
@@ -265,6 +281,9 @@ async def get_session(session_id: str):
         conn.close()
 
 
+
+# ========== DELETE SESSION ID ==========
+
 @app.api_route("/api/sessions/{session_id}", methods=["DELETE", "OPTIONS"])
 async def delete_session(session_id: str):
     """Delete session and associated data."""
@@ -292,6 +311,158 @@ async def delete_session(session_id: str):
     finally:
         conn.close()
 
+
+
+# ========== RESET CONVERSATION ==========
+
+@app.api_route("/api/sessions/{session_id}/reset", methods=["POST", "OPTIONS"], response_model=ResetResponse)
+async def reset_conversation(session_id: str):
+    """
+    Reset conversation history while keeping the session active.
+    
+    Useful for:
+    - Starting a new topic within the same session
+    - Testing the companion without creating new sessions
+    - Clearing sensitive information while maintaining session context
+    """
+    if simplified_db_mode:
+        session = simple_db["sessions"].get(session_id)
+        if not session:
+            raise HTTPException(status_code=404, detail="Session not found")
+        
+        # Clear messages
+        message_count = len(session["messages"])
+        session["messages"] = []
+        session["updated_at"] = datetime.now(timezone.utc)
+        
+        # Reset LLM service conversation history
+        llm_svc.reset()
+        
+        logger.info(f"[Memory] Reset conversation for session: {session_id} ({message_count} messages cleared)")
+        return {
+            "reset": True,
+            "session_id": session_id,
+            "message": f"Conversation reset. Cleared {message_count} messages."
+        }
+    
+    # Normal DB mode
+    conn = get_db_connection()
+    try:
+        with conn.cursor() as cur:
+            cur.execute("SELECT id FROM sessions WHERE id = %s", (session_id,))
+            if not cur.fetchone():
+                raise HTTPException(status_code=404, detail="Session not found")
+            
+            # Count messages before deletion
+            cur.execute("SELECT COUNT(*) FROM messages WHERE session_id = %s", (session_id,))
+            message_count = cur.fetchone()['count']
+            
+            # Delete all messages for this session
+            cur.execute("DELETE FROM messages WHERE session_id = %s", (session_id,))
+            cur.execute("UPDATE sessions SET updated_at = NOW() WHERE id = %s", (session_id,))
+            conn.commit()
+            
+            # Reset LLM service
+            llm_svc.reset()
+            
+            logger.info(f"Reset conversation for session: {session_id} ({message_count} messages cleared)")
+            return {
+                "reset": True,
+                "session_id": session_id,
+                "message": f"Conversation reset. Cleared {message_count} messages."
+            }
+    except Exception as e:
+        conn.rollback()
+        logger.error(f"Error resetting conversation: {e}")
+        raise HTTPException(status_code=500, detail="Failed to reset conversation")
+    finally:
+        conn.close()
+
+
+# ========== HEALTH SUMMARY ==========
+
+
+# is missing a real function to get demographic data of patient
+@app.api_route("/api/sessions/{session_id}/summary", methods=["GET", "OPTIONS"], response_model=SummaryResponse)
+async def generate_summary(session_id: str):
+    """
+    Generate medical summary from conversation for ER staff.
+    
+    This endpoint extracts key medical information from the patient conversation
+    and formats it for medical staff. 
+    this should include: main complaint, key symptoms, relevant history, and red flags.
+    """
+    if simplified_db_mode:
+        session = simple_db["sessions"].get(session_id)
+        if not session:
+            raise HTTPException(status_code=404, detail="Session not found")
+        
+        if not session["messages"]:
+            raise HTTPException(status_code=400, detail="No messages in session to summarize")
+
+        # Ask LLM to generate structured medical summary
+        summary_prompt = f"""Based on this conversation between a patient and Lumee (ER companion), create a brief medical summary for the healthcare team.
+        Demographic data:
+        {'Sarah - 23 years old - From Hannover.'}
+        Conversation:
+        {llm_svc.get_transcript()}
+        Format the summary in this json structure:
+        {utils.get_health_summary_json_structure(as_str = True)}
+        Be concise and medically relevant. No text outside of the json structure. Must be parseable by Flutter/dart's json.decode()."""
+        
+        
+        summary = llm_svc.generate(summary_prompt)
+        
+        logger.info(f"[Memory] Generated summary for session: {session_id}")
+        return {
+            "summary": summary,
+            "created_at": datetime.now(timezone.utc)
+        }
+    
+    # Normal DB mode
+    conn = get_db_connection()
+    try:
+        with conn.cursor() as cur:
+            cur.execute("SELECT id FROM sessions WHERE id = %s", (session_id,))
+            if not cur.fetchone():
+                raise HTTPException(status_code=404, detail="Session not found")
+            
+            cur.execute("""
+                SELECT content, is_ai 
+                FROM messages 
+                WHERE session_id = %s 
+                ORDER BY created_at
+            """, (session_id,))
+            messages = cur.fetchall()
+            
+            if not messages:
+                raise HTTPException(status_code=400, detail="No messages in session to summarize")
+
+            
+            summary_prompt = f"""Based on this conversation between a patient and Lumee (ER companion), create a brief medical summary for the healthcare team.
+            Demographic data:
+            {'Sarah - 23 years old - From Hannover.'}
+            Conversation:
+            {llm_svc.get_transcript()}
+            Format the summary in this json structure:
+            {utils.get_health_summary_json_structure(as_str = True)}
+            Be concise and medically relevant. No text outside of the json structure. Must be parseable by Flutter/dart's json.decode()."""
+            
+            summary = llm_svc.generate(summary_prompt)
+            
+            logger.info(f"Generated summary for session: {session_id}")
+            return {
+                "summary": summary,
+                "created_at": datetime.now(timezone.utc)
+            }
+    except Exception as e:
+        logger.error(f"Error generating summary: {e}")
+        raise HTTPException(status_code=500, detail="Failed to generate summary")
+    finally:
+        conn.close()
+
+
+# ========== GET HEALTH?? ==========
 
 @app.api_route("/health", methods=["GET", "OPTIONS"])
 async def health_check():

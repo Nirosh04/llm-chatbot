@@ -11,8 +11,7 @@ General structure:
 llm_chatbot/
 │
 ├── 1_frontend/             # Flutter app source code
-├── 2_integration/          # Python FastAPI integration server
-├── 3_backend/              # Python backend services / logic
+├── 2_backend/              # Python backend services / logic
 ├── venv/                   # Python virtual environment 
 ├── .gitignore              # Git ignore rules
 └── README.md               # This file
@@ -24,6 +23,7 @@ Flutter part:
 1_frontend/
 └── lib/
     ├── main.dart                  # Main entry point for the Flutter app
+    ├── dummy_frontend/            # Flet and GRADIO is in here - not relevant for the final product
     ├── frontend/                  # Flutter frontend components
     │   ├── atoms.dart             # Atomic UI components
     │   └── utils_components.dart  # Utility UI components
@@ -31,31 +31,27 @@ Flutter part:
         └── http_backend.dart    # Dart script to communicate with Python backend
 ```
 
-Python Integration (fastapi server):
-```
-llm_chatbot/
-└── 2_integration/
-    ├── fastapi_server_app.py        # Fastapi server application
-    ├── database/        # database files in sql
-```
 
 
 Python backend:
 ```
 llm_chatbot/
-└── 3_backend/
-    ├── simple_chat_w_flet.py      # Simple chat interface using Flet
+└── 2_backend/
+    ├── fastapi_server_app.py      # Fastapi server application
+    ├── database/                  # database files in sql
     ├── llm_service.py             # Main Script for using the llm
-    ├── llm_models/                # Folder for language model scripts or weights
+    ├── utils.py                   # Script w useful functions like logger etc
     ├── venv/                      # Python virtual environment
-    ├── config.yml/                # YAML for configuration
+    ├── config.yml                 # YAML for configuration
+    ├── health_summary.json        # JSON for health summary structure
+    ├── lumee_prompt.py            # lumee_prompts - maybe better to use json in the future
     └── README.md                  # Project documentation
 ```
 
 
 ## Environment for python
 
-Fsee requirements.txt
+See requirements.txt
 
 
 ## Ollama model environment
@@ -73,11 +69,11 @@ Search for FLutter install tutorial.
 The IDE VSCODE is required. USE Visual Studio Installer 2022 (not 2019)
 
 ## Start Flutter app
-Keep in mind: To successfully connect to the python backend you need to activate the fastapi server (see below: "Start Python Fastapi Server")
+Keep in mind: To successfully connect to the python backend you need to activate the fastapi server (see below: "Start Python Fastapi Server"). Use web-app instead of a native app when starting the app.
 ```
 cd C:\Users\...your_path...\llm_chatbot\1_frontend\
 flutter run
-1
+2
  ```
 
 ## Start Flet app
@@ -85,7 +81,7 @@ Keep in mind: This is a a dummy frontend for the backend group. The final produc
 ```
 cd "C:\Users\...your_path...\llm_chatbot\"
 venv\Scripts\activate
-cd 3_backend/dummy_frontend
+cd 1_frontend/dummy_frontend
 python simple_chat_w_flet.py
 ```
 
@@ -94,7 +90,7 @@ Keep in mind: activate or deactivate sql database in fastapi_server_w_db.py (at 
 ```
 cd "C:\Users\...your_path...\llm_chatbot\"
 venv\Scripts\activate
-cd 2_integration
+cd 2_backend
 uvicorn fastapi_server_w_db:app --host 127.0.0.1 --port 5000 --reload
 ```
 

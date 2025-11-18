@@ -264,6 +264,56 @@ class _MyAppState extends State<MyApp> {
                 },
               ),
               ListTile(
+                leading: const Icon(Icons.home),
+                title: const Text('Test health summary'),
+                onTap: () async {
+
+                  if (!sessionIdCreated) {
+                    sessionId = await python_backend.createSession();
+                    sessionIdCreated = true;
+                  }
+
+                  final response = await python_backend.getHealthSummary(
+                    sessionId,
+                  );
+                  
+                  // Now you can access the map data
+                  print('LLM Response: ${response['ai_summary']?.substring(0, 14)}');
+                  
+                  // Or, for example, show it in a dialog/snackbar:
+                  // if (!mounted) return; // Widget might have been removed
+                  setState(() {
+                    chatList.add(
+                      turnStringToChatBubble(response['ai_summary'], false)
+                    );
+                  });
+                },
+              ),
+              ListTile(
+                leading: const Icon(Icons.home),
+                title: const Text('Test Reset conversation'),
+                onTap: () async {
+
+                  if (!sessionIdCreated) {
+                    sessionId = await python_backend.createSession();
+                    sessionIdCreated = true;
+                  }
+
+                  await python_backend.resetConversation(
+                    sessionId,
+                  );
+                  
+                  // Now you can access the map data
+                  print('Conversation resetted');
+                  
+                  // Or, for example, show it in a dialog/snackbar:
+                  // if (!mounted) return; // Widget might have been removed
+                  setState(() {
+                    chatList.clear();
+                  });
+                },
+              ),
+              ListTile(
                 leading: const Icon(Icons.person),
                 title: const Text('Profile'),
                 onTap: () {},

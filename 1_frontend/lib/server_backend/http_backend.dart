@@ -122,6 +122,73 @@ Future<Map<String, dynamic>> getLLMResponseFromServer(dynamic sessionId, String 
 }
 
 
+
+
+
+// get health summary
+Future<Map<String, dynamic>> getHealthSummary(dynamic sessionId) async {
+  try {
+    // Define the server URL for summary generation
+    Uri url = Uri.parse('http://127.0.0.1:5000/api/sessions/$sessionId/summary');
+
+    // Make the GET request
+    final response = await http.get(
+      url,
+      headers: {'Content-Type': 'application/json'},
+    );
+
+    // Check the server's response
+    if (response.statusCode == 200) {
+      // Parse the JSON response
+      final jsonResponse = jsonDecode(response.body);
+
+      print('Server returned JSON keys: ${jsonResponse.keys.toList()}');
+      print('Summary check: "${jsonResponse['summary']}"');
+      print('Created at: "${jsonResponse['created_at']}"');
+
+      // Return the summary response structure
+      return {
+        'ai_summary': jsonResponse['summary'] ?? '',
+        'created_at': jsonResponse['created_at'] ?? ''
+      };
+    } else {
+      // Handle different error status codes with appropriate messages
+      if (response.statusCode == 404) {
+        throw Exception('Session not found. Status code: ${response.statusCode}');
+      } else if (response.statusCode == 400) {
+        throw Exception('No messages in session to summarize. Status code: ${response.statusCode}');
+      } else {
+        throw Exception('Failed to fetch session summary. Status code: ${response.statusCode}');
+      }
+    }
+  } catch (e) {
+    print('Error in getSessionSummary: $e');
+    rethrow;
+  }
+}
+
+
+/// Reset the conversation for a specific session on the backend.
+Future<void> resetConversation(dynamic sessionId) async {
+  final uri = Uri.parse('http://127.0.0.1:5000/api/sessions/$sessionId/reset');
+  try {
+    final response = await http.post(
+      uri,
+      headers: {"Content-Type": "application/json"},
+      body: json.encode({}), // Empty body or include any required parameters
+    );
+    
+    if (response.statusCode == 200) {
+      print('Conversation reset successfully for session: $sessionId');
+    } else {
+      throw Exception('Failed to reset conversation: ${response.statusCode} - ${response.body}');
+    }
+  } catch (e) {
+    throw Exception('Error resetting conversation: $e');
+  }
+}
+
+
 /// this function is not used yet (there will probably only be one model anyway)
 /// Fetch the list of available models from the backend.
 Future<List<String>> fetchModels() async {

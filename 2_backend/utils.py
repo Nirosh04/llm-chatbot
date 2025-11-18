@@ -1,8 +1,11 @@
 import yaml
 import logging
 import os
+import json
 
-config_path = os.path.join(os.path.dirname(__file__), "config.yml")
+
+same_dir = os.path.dirname(os.path.abspath(__file__))
+config_path = os.path.join(same_dir, "config.yml")
 
 def load_config(config_path=config_path):
     """Load YAML configuration file"""
@@ -24,11 +27,15 @@ def setup_logger(name=__name__):
 
     return logger
 
-def get_llm_output(user_input):
-    llm_output = f'got user input "{user_input[:8]}"...\nDUMMY ANSWER - implement real model' 
+def get_health_summary_json_structure(as_str=True):
+    """Load health summary JSON structure from file"""
+    same_dir = os.path.dirname(os.path.abspath(__file__))
+    json_path = os.path.join(same_dir, "health_summary.json")
     
-    return llm_output
-
+    with open(json_path, 'r') as file:
+        json_data = json.load(file)
+    
+    return json.dumps(json_data) if as_str else json_data
 
 # Load config and create logger when imported
 config = load_config()

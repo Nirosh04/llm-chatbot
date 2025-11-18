@@ -13,7 +13,6 @@ log_level: INFO
 
 
 # paths
-llm_path: 
 
 
 # logger 
@@ -21,10 +20,12 @@ llm_path:
 
 
 # database backend
-#activate_simplified_csv_database: True
-#csv_database_path: ./data.csv
+activate_simplified_dict_database: True
+#CORS_middleware_allow_origins: 
+#- "https://your-frontend.com"
+#- "https://www.your-frontend.com"
+#- "http://localhost:3000"
 
 # sql backend
-#sql_database_path: ./data.db
 
 

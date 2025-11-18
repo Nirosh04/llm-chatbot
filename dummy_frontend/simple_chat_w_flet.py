@@ -1,6 +1,13 @@
 import flet as ft
-from llm_backend.llm_service import config, logger, get_llm_output
+import sys
+import os
+#from llm_backend.llm_service import config, logger, get_llm_output
+#from llm_backend.llm_service import config, logger, get_llm_output
+sys.path.append(os.path.abspath('../')) # to import llm service
+from llm_service import LLMService
+llm_svc = LLMService()
 #from llm_backend import llm_main
+
 
 r'''
 
@@ -10,10 +17,6 @@ venv\Scripts\activate
 python simple_chat_w_flet.py
 
 
-
-cd "C:\Users\...\llm_chatbot\python"
-venv\Scripts\activate
-python flask_server_app.py
 
 '''
 
@@ -67,7 +70,7 @@ def main(page: ft.Page):
         )
 
         # Chatbot response (left aligned)
-        chatbot_message = get_llm_output(message)
+        chatbot_message = llm_svc.generate(message)
         chat_column.controls.append(
             ft.Row(
                 [
