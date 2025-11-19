@@ -36,7 +36,7 @@ Flutter part:
 Python backend:
 ```
 llm_chatbot/
-└── 2_backend/
+└── backend/
     ├── fastapi_server_app.py      # Fastapi server application
     ├── database/                  # database files in sql
     ├── llm_service.py             # Main Script for using the llm
@@ -90,7 +90,7 @@ Keep in mind: activate or deactivate sql database in fastapi_server_w_db.py (at 
 ```
 cd "C:\Users\...your_path...\llm_chatbot\"
 venv\Scripts\activate
-cd 2_backend
+cd backend
 uvicorn fastapi_server_w_db:app --host 127.0.0.1 --port 5000 --reload
 ```
 
