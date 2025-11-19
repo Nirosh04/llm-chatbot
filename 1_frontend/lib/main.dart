@@ -15,6 +15,7 @@ import 'package:flutter/material.dart';
 import 'dart:math';
 import 'server_backend/http_backend.dart' as python_backend;
 import 'frontend/atoms.dart' as atoms; // meant for colors and buttons
+import 'frontend/utils_components.dart' as utils;
 import 'dart:developer' as dev;
 
 
@@ -188,7 +189,7 @@ class MyApp extends StatefulWidget {
   State<MyApp> createState() => _MyAppState();
 }
 
-class _MyAppState extends State<MyApp> {
+class _MyAppState extends State<MyApp> with SingleTickerProviderStateMixin {
   // Move your chatList and other variables here
   final TextEditingController _messageController = TextEditingController();
 
@@ -196,7 +197,21 @@ class _MyAppState extends State<MyApp> {
 
   bool sessionIdCreated = false;
   String? sessionId; // Declare variable outside
+  bool isLoading = false;
 
+  late TabController _tabController;
+
+  @override
+  void initState() {
+    super.initState();
+    _tabController = TabController(length: 3, vsync: this);
+  }
+
+  @override
+  void dispose() {
+    _tabController.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -337,80 +352,104 @@ class _MyAppState extends State<MyApp> {
           title: const Center(
             child: Text("Chat UI Example"),
           ),
+          bottom: TabBar(
+            controller: _tabController,
+            indicatorColor: atoms.fabColor,
+            labelColor: atoms.fabColor,
+            unselectedLabelColor: atoms.textColor,
+            tabs: const [
+              Tab(icon: Icon(Icons.chat_rounded), text: "Chat"),
+              Tab(icon: Icon(Icons.info), text: "Info"),
+              Tab(icon: Icon(Icons.settings), text: "Settings"),
+            ],
+          ),
         ),
-        body: Column(
+        body: TabBarView(
+          controller: _tabController,
+          physics: const NeverScrollableScrollPhysics(), // disable swipe gestures between tabs
           children: [
-            // Expanded chat area (scrollable)
-            Expanded(
-              child: SingleChildScrollView(
-                reverse: true, // so newest messages appear at the bottom
-                child: Column(
-                  children: chatList.isEmpty 
-                    ? [const HomeGreeting()] // show HomeGreeting if chatList is empty
-                    : chatList,        // otherwise show the chat messages
+            Column(
+              children: [
+                // Expanded chat area (scrollable)
+                Expanded(
+                  child: SingleChildScrollView(
+                    reverse: true, // so newest messages appear at the bottom
+                    child: Column(
+                      children: chatList.isEmpty 
+                        ? [const HomeGreeting()] // show HomeGreeting if chatList is empty
+                        : chatList,        // otherwise show the chat messages
+                    ),
+                  ),
                 ),
-              ),
-            ),
-            // Bottom input bar
-            Container(
-              padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 10),
-              color: atoms.barColor,
-              child: Row(
-                children: [
-                  // Text field expands to fill available space
-                  Expanded(
-                    child: CustomTextField(
-                      controller: _messageController,
-                      textColor: atoms.textColor,
-                      cursorColor: atoms.fabColor,
-                      backgroundColor: atoms.backgroundColor,
-                    ),
+                // Bottom input bar
+                Container(
+                  padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 10),
+                  color: atoms.barColor,
+                  child: Row(
+                    children: [
+                      // Text field expands to fill available space
+                      Expanded(
+                        child: CustomTextField(
+                          controller: _messageController,
+                          textColor: atoms.textColor,
+                          cursorColor: atoms.fabColor,
+                          backgroundColor: atoms.backgroundColor,
+                        ),
 
+                      ),
+                      const SizedBox(width: 8),
+                      // Send button
+                      IconButton(
+                        onPressed: isLoading ? null : () async {
+                          final messageText = _messageController.text.trim();
+                          setState(() {
+                            chatList.add(
+                              turnStringToChatBubble(messageText, true)
+                            );
+                            isLoading = true;
+                            chatList.add(const utils.LoadingDots());
+                          });
+                          _messageController.clear(); // Clear input after sending
+
+                          if (!sessionIdCreated) {
+                            sessionId = await python_backend.createSession();
+                            sessionIdCreated = true;
+                          }
+
+                          final response = await python_backend.getLLMResponseFromServer(
+                            sessionId,
+                            messageText
+                          );
+                          
+                          // Now you can access the map data
+                          print('LLM Response: ${response['ai_response']}');
+                          
+                          // Or, for example, show it in a dialog/snackbar:
+                          // if (!mounted) return; // Widget might have been removed
+                          setState(() {
+                            chatList.removeLast(); // Remove loading animation
+                            chatList.add(
+                              turnStringToChatBubble(response['ai_response'], false)
+                            );
+                            isLoading = false;
+                          });
+
+                        },
+                        icon: const Icon(Icons.send, color: atoms.iconColor),
+                        style: IconButton.styleFrom(
+                          backgroundColor: atoms.fabColor,
+                          shape: const StadiumBorder(), // Perfect middle ground
+                          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+                        ),
+                      ),
+                    ],
                   ),
-                  const SizedBox(width: 8),
-                  // Send button
-                  IconButton(
-                    onPressed: () async {
-                      final messageText = _messageController.text.trim();
-                      setState(() {
-                        chatList.add(
-                          turnStringToChatBubble(messageText, true)
-                        );
-                      });
-                      _messageController.clear(); // Clear input after sending
-
-                      if (!sessionIdCreated) {
-                        sessionId = await python_backend.createSession();
-                        sessionIdCreated = true;
-                      }
-
-                      final response = await python_backend.getLLMResponseFromServer(
-                        sessionId,
-                        messageText
-                      );
-                      
-                      // Now you can access the map data
-                      print('LLM Response: ${response['ai_response']}');
-                      
-                      // Or, for example, show it in a dialog/snackbar:
-                      // if (!mounted) return; // Widget might have been removed
-                      setState(() {
-                        chatList.add(
-                          turnStringToChatBubble(response['ai_response'], false)
-                        );
-                      });
-
-                    },
-                    icon: const Icon(Icons.send, color: atoms.iconColor),
-                    style: IconButton.styleFrom(
-                      backgroundColor: atoms.fabColor,
-                      shape: const StadiumBorder(), // Perfect middle ground
-                      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-                    ),
-                  ),
-                ],
-              ),
+                ),
+              ],
             ),
+            // placeholder for other tabs
+            const  Center(child: Text("Info Tab Content", style: TextStyle(color: atoms.textColor))),
+            const  Center(child: Text("Settings Tab Content", style: TextStyle(color: atoms.textColor))),
           ],
         ),
       ),
