@@ -94,8 +94,18 @@ cd backend
 uvicorn fastapi_server_w_db:app --host 127.0.0.1 --port 5000 --reload
 ```
 
+## Docker Commands
 
+The application can be deployed to a Docker container using the following commands:
 
+```
+docker compose build
+docker compose up -d
+```
+
+This will deploy the whole application (Frontend, Backend, and Database) to a Docker container.
+
+Note: Install Docker and Docker Compose before running these commands.
 
 ## Coding Conventions
 

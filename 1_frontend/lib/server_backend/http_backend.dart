@@ -11,11 +11,13 @@ import 'dart:io';
 import 'dart:async';
 import 'dart:developer' as dev;
 
-
-
+const apiBaseUrl = String.fromEnvironment(
+  'API_URL',
+  defaultValue: 'http://127.0.0.1:5000',
+);
 
 Future<void> getSignalCheck() async {
-  final url = Uri.parse('http://127.0.0.1:5000/check_signal');
+  final url = Uri.parse('$apiBaseUrl/check_signal');
   try {
     
     final response = await http.post(
@@ -58,7 +60,7 @@ process data with server by given option
 Future<String> createSession() async {
   try {
     // Define the server URL for creating a new session
-    Uri url = Uri.parse('http://127.0.0.1:5000/api/sessions');
+    Uri url = Uri.parse('$apiBaseUrl/api/sessions');
 
     // Make the POST request
     final response = await http.post(
@@ -90,7 +92,7 @@ Future<String> createSession() async {
 Future<Map<String, dynamic>> getLLMResponseFromServer(dynamic sessionId, String userText) async {
   try {
   // Define the server URL for LLM/text response
-  Uri url = Uri.parse('http://127.0.0.1:5000/api/sessions/${sessionId}/get-llm-response');
+  Uri url = Uri.parse('$apiBaseUrl/api/sessions/${sessionId}/get-llm-response');
 
   // Make the POST request with JSON body
   final response = await http.post(
@@ -129,7 +131,7 @@ Future<Map<String, dynamic>> getLLMResponseFromServer(dynamic sessionId, String 
 Future<Map<String, dynamic>> getHealthSummary(dynamic sessionId) async {
   try {
     // Define the server URL for summary generation
-    Uri url = Uri.parse('http://127.0.0.1:5000/api/sessions/$sessionId/summary');
+    Uri url = Uri.parse('$apiBaseUrl/api/sessions/$sessionId/summary');
 
     // Make the GET request
     final response = await http.get(
@@ -170,7 +172,7 @@ Future<Map<String, dynamic>> getHealthSummary(dynamic sessionId) async {
 
 /// Reset the conversation for a specific session on the backend.
 Future<void> resetConversation(dynamic sessionId) async {
-  final uri = Uri.parse('http://127.0.0.1:5000/api/sessions/$sessionId/reset');
+  final uri = Uri.parse('$apiBaseUrl/api/sessions/$sessionId/reset');
   try {
     final response = await http.post(
       uri,
@@ -192,7 +194,7 @@ Future<void> resetConversation(dynamic sessionId) async {
 /// this function is not used yet (there will probably only be one model anyway)
 /// Fetch the list of available models from the backend.
 Future<List<String>> fetchModels() async {
-  final uri = Uri.parse('http://127.0.0.1:5000/list-models');
+  final uri = Uri.parse('$apiBaseUrl/list-models');
   try {
     final response = await http.get(uri);
     if (response.statusCode == 200) {
@@ -211,7 +213,7 @@ Future<List<String>> fetchModels() async {
 /// this function is not used yet (there will probably only be one model anyway)
 /// Set the selected model on the backend.
 Future<void> setModel(String modelName) async {
-  final uri = Uri.parse('http://127.0.0.1:5000/set-model');
+  final uri = Uri.parse('$apiBaseUrl/set-model');
   try {
     final response = await http.post(
       uri,
