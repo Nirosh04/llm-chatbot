@@ -90,7 +90,7 @@ Future<String> createSession() async {
 Future<Map<String, dynamic>> getLLMResponseFromServer(dynamic sessionId, String userText) async {
   try {
   // Define the server URL for LLM/text response
-  Uri url = Uri.parse('http://127.0.0.1:5000/api/sessions/${sessionId}/get-llm-response');
+  Uri url = Uri.parse('http://127.0.0.1:5000/api/sessions/$sessionId/get-llm-response');
 
   // Make the POST request with JSON body
   final response = await http.post(

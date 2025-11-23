@@ -5,12 +5,16 @@ cd "C:\Users\...\llm_chatbot\python"
 flutter run
 1
  
+// flutter config --enable-web
+// flutter run -d chrome
 
+// flutter config --enable-windows-desktop
+// flutter create . --platforms=windows
 
 
 */
 
-
+import 'symptoms_page.dart';
 import 'package:flutter/material.dart';
 import 'dart:math';
 import 'server_backend/http_backend.dart' as python_backend;
@@ -23,12 +27,24 @@ import 'dart:developer' as dev;
 
 
 void main() {
-  runApp(MyApp());
+  runApp(const MyApp());
 }
 
 
 
 
+const sampleTexts = [
+      "Helo",
+      "This is a chat bubble.",
+      "Hello patient! How can I help?",
+      "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.",
+      "Hello patient! How can I help?",
+      "Hello patient! How can I help?",
+      "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.",
+      "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.",
+      "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.",
+      "Hello patient! How can I help?",
+    ];
 
 
 Widget turnStringToChatBubble(String message, bool isMe) {
@@ -62,7 +78,7 @@ Widget turnStringToChatBubble(String message, bool isMe) {
 
 
 class HomeGreeting extends StatelessWidget {
-  const HomeGreeting({Key? key}) : super(key: key);
+  const HomeGreeting({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -72,7 +88,7 @@ class HomeGreeting extends StatelessWidget {
     return SizedBox(
       height: height, // take full screen height
       width: double.infinity,
-      child: const Center( // center the child vertically and horizontally
+      child: Center( // center the child vertically and horizontally
         child: Padding(
           padding: EdgeInsets.symmetric(horizontal: 32),
           child: Column(
@@ -80,7 +96,10 @@ class HomeGreeting extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              Icon(Icons.auto_awesome, size: 48, color: atoms.fabColor),
+              Image.asset('assets/Lumee.png', 
+                width: 120,
+                height: 120,
+                color: atoms.fabColor),
               SizedBox(height: 24),
               Text(
                 'Willkommen!',
@@ -92,7 +111,7 @@ class HomeGreeting extends StatelessWidget {
               ),
               SizedBox(height: 16),
               Text(
-                'Ich bin Ihr digitaler Begleiter für die Wartezeit.',
+                'Ich bin Lumee, Ihr digitaler Begleiter. Ich helfe Ihnen, die Wartezeit zu überbrücken.',
                 textAlign: TextAlign.center,
                 style: TextStyle(
                   fontSize: 26,
@@ -102,7 +121,7 @@ class HomeGreeting extends StatelessWidget {
               ),
               SizedBox(height: 12),
               Text(
-                'Wie geht es Ihnen? Tippen Sie einfach los, ich höre Ihnen zu',
+                'Wenn Sie möchten, stelle ich Ihnen ein paar kurze Fragen zu Ihrem befinden. Dies hilft dem Personal, sich besser um Sie zu kümmern. Klicken Sie dazu einfach unten auf "Chat beginnen"',
                 textAlign: TextAlign.center,
                 style: TextStyle(
                   fontSize: 24,
@@ -162,10 +181,19 @@ class CustomTextField extends StatelessWidget {
 
 
 
+// Generate random dummy text
+String getRandomText() {
+  
+  return sampleTexts[Random().nextInt(sampleTexts.length)];
+}
+
+
 
 
 
 class MyApp extends StatefulWidget {
+  const MyApp({super.key});
+
   @override
   State<MyApp> createState() => _MyAppState();
 }
@@ -198,25 +226,32 @@ class _MyAppState extends State<MyApp> with SingleTickerProviderStateMixin {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: true,
+      routes: {
+        '/symptoms': (_) => const SymptomsPage(),
+      },
       home: Scaffold(
         backgroundColor: atoms.backgroundColor,
         // Sidebar / Drawer
-        drawer: Drawer(
-          child: ListView(
-            padding: EdgeInsets.zero,
-            children: [
-              const DrawerHeader(
-                decoration: BoxDecoration(
-                  color: atoms.barHeaderColor,
-                ),
-                child: Text(
-                  'Sidebar Menu',
-                  style: TextStyle(
-                    color: atoms.textColor,
-                    fontSize: 24,
-                  ),
-                ),
-              ),
+      drawer: Builder(
+      builder: (drawerCtx) => Drawer(
+        child: ListView(
+        padding: EdgeInsets.zero,
+        children: [
+          const DrawerHeader(
+          decoration: BoxDecoration(color: atoms.barHeaderColor),
+          child: Text(
+            'Sidebar Menu',
+            style: TextStyle(color: atoms.textColor, fontSize: 24),
+          ),
+        ),
+        ListTile(
+          title: const Text("Symptome", style: TextStyle(color: atoms.textColor)),
+          leading: const Icon(Icons.sick),
+          onTap: () {
+            Navigator.of(drawerCtx).pop(); // Drawer schließen
+            Navigator.of(drawerCtx).pushNamed('/symptoms'); // Seite öffnen
+          },
+        ),
               ListTile(
                 leading: const Icon(Icons.home),
                 title: const Text('Test - Signal check'),
@@ -327,6 +362,7 @@ class _MyAppState extends State<MyApp> with SingleTickerProviderStateMixin {
             ],
           ),
         ),
+      ),
         // AppBar with slightly different color
         appBar: AppBar(
           backgroundColor: atoms.backgroundColor, // slightly different
@@ -381,16 +417,14 @@ class _MyAppState extends State<MyApp> with SingleTickerProviderStateMixin {
                       const SizedBox(width: 8),
                       // Send button
                       IconButton(
-                        onPressed: () async {
-                          if (isLoading) return; // Early return if loading
-
+                        onPressed: isLoading ? null : () async {
                           final messageText = _messageController.text.trim();
                           setState(() {
                             chatList.add(
                               turnStringToChatBubble(messageText, true)
                             );
                             isLoading = true;
-                            chatList.add(const utils.LoadingDots());
+                            //chatList.add(const utils.LoadingDots());
                           });
                           _messageController.clear(); // Clear input after sending
 
@@ -436,6 +470,8 @@ class _MyAppState extends State<MyApp> with SingleTickerProviderStateMixin {
           ],
         ),
       ),
-    );
+      );
+    
   }
 }
+
