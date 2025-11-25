@@ -1,44 +1,46 @@
 
 import 'dart:convert';
-import 'dart:io';
 
 import 'package:flutter/material.dart';
-import 'package:path_provider/path_provider.dart';  
 import 'frontend/atoms.dart' as atoms;
+import 'server_backend/http_backend.dart' as backend;
 
 class SymptomsPage extends StatefulWidget {
-  const SymptomsPage({super.key});
+  final String? sessionId;
+  
+  const SymptomsPage({super.key, this.sessionId});
 
   @override
   State<SymptomsPage> createState() => _SymptomsPageState();
 }
 
 class _SymptomsPageState extends State<SymptomsPage> {
-  static const _fileName = "symptoms_data.json";
-  static const Map<String, dynamic> _defaultData = {
-    "historyOfPresentIllness": {
-      "keySymptoms": [
-        {
-          "description": "Kopfschmerzen",
-          "location": "Stirn",
-          "severity": "mittel",
-          "duration": "seit 2 Tagen",
-          "pain": 6
-        },
-        {
-          "description": "Müdigkeit",
-          "location": "gesamt",
-          "severity": "leicht",
-          "duration": "seit 1 Woche",
-          "pain": 3
-        }
-      ]
-    }
-  };
-
   Map<String, dynamic>? _jsonData;
-  late File _localFile;
   bool _isLoading = true;
+  String? _sessionId;
+
+  Map<String, dynamic> _getDefaultData() {
+    return {
+      "historyOfPresentIllness": {
+        "keySymptoms": [
+          {
+            "description": "Kopfschmerzen",
+            "location": "Stirn",
+            "severity": "mittel",
+            "duration": "seit 2 Tagen",
+            "pain": 6
+          },
+          {
+            "description": "Müdigkeit",
+            "location": "gesamt",
+            "severity": "leicht",
+            "duration": "seit 1 Woche",
+            "pain": 3
+          }
+        ]
+      }
+    };
+  }
 
   int _normalizePain(Map<String, dynamic> symptom) {
     final painValue = symptom["pain"];
@@ -51,43 +53,52 @@ class _SymptomsPageState extends State<SymptomsPage> {
     return 5;
   }
 
+  /// Fetches health summary from backend.
+  /// Returns the parsed data or null if invalid/error.
+  Future<Map<String, dynamic>?> _fetchHealthSummary() async {
+    if (_sessionId == null) return null;
+    
+    try {
+      final response = await backend.getHealthSummary(_sessionId);
+      final summaryString = response["ai_summary"] as String?;
+      
+      if (summaryString == null || summaryString.isEmpty) return null;
+      
+      // Parse the summary string as JSON
+      final summaryJson = jsonDecode(summaryString);
+      if (summaryJson is Map<String, dynamic> && 
+          summaryJson.containsKey('historyOfPresentIllness')) {
+        return summaryJson;
+      }
+
+    } catch (e) {
+      print('Error fetching health summary: $e');
+    }
+    return null;
+  }
+
+  Future<void> _loadData() async {
+    if (!mounted) return;
+    setState(() => _isLoading = true);
+    
+    final data = await _fetchHealthSummary();
+    
+    if (!mounted) return;
+    setState(() {
+      _jsonData = data ?? _getDefaultData();
+      _isLoading = false;
+    });
+  }
+
   @override
   void initState() {
     super.initState();
-    _initData();
-  }
-
-  Future<void> _initData() async {
-    final dir = await getApplicationDocumentsDirectory();
-    _localFile = File("${dir.path}/$_fileName");
-
-    if (!await _localFile.exists()) {
-      await _localFile.writeAsString(jsonEncode(_defaultData));
-    }
-
-    try {
-      final fileString = await _localFile.readAsString();
-      setState(() {
-        _jsonData = jsonDecode(fileString);
-        _isLoading = false;
-      });
-    } catch (_) {
-      // reset to default when the file is corrupted
-      await _localFile.writeAsString(jsonEncode(_defaultData));
-      setState(() {
-        _jsonData = jsonDecode(jsonEncode(_defaultData));
-        _isLoading = false;
-      });
-    }
-  }
-
-  Future<void> _saveData() async {
-    if (_jsonData == null) return;
-    await _localFile.writeAsString(jsonEncode(_jsonData));
+    _sessionId = widget.sessionId;
+    _loadData();
   }
 
   List<dynamic> _symptomsList() {
-    _jsonData ??= jsonDecode(jsonEncode(_defaultData));
+    _jsonData ??= _getDefaultData();
     var history =
         _jsonData?["historyOfPresentIllness"] as Map<String, dynamic>?;
     history ??= {};
@@ -122,7 +133,6 @@ class _SymptomsPageState extends State<SymptomsPage> {
     setState(() {
       _symptomsList().add(newSymptom);
     });
-    _saveData();
   }
 
   void _removeSymptom(int index) {
@@ -130,7 +140,6 @@ class _SymptomsPageState extends State<SymptomsPage> {
     setState(() {
       _symptomsList().removeAt(index);
     });
-    _saveData();
   }
 
   void _showAddSymptomDialog() {
@@ -310,7 +319,6 @@ class _SymptomsPageState extends State<SymptomsPage> {
                           setState(() {
                             s["pain"] = value.round();
                           });
-                          _saveData();
                         },
                       ),
                       Align(
