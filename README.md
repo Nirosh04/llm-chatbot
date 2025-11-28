@@ -107,6 +107,7 @@ This will deploy the whole application (Frontend, Backend, and Database) to a Do
 
 Note: Install Docker and Docker Compose before running these commands.
 
+You will then be able to find the web-based app with the url "http://localhost/" in the browser.
 ## Coding Conventions
 
 To maintain a clean and maintainable codebase, the following conventions are used throughout this project:
