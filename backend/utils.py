@@ -9,9 +9,12 @@ config_path = os.path.join(same_dir, "config.yml")
 
 def load_config(config_path=config_path):
     """Load YAML configuration file"""
-    with open(config_path, 'r') as file:
-        config = yaml.safe_load(file)
-    return config
+    try:
+        with open(config_path, 'r') as file:
+            config = yaml.safe_load(file)
+        return config
+    except:
+        return None
 
 def setup_logger(name=__name__):
     """Setup and return a logger"""

@@ -71,3 +71,5 @@ my_info_llm_chatbot.txt
 # Virtual environments
 **/.venv
 
+#ssh userdata
+.priv.yml
