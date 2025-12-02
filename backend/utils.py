@@ -16,8 +16,9 @@ def load_config(config_path=config_path):
     except:
         return None
 
-def setup_logger(name=__name__):
+def setup_logger(level, name=__name__):
     """Setup and return a logger"""
+
     logger = logging.getLogger(name)
 
     if not logger.hasHandlers():  # only add handler once
@@ -25,7 +26,17 @@ def setup_logger(name=__name__):
         formatter = logging.Formatter("%(asctime)s - %(name)s - %(levelname)s - %(message)s")
         handler.setFormatter(formatter)
         logger.addHandler(handler)
-        logger.setLevel(logging.INFO)
+
+        #set this in config.yml
+        if level == "DEBUG":
+            # for devs
+            logger.setLevel(logging.DEBUG)
+        elif level == "INFO":
+            # default
+            logger.setLevel(logging.INFO)
+        else:
+            # mute all logging
+            logger.setLevel(logging.WARNING)
         logger.propagate = False  # prevent double logging to root
 
     return logger
@@ -42,11 +53,13 @@ def get_health_summary_json_structure(as_str=True):
 
 # Load config and create logger when imported
 config = load_config()
-logger = setup_logger()
+logger = setup_logger(config.get("log_level"))
 
 
-logger.info('logger (info) test 1')
-logger.debug('logger (debug) test 1')
+#example of using the logger
+#to be removed in the future
+logger.info('logger (info) test from utils')
+logger.debug('logger (debug) test from utils')
 
 
 

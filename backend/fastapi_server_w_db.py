@@ -10,16 +10,20 @@ import psycopg2
 from psycopg2.extras import RealDictCursor
 import uvicorn
 from fastapi.middleware.cors import CORSMiddleware
+
+#our modules
 import llm_service
+import utils
+
+#setup llm object
 llm_svc = llm_service.LLMService() 
 
-import utils
+#setpu logger
 config = utils.load_config()
-# Configure logging
-logging.basicConfig(level=logging.INFO)
-logger = logging.getLogger(__name__)
+logger = utils.setup_logger(config.get("log_level"))
 
-logger.info(llm_service.test())
+logger.info("Logger started, showing INFO")
+logger.debug("Logger started, showing DEBUG")
 
 from api_models import (
     Message,
