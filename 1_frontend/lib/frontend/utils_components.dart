@@ -54,7 +54,7 @@ void showInfoContent(BuildContext context, String title, Widget content) {
 // ---------------------------------- LOADING DOTS -------------------------------
 
 class LoadingDots extends StatefulWidget {
-  const LoadingDots({Key? key}) : super(key: key);
+  const LoadingDots({super.key});
 
   @override
   State<LoadingDots> createState() => _LoadingDotsState();

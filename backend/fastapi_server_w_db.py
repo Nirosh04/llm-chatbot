@@ -379,7 +379,7 @@ async def generate_summary(session_id: str):
         summary_prompt = f"""Based on this conversation between a patient and Lumee (ER companion), create a brief medical summary for the healthcare team.
         Demographic data:
         {'Sarah - 23 years old - From Hannover.'}
-        Conversation:
+        Conversation: 
         {llm_svc.get_transcript()}
         Format the summary in this json structure:
         {utils.get_health_summary_json_structure(as_str = True)}
@@ -414,16 +414,29 @@ async def generate_summary(session_id: str):
                 raise HTTPException(status_code=400, detail="No messages in session to summarize")
 
             
-            summary_prompt = f"""Based on this conversation between a patient and Lumee (ER companion), create a brief medical summary for the healthcare team.
+            summary_prompt = f"""Based on this conversation between a patient and Lumee (ER companion) and additional data, create a brief medical summary for the healthcare team.
             Demographic data:
+            ---BEGIN DEMOGRAPHICS---
             {'Sarah - 23 years old - From Hannover.'}
+            ---END DEMOGRAPHICS---
+
+            Manually inputted data by the patient itself:
+            ---BEGIN MANUAL DATA---
+            {"Symptom: sharp pain, location: chest"}
+            ---END MANUAL DATA---
+
             Conversation:
+            ---BEGIN CONVERSATION---
             {llm_svc.get_transcript()}
+            ---END CONVERSATION---
+
             Format the summary in this json structure:
+            ---BEGIN JSON STRUCTURE---
             {utils.get_health_summary_json_structure(as_str = True)}
+            ---BEGIN JSON STRUCTURE---
             Be concise and medically relevant. No text outside of the json structure. Must be parseable by Flutter/dart's json.decode()."""
             
-            summary = llm_svc.generate(summary_prompt)
+            summary = llm_svc.generate(summary_prompt, add_to_chat_history=False)
             
             logger.info(f"Generated summary for session: {session_id}")
             return {

@@ -1,44 +1,64 @@
 {
-  "demographics": {
+  "patient_demographics": {
     "name": null,
     "age": null,
     "sex": null,
-    "dateOfBirth": null,
-    "occupation": null
+    "dateOfBirth": null
   },
-  "chiefComplaint": {
-    "mainComplaint": null,
+  "chief_complaint": {
+    "main_complaint": null,
     "duration": null,
     "onset": null
   },
-  "historyOfPresentIllness": {
-    "keySymptoms": [
+  "S_Symptoms_Pain": {
+    "symptoms": [
       {
-        "description": null,
-        "location": null,
-        "severity": null,
-        "duration": null
+        "symptom_description": null,
+        "onset": null,
+        "duration": null,
+        "severity_scale_1_10": null,
+        "additional_notes": null
       }
-    ],
-    "aggravatingFactors": [],
-    "alleviatingFactors": []
+    ]
   },
-  "relevantHistory": {
-    "pastMedicalHistory": [],
-    "medications": [],
-    "allergies": [],
-    "familyHistory": {},
-    "socialHistory": {}
-  },
-  "redFlags": {
-    "present": null,
-    "flags": [
+  "A_Allergies": {
+    "allergy_pass_available": null,
+    "allergies": [
       {
-        "symptomDescription": null,
-        "present": null,
-        "urgency": null
+        "substance": null,
+        "reaction_type": null,
+        "reaction_severity": null,
+        "additional_notes": null
       }
-    ],
-    "notes": null
+    ]
+  },
+  "M_Medications": {
+    "routine_medications": [
+      {
+        "name": null,
+        "dosage": null,
+        "frequency": null,
+        "since_when_taken": null
+      }
+    ]
+  },
+  "P_Past_Medical_History": {
+    "pre_existing_conditions": [],
+    "surgical_history": [],
+    "implanted_devices": [],
+    "additional_notes": null
+  },
+  "L_Lasts": {
+    "last_meal_time": null,
+    "last_meal_content": null,
+    "additional_notes": null
+  },
+  "E_Event": {
+    "mechanism_of_injury": null,
+    "contextual_circumstances": null
+  },
+  "R_Risks": {
+    "accompanying_risks": [],
+    "pregnancy_status": null
   }
 }

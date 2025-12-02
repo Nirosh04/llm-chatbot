@@ -132,7 +132,7 @@ class LLMService:
         self.model = config.get("llm_model_name") or "llama3"
         self.options = _ollama_options()
 
-    def stream(self, user_text: str) -> Iterable[str]:
+    def stream(self, user_text: str, add_to_chat_history: bool = True) -> Iterable[str]:
         msgs = self.conversation.build_messages(user_text)
         accumulated = ""
         try:
@@ -148,13 +148,13 @@ class LLMService:
             accumulated = hint + detail
             yield accumulated
         finally:
-            if accumulated:
+            if accumulated and add_to_chat_history:
                 self.conversation.add("user", user_text.strip())
                 self.conversation.add("assistant", accumulated)
 
-    def generate(self, user_text: str) -> str:
+    def generate(self, user_text: str, add_to_chat_history: bool = True) -> str:
         last = ""
-        for last in self.stream(user_text):
+        for last in self.stream(user_text, add_to_chat_history):
             pass
         return last.strip() if last else "Sorry, I couldn't generate a response right now."
 

@@ -5,12 +5,16 @@ cd "C:\Users\...\llm_chatbot\python"
 flutter run
 1
  
+// flutter config --enable-web
+// flutter run -d chrome
 
+// flutter config --enable-windows-desktop
+// flutter create . --platforms=windows
 
 
 */
 
-
+import 'symptoms_page.dart';
 import 'package:flutter/material.dart';
 import 'dart:math';
 import 'server_backend/http_backend.dart' as python_backend;
@@ -23,7 +27,7 @@ import 'dart:developer' as dev;
 
 
 void main() {
-  runApp(MyApp());
+  runApp(const MyApp());
 }
 
 
@@ -62,7 +66,7 @@ Widget turnStringToChatBubble(String message, bool isMe) {
 
 
 class HomeGreeting extends StatelessWidget {
-  const HomeGreeting({Key? key}) : super(key: key);
+  const HomeGreeting({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -72,7 +76,7 @@ class HomeGreeting extends StatelessWidget {
     return SizedBox(
       height: height, // take full screen height
       width: double.infinity,
-      child: const Center( // center the child vertically and horizontally
+      child: Center( // center the child vertically and horizontally
         child: Padding(
           padding: EdgeInsets.symmetric(horizontal: 32),
           child: Column(
@@ -80,7 +84,10 @@ class HomeGreeting extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              Icon(Icons.auto_awesome, size: 48, color: atoms.fabColor),
+              Image.asset('assets/Lumee.png', 
+                width: 120,
+                height: 120,
+                color: atoms.fabColor),
               SizedBox(height: 24),
               Text(
                 'Willkommen!',
@@ -92,7 +99,7 @@ class HomeGreeting extends StatelessWidget {
               ),
               SizedBox(height: 16),
               Text(
-                'Ich bin Ihr digitaler Begleiter für die Wartezeit.',
+                'Ich bin Lumee, Ihr digitaler Begleiter. Ich helfe Ihnen, die Wartezeit zu überbrücken.',
                 textAlign: TextAlign.center,
                 style: TextStyle(
                   fontSize: 26,
@@ -102,7 +109,7 @@ class HomeGreeting extends StatelessWidget {
               ),
               SizedBox(height: 12),
               Text(
-                'Wie geht es Ihnen? Tippen Sie einfach los, ich höre Ihnen zu',
+                'Wenn Sie möchten, stelle ich Ihnen ein paar kurze Fragen zu Ihrem befinden. Dies hilft dem Personal, sich besser um Sie zu kümmern. Klicken Sie dazu einfach unten auf "Chat beginnen"',
                 textAlign: TextAlign.center,
                 style: TextStyle(
                   fontSize: 24,
@@ -163,9 +170,30 @@ class CustomTextField extends StatelessWidget {
 
 
 
+class InfoTabNoInfo extends StatelessWidget {
+  const InfoTabNoInfo({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return const Column(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        SizedBox(height: 20),
+        Text(
+          'Information for the creation of a health summary is missing',
+          textAlign: TextAlign.center,
+          style: TextStyle(fontSize: 16),
+        ),
+        SizedBox(height: 20),
+      ],
+    );
+  }
+}
 
 
 class MyApp extends StatefulWidget {
+  const MyApp({super.key});
+
   @override
   State<MyApp> createState() => _MyAppState();
 }
@@ -179,7 +207,7 @@ class _MyAppState extends State<MyApp> with SingleTickerProviderStateMixin {
   bool sessionIdCreated = false;
   String? sessionId; // Declare variable outside
   bool isLoading = false;
-
+  String healthSummaryText = "No Health summary was requested yet";
   late TabController _tabController;
 
   @override
@@ -194,29 +222,75 @@ class _MyAppState extends State<MyApp> with SingleTickerProviderStateMixin {
     super.dispose();
   }
 
+
+
+  Future<String> loadDummyHealthSummary() async {
+    // Simulate network delay
+    await Future.delayed(const Duration(seconds: 5));
+
+    // Dummy Lorem Ipsum text
+    return "Lorem ipsum dolor sit amet, consectetur adipiscing elit. "
+        "Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. "
+        "Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris "
+        "nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in "
+        "reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. "
+        "Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia "
+        "deserunt mollit anim id est laborum.";
+  }
+
+
+
+
+  Future<String> loadHealthSummary() async {
+    if (!sessionIdCreated) {
+      sessionId = await python_backend.createSession();
+      sessionIdCreated = true;
+    }
+
+    final response = await python_backend.getHealthSummary(sessionId);
+
+    final summary = response['ai_summary'] ?? "No summary available";
+    print('LLM Response(first few letters): ${summary.substring(0, summary.length > 14 ? 14 : summary.length)} ');
+
+    return summary;
+  }
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: true,
+      routes: {
+        '/symptoms': (context) {
+          final args = ModalRoute.of(context)?.settings.arguments as Map<String, dynamic>?;
+          return SymptomsPage(sessionId: args?['sessionId']);
+        },
+      },
       home: Scaffold(
         backgroundColor: atoms.backgroundColor,
         // Sidebar / Drawer
-        drawer: Drawer(
-          child: ListView(
-            padding: EdgeInsets.zero,
-            children: [
-              const DrawerHeader(
-                decoration: BoxDecoration(
-                  color: atoms.barHeaderColor,
-                ),
-                child: Text(
-                  'Sidebar Menu',
-                  style: TextStyle(
-                    color: atoms.textColor,
-                    fontSize: 24,
-                  ),
-                ),
-              ),
+      drawer: Builder(
+      builder: (drawerCtx) => Drawer(
+        child: ListView(
+        padding: EdgeInsets.zero,
+        children: [
+          const DrawerHeader(
+          decoration: BoxDecoration(color: atoms.barHeaderColor),
+          child: Text(
+            'Sidebar Menu',
+            style: TextStyle(color: atoms.textColor, fontSize: 24),
+          ),
+        ),
+        ListTile(
+          title: const Text("Symptome", style: TextStyle(color: atoms.textColor)),
+          leading: const Icon(Icons.sick),
+          onTap: () {
+            Navigator.of(drawerCtx).pop(); // Drawer schließen
+            Navigator.of(drawerCtx).pushNamed(
+              '/symptoms',
+              arguments: {'sessionId': sessionId},
+            ); // Seite öffnen
+          },
+        ),
               ListTile(
                 leading: const Icon(Icons.home),
                 title: const Text('Test - Signal check'),
@@ -269,19 +343,15 @@ class _MyAppState extends State<MyApp> with SingleTickerProviderStateMixin {
                     sessionIdCreated = true;
                   }
 
-                  final response = await python_backend.getHealthSummary(
-                    sessionId,
-                  );
+                  final summary = await loadHealthSummary();
                   
                   // Now you can access the map data
-                  print('LLM Response: ${response['ai_summary']?.substring(0, 14)}');
+                  print('LLM Response: ${summary.substring(0, 14)}');
                   
                   // Or, for example, show it in a dialog/snackbar:
                   // if (!mounted) return; // Widget might have been removed
                   setState(() {
-                    chatList.add(
-                      turnStringToChatBubble(response['ai_summary'], false)
-                    );
+                    healthSummaryText = summary;
                   });
                 },
               ),
@@ -327,6 +397,7 @@ class _MyAppState extends State<MyApp> with SingleTickerProviderStateMixin {
             ],
           ),
         ),
+      ),
         // AppBar with slightly different color
         appBar: AppBar(
           backgroundColor: atoms.backgroundColor, // slightly different
@@ -430,12 +501,31 @@ class _MyAppState extends State<MyApp> with SingleTickerProviderStateMixin {
                 ),
               ],
             ),
-            // placeholder for other tabs
-            const  Center(child: Text("Info Tab Content", style: TextStyle(color: atoms.textColor))),
+            // Tab for: Info - Health Summary
+            SingleChildScrollView(
+            child: Padding(
+              padding: const EdgeInsets.all(16.0),
+              child: chatList.isNotEmpty
+                  ? Center(
+                      child: Column(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          SizedBox(height: 10),
+                          Text(healthSummaryText, style: TextStyle(color: atoms.textColor)),
+                          SizedBox(height: 10),
+                          //CircularProgressIndicator(),
+                        ],
+                      ),
+                    )
+                  : const InfoTabNoInfo(), // if chatList is empty: InfoTabNoInfo is shown
+            ),
+          ),
             const  Center(child: Text("Settings Tab Content", style: TextStyle(color: atoms.textColor))),
           ],
         ),
       ),
-    );
+      );
+    
   }
 }
+

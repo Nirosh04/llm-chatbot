@@ -76,14 +76,7 @@ flutter run
 2
  ```
 
-## Start Flet app
-Keep in mind: This is a a dummy frontend for the backend group. The final product won't include flet.
-```
-cd "C:\Users\...your_path...\llm_chatbot\"
-venv\Scripts\activate
-cd 1_frontend/dummy_frontend
-python simple_chat_w_flet.py
-```
+
 
 ## Start Python Fastapi Server
 Keep in mind: activate or deactivate sql database in fastapi_server_w_db.py (at the top of the script - simplified_db_version = True) if needed. And also: the ollama model specified n config.yaml has to be downloaded.
