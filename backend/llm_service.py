@@ -15,11 +15,13 @@ def test():
 
 # Load config and create logger when imported
 config = utils.load_config()
-logger = utils.setup_logger()
+logger = utils.setup_logger(config.get("log_level"))
 
 
-logger.info('logger (info) test 1')
-logger.debug('logger (debug) test 1')
+#example of using the logger
+#to be removed in the future
+logger.info('logger (info) test from llm_svc')
+logger.debug('logger (debug) test llm_svc')
 
 
 '''
