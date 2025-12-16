@@ -22,9 +22,9 @@ llm_chatbot/
 └── README.md               # This file
 ```
 
-## First steps
+## Set up Python server (with fastapi and uvicorn)
 
-## Environment for python
+### Environment for python
 create and activate environment first and then: (for example with "python -m venv .venv && .venv\Scripts\activate")
 ```
 cd "C:\Users\...your_path...\llm_chatbot\backend\"
@@ -33,7 +33,7 @@ pip install -r requirements.txt
 ```
 
 
-## Start Python Fastapi Server
+### Start Python Fastapi Server
 Keep in mind: activate or deactivate sql database in fastapi_server_w_db.py (at the top of the script - simplified_db_version = True) if needed. And also: the ollama model specified n config.yaml has to be downloaded.
 ```
 cd "C:\Users\...your_path...\llm_chatbot\backend\"
@@ -44,7 +44,7 @@ uvicorn fastapi_server_w_db:app --host 127.0.0.1 --port 5000 --reload
 
 
 
-## Ollama model environment
+### Ollama model environment
 
 Go to the official Ollama website to download the ollama program.
 llama3.2:1b is the smallest model - 1.3GB.
