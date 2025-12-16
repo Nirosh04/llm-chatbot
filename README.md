@@ -1,6 +1,12 @@
 # llm_chatbot
 
-llm_chatbot is a project that integrates a Flutter frontend with a Python backend. Flutter provides the main cross-platform frontend, while Flet offers a lightweight Python-based frontend for users who do not have Flutter installed. The backend is powered by Fastapi and can host language model interactions.
+
+**Description:**  
+Caring and empathetic chatbot for hospitals. Helps with patient data collection and provides dashboard functions.  
+
+**Frontend:** React, Next.js, TypeScript, Material UI, no Tailwind  
+
+**Backend:** Python with FastAPI and Ollama
 
 
 ## Folder structure
@@ -10,7 +16,7 @@ General structure:
 ```
 llm_chatbot/
 │
-├── frontend/             # Flutter app source code
+├── frontend/             # React app source code
 ├── backend/              # Python backend services / logic
 ├── .gitignore              # Git ignore rules
 └── README.md               # This file
