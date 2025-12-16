@@ -27,6 +27,17 @@ pip install -r requirements.txt
 ```
 
 
+## Start Python Fastapi Server
+Keep in mind: activate or deactivate sql database in fastapi_server_w_db.py (at the top of the script - simplified_db_version = True) if needed. And also: the ollama model specified n config.yaml has to be downloaded.
+```
+cd "C:\Users\...your_path...\llm_chatbot\backend\"
+venv\Scripts\activate
+uvicorn fastapi_server_w_db:app --host 127.0.0.1 --port 5000 --reload
+```
+
+
+
+
 ## Ollama model environment
 
 Go to the official Ollama website to download the ollama program.
@@ -37,29 +48,30 @@ ollama list
 ```
 
 ## Set up React next.js app
-After downloading ..
-```
-cd "C:\Users\...your_path...\llm_chatbot\frontend\"
-npm install # handles installs
-```
 
 
+### 1. Make sure Node.js is installed (version 18+ recommended)
+node -v
+npm -v
 
-## Start React Frontend
-```
-cd "C:\Users\...your_path...\llm_chatbot\frontend\"
+### 2. Create a new Next.js app
+npx create-next-app@latest llm_chatbot
+
+### OR using npm init
+### npm init next-app@latest llm_chatbot
+
+### 3. Move into your project folder
+cd llm_chatbot
+
+### 4. Install dependencies (React, React-DOM, Next are usually already installed)
+npm install react react-dom next
+
+### Optional: install other common libraries (HTTP requests, UI components)
+npm install axios                   # for API calls
+npm install @mui/material @emotion/react @emotion/styled  # for Material UI components
+
+### 5. Run the development server
 npm run dev
-```
 
-
-
-
-## Start Python Fastapi Server
-Keep in mind: activate or deactivate sql database in fastapi_server_w_db.py (at the top of the script - simplified_db_version = True) if needed. And also: the ollama model specified n config.yaml has to be downloaded.
-```
-cd "C:\Users\...your_path...\llm_chatbot\backend\"
-venv\Scripts\activate
-uvicorn fastapi_server_w_db:app --host 127.0.0.1 --port 5000 --reload
-```
 
 
