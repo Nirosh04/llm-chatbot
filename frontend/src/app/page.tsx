@@ -3,7 +3,6 @@
 
 import { Button, Stack, ButtonProps } from "@mui/material";
 import { useRouter } from "next/navigation";
-import { colors } from "./../styles/colors";
 
 
 
@@ -14,11 +13,11 @@ function CustomButton({ children, ...props }: ButtonProps) {
       {...props}
       variant="contained"
       sx={{
-        backgroundColor: colors.buttonColor,
-        color: colors.textColor,
-        '&:hover': {
-          backgroundColor: colors.buttonHoverColor,
-        },
+        //backgroundColor: colors.buttonColor,
+        //color: colors.textColor,
+        //'&:hover': {
+        //  backgroundColor: colors.buttonHoverColor,
+        //},
         padding: '12px 24px',
         fontSize: '16px',
         fontWeight: 600,
@@ -40,7 +39,7 @@ export default function LanderPage() {
       display: "flex", 
       justifyContent: "center", 
       marginTop: "50px",
-      backgroundColor: colors.backgroundColor,
+      //backgroundColor: colors.backgroundColor,
       minHeight: '100vh',
       padding: '20px',
     }}>

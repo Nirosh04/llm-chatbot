@@ -4,7 +4,6 @@
 import React from 'react';
 import Image from 'next/image';
 
-import { colors } from "./../styles/colors";
 import CompanionIcon from './../assets/CompanionIcon.png';
 
 export const HomeGreeting: React.FC = () => {
@@ -39,7 +38,6 @@ export const HomeGreeting: React.FC = () => {
           style={{
             fontSize: '36px',
             fontWeight: 600,
-            color: colors.textColor,
             marginBottom: '16px',
           }}
         >
@@ -49,7 +47,6 @@ export const HomeGreeting: React.FC = () => {
           style={{
             fontSize: '26px',
             fontWeight: 600,
-            color: colors.textColor,
             marginBottom: '12px',
             lineHeight: '1.4',
           }}
@@ -59,7 +56,6 @@ export const HomeGreeting: React.FC = () => {
         <p
           style={{
             fontSize: '24px',
-            color: colors.textColor,
             lineHeight: '1.4',
           }}
         >

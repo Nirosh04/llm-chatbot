@@ -1,14 +1,15 @@
-// src/app/layout.tsx
 import './globals.css';
+import { ReactNode } from 'react';
+import { SettingsProvider } from '@/context/SettingsContext';
 
-export default function RootLayout({
-  children,
-}: {
-  children: React.ReactNode;
-}) {
+export default function RootLayout({ children }: { children: ReactNode }) {
   return (
     <html lang="en">
-      <body>{children}</body>
+      <body>
+        <SettingsProvider>
+          {children}
+        </SettingsProvider>
+      </body>
     </html>
   );
 }

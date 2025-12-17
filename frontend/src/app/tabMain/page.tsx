@@ -7,7 +7,9 @@ import React, { useState, useRef, useEffect } from 'react';
 import { useRouter } from "next/navigation";
 import {
   AppBar,
-  Toolbar,
+  Switch,
+  Select,
+  MenuItem,
   List,
   ListItem,
   Button,
@@ -31,7 +33,6 @@ import ChatIcon from '@mui/icons-material/Chat';
 import InfoIcon from '@mui/icons-material/Info';
 import SendIcon from '@mui/icons-material/Send';
 
-import { colors } from './../../styles/colors';
 //import { ChatBubble } from './components/ChatBubble';
 import { MessageList } from './../../components/MessageList';
 import { HomeGreeting } from './../../components/HomeGreeting';
@@ -47,6 +48,8 @@ import {
   resetConversationRequest
 } from './../../services/serverRequests';
 import SymptomsPage from '@/app/symptoms/page'; // adjust the path if needed
+import { useSettings } from '@/context/SettingsContext';
+
 
 interface ChatMessage {
   id: string;
@@ -54,11 +57,8 @@ interface ChatMessage {
   isMe: boolean;
 }
 
-interface TabMainProps {
-  selectedLanguage: string;
-}
 
-export default function TabMain({ selectedLanguage = 'DE' }: TabMainProps) {
+export default function TabMain() {
   const [messages, setMessages] = useState<ChatMessage[]>([]);
   const [inputText, setInputText] = useState('');
   const [isLoading, setIsLoading] = useState(false);
@@ -69,6 +69,8 @@ export default function TabMain({ selectedLanguage = 'DE' }: TabMainProps) {
   );
 
   const router = useRouter();
+  const { darkMode, toggleDarkMode, language, setLanguage } = useSettings();
+
   
 
   const messagesEndRef = useRef<HTMLDivElement>(null);
@@ -163,6 +165,7 @@ export default function TabMain({ selectedLanguage = 'DE' }: TabMainProps) {
     }
   };
 
+
   // Main content container - FIXED: Consistent height
   const renderTabContent = () => {
     return (
@@ -194,7 +197,6 @@ export default function TabMain({ selectedLanguage = 'DE' }: TabMainProps) {
                 overflowY: 'auto',
                 overflowX: 'hidden', // Prevent horizontal scrolling
                 padding: 2,
-                backgroundColor: colors.backgroundColor,
               }}
             >
               {messages.length === 0 && !isLoading ? (
@@ -210,22 +212,22 @@ export default function TabMain({ selectedLanguage = 'DE' }: TabMainProps) {
             {/* Input area */}
             <Box
               sx={{
-                backgroundColor: colors.barColor,
                 padding: 2,
                 display: 'flex',
                 gap: 1,
                 alignItems: 'center',
                 flexShrink: 0, // Prevent input area from shrinking
+                backgroundColor: theme => theme.palette.background.paper,
+
               }}
             >
-              <Box sx={{ flex: 1 }}>
+              <Box sx={{ 
+                flex: 1,                 
+                }}>
                 <CustomTextField
                   value={inputText}
                   onChange={(e) => setInputText(e.target.value)}
                   onKeyPress={handleKeyPress}
-                  textColor={colors.textColor}
-                  cursorColor={colors.fabColor}
-                  backgroundColor={colors.backgroundColor}
                   placeholder="Type a message..."
                 />
               </Box>
@@ -234,12 +236,12 @@ export default function TabMain({ selectedLanguage = 'DE' }: TabMainProps) {
                   onClick={handleSendMessage}
                   disabled={!inputText.trim()}
                   sx={{
-                    backgroundColor: colors.fabColor,
-                    color: colors.iconColor,
                     borderRadius: '20px',
                     padding: '12px',
+                    backgroundColor: theme => theme.palette.primary.main,
+
                     '&:hover': {
-                      backgroundColor: colors.fabColor,
+                      backgroundColor: theme => theme.palette.primary.main,
                       opacity: 0.9,
                     },
                   }}
@@ -263,30 +265,31 @@ export default function TabMain({ selectedLanguage = 'DE' }: TabMainProps) {
               display: 'flex',
               justifyContent: 'center',
               alignItems: 'center',
-              backgroundColor: colors.backgroundColor,
-              color: colors.textColor,
+              //backgroundColor: colors.backgroundColor,
+              //color: colors.textColor,
             }}
           >
           <List
             sx={{
-    display: 'flex',
-    flexDirection: 'column',
-    alignItems: 'center', // centers all ListItems horizontally
-    gap: 1,               // optional: space between items
-  }}>
-          {/* Symptome */}
+              display: 'flex',
+              flexDirection: 'column',
+              alignItems: 'center', // centers all ListItems horizontally
+              gap: 1,               // optional: space between items
+            }}>
+
+          {/* Language Selector */}
           <ListItem>
-            <Button
-              onClick={() => {
-                console.log('Navigate to symptoms page');
-                router.push("/symptoms");
-              }}
-            >
-              <ListItemIcon sx={{ color: colors.textColor }}>
-                <SickIcon />
-              </ListItemIcon>
-              <ListItemText primary="Symptome" />
-            </Button>
+            <ListItemText primary="Language" />
+            <Select value={language} onChange={e => setLanguage(e.target.value)} sx={{ minWidth: 100 }}>
+              <MenuItem value="DE">Deutsch</MenuItem>
+              <MenuItem value="EN">English</MenuItem>
+            </Select>
+          </ListItem>
+
+          {/* Dark Mode Toggle */}
+          <ListItem>
+            <ListItemText primary="Dark Mode" />
+            <Switch checked={darkMode} onChange={toggleDarkMode} />
           </ListItem>
 
           {/* Test - Signal Check */}
@@ -297,7 +300,7 @@ export default function TabMain({ selectedLanguage = 'DE' }: TabMainProps) {
                 console.log('Signal check:', response);
               }}
             >
-              <ListItemIcon sx={{ color: colors.textColor }}>
+              <ListItemIcon>
                 <HomeIcon />
               </ListItemIcon>
               <ListItemText primary="Test - Signal check" />
@@ -313,7 +316,7 @@ export default function TabMain({ selectedLanguage = 'DE' }: TabMainProps) {
                 setSessionId(newSessionId);
               }}
             >
-              <ListItemIcon sx={{ color: colors.textColor }}>
+              <ListItemIcon>
                 <HomeIcon />
               </ListItemIcon>
               <ListItemText primary="Test - Create session" />
@@ -323,7 +326,7 @@ export default function TabMain({ selectedLanguage = 'DE' }: TabMainProps) {
           {/* Test - Health Summary */}
           <ListItem>
             <Button onClick={loadHealthSummary}>
-              <ListItemIcon sx={{ color: colors.textColor }}>
+              <ListItemIcon>
                 <HomeIcon />
               </ListItemIcon>
               <ListItemText primary="Test health summary" />
@@ -333,7 +336,7 @@ export default function TabMain({ selectedLanguage = 'DE' }: TabMainProps) {
           {/* Test - Reset Conversation */}
           <ListItem>
             <Button onClick={resetConversation}>
-              <ListItemIcon sx={{ color: colors.textColor }}>
+              <ListItemIcon>
                 <HomeIcon />
               </ListItemIcon>
               <ListItemText primary="Test Reset conversation" />
@@ -343,7 +346,7 @@ export default function TabMain({ selectedLanguage = 'DE' }: TabMainProps) {
           {/* Profile */}
           <ListItem>
             <Button>
-              <ListItemIcon sx={{ color: colors.textColor }}>
+              <ListItemIcon>
                 <PersonIcon />
               </ListItemIcon>
               <ListItemText primary="Profile" />
@@ -353,7 +356,7 @@ export default function TabMain({ selectedLanguage = 'DE' }: TabMainProps) {
           {/* Logout */}
           <ListItem>
             <Button>
-              <ListItemIcon sx={{ color: colors.textColor }}>
+              <ListItemIcon>
                 <LogoutIcon />
               </ListItemIcon>
               <ListItemText primary="Logout" />
@@ -376,7 +379,7 @@ export default function TabMain({ selectedLanguage = 'DE' }: TabMainProps) {
         <AppBar
           position="static"
           sx={{
-            backgroundColor: colors.backgroundColor,
+            backgroundColor: theme => theme.palette.background.paper,
             boxShadow: 'none',
             flexShrink: 0, // Prevent AppBar from shrinking
           }}
@@ -388,14 +391,17 @@ export default function TabMain({ selectedLanguage = 'DE' }: TabMainProps) {
             onChange={(_, newValue) => setActiveTab(newValue)}
             centered
             sx={{
-              '& .MuiTab-root': {
-                color: colors.textColor,
+              '& .MuiTab-root': { // when not selected
+                color: theme => theme.palette.text.primary,
+                minHeight: 56,
               },
-              '& .Mui-selected': {
-                color: colors.fabColor,
+              '& .MuiTab-root.Mui-selected': { // when clicked
+                color: theme => theme.palette.text.secondary,
               },
-              '& .MuiTabs-indicator': {
-                backgroundColor: colors.fabColor,
+              '& .MuiTabs-indicator': { // bar under clicked - should be the same as clicked
+                backgroundColor: theme => theme.palette.text.secondary,
+                height: 3,
+                borderRadius: 2,
               },
             }}
           >

@@ -10,7 +10,6 @@ import {
   Stack,
 } from '@mui/material';
 import { Edit, Delete, ExpandMore } from '@mui/icons-material';
-import { colors } from './../styles/colors';
 import { MedicalCondition } from './../types/PatientMedicalData'; // rename to patientData.ts
 
 
@@ -36,7 +35,7 @@ export default function MedicalHistoryCard({
       expanded={expanded}
       onChange={() => setExpanded(!expanded)}
       sx={{
-        backgroundColor: colors.llmChatColor,
+        // backgroundColor: colors.llmChatColor,
         borderRadius: '12px !important',
         mb: 2,
         '&:before': { display: 'none' },
@@ -51,19 +50,19 @@ export default function MedicalHistoryCard({
           },
         }}
       >
-        <Typography sx={{ fontSize: 20, fontWeight: 700, color: colors.textColor }}>
+        <Typography sx={{ fontSize: 20, fontWeight: 700}}>
           {condition.condition}
         </Typography>
       </AccordionSummary>
       
       <AccordionDetails>
         <Stack spacing={2}>
-          <Typography sx={{ fontSize: 16, color: colors.textColor }}>
+          <Typography sx={{ fontSize: 16}}>
             Seit: {condition.since}
           </Typography>
           
           {condition.notes && (
-            <Typography sx={{ fontSize: 14, color: colors.textColor }}>
+            <Typography sx={{ fontSize: 14}}>
               Notizen: {condition.notes}
             </Typography>
           )}
@@ -74,7 +73,7 @@ export default function MedicalHistoryCard({
                 e.stopPropagation();
                 onEdit(index);
               }}
-              sx={{ color: colors.textColor }}
+              // sx={{ color: colors.textColor }}
             >
               <Edit />
             </IconButton>
@@ -84,7 +83,7 @@ export default function MedicalHistoryCard({
                 e.stopPropagation();
                 onRemove(index);
               }}
-              sx={{ color: colors.textColor }}
+              // sx={{ color: colors.textColor }}
             >
               <Delete />
             </IconButton>

@@ -2,7 +2,6 @@
 
 
 import React from 'react';
-import { colors } from "./../styles/colors";
 
 export const LoadingDots: React.FC = () => {
   return (
@@ -27,7 +26,7 @@ export const LoadingDots: React.FC = () => {
               width: '12px',
               height: '12px',
               borderRadius: '50%',
-              backgroundColor: colors.fabColor,
+              //backgroundColor: colors.fabColor,
               animation: `pulse 1.5s ease-in-out ${dot * 0.3}s infinite`,
             }}
           />

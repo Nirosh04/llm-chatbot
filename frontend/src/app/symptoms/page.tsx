@@ -38,7 +38,6 @@ import {
   Delete,
   ExpandMore,
 } from '@mui/icons-material';
-import { colors } from './../../styles/colors';
 import SymptomCard from './../../components/SymptomCard';
 import MedicalHistoryCard from './../../components/MedicalHistoryCard';
 import AddSymptomDialog from './../../components/AddSymptomDialog';
@@ -91,6 +90,7 @@ interface SymptomsPageProps {
   sessionId: string | null;
 }
 
+// passing sessionId as prop works as long as it is loaded as a component
 export default function SymptomsPage({ sessionId }: SymptomsPageProps) {
   const [jsonData, setJsonData] = useState<HealthSummary | null>(null);
   const [isLoading, setIsLoading] = useState(true);
@@ -384,10 +384,9 @@ export default function SymptomsPage({ sessionId }: SymptomsPageProps) {
           justifyContent: 'center',
           alignItems: 'center',
           minHeight: '100vh',
-          backgroundColor: colors.backgroundColor,
         }}
       >
-        <CircularProgress sx={{ color: colors.fabColor }} />
+        <CircularProgress/>
       </Box>
     );
   }
@@ -400,7 +399,6 @@ export default function SymptomsPage({ sessionId }: SymptomsPageProps) {
           justifyContent: 'center',
           alignItems: 'center',
           minHeight: '100vh',
-          backgroundColor: colors.backgroundColor,
           p: 3,
         }}
       >
@@ -412,14 +410,13 @@ export default function SymptomsPage({ sessionId }: SymptomsPageProps) {
   }
 
   return (
-    <Box sx={{ backgroundColor: colors.backgroundColor, minHeight: '100vh' }}>
+    <Box sx={{ minHeight: '100vh' }}>
       <AppBar
         position="static"
         elevation={0}
         sx={{
-          backgroundColor: colors.backgroundColor,
-          color: colors.textColor,
           py: 1,
+          backgroundColor: theme => theme.palette.background.paper,
         }}
       >
         <Container maxWidth="lg">
@@ -429,7 +426,6 @@ export default function SymptomsPage({ sessionId }: SymptomsPageProps) {
               <Tooltip title="Zurück zu Symptomen">
                 <IconButton
                   onClick={handlePreviousPage}
-                  sx={{ color: colors.textColor }}
                 >
                   <ChevronLeft />
                 </IconButton>
@@ -444,7 +440,6 @@ export default function SymptomsPage({ sessionId }: SymptomsPageProps) {
               <Box
                 sx={{
                   position: 'relative',
-                  backgroundColor: colors.llmChatColor,
                   borderRadius: 24,
                   p: 0.5,
                   mx: 'auto',
@@ -459,9 +454,10 @@ export default function SymptomsPage({ sessionId }: SymptomsPageProps) {
                     bottom: 4,
                     left: activeTab === 0 ? 4 : '50%',
                     right: activeTab === 1 ? 4 : '50%',
-                    backgroundColor: 'white',
                     borderRadius: 20,
                     transition: 'all 0.25s ease-in-out',
+                    backgroundColor: theme => theme.palette.button.bg, // or any color like '#e0e0e0'
+                    boxShadow: '0 2px 8px rgba(35, 35, 35, 0.1)',
                   }}
                 />
                 
@@ -478,13 +474,13 @@ export default function SymptomsPage({ sessionId }: SymptomsPageProps) {
                       cursor: 'pointer',
                       py: 1,
                       borderRadius: 16,
-                      transition: 'background-color 0.2s',
-                      backgroundColor: hoveredTab === 0 
-                        ? 'rgba(0, 0, 0, 0.08)' 
-                        : 'transparent',
-                      '&:hover': {
-                        backgroundColor: 'rgba(0, 0, 0, 0.08)',
-                      },
+                       transition: 'background-color 0.2s',
+                       backgroundColor: hoveredTab === 0 
+                         ? 'rgba(0, 0, 0, 0.08)' 
+                         : 'transparent',
+                       '&:hover': {
+                         backgroundColor: 'rgba(0, 0, 0, 0.08)',
+                       },
                     }}
                     onClick={() => setActiveTab(0)}
                     onMouseEnter={() => setHoveredTab(0)}
@@ -494,7 +490,7 @@ export default function SymptomsPage({ sessionId }: SymptomsPageProps) {
                       sx={{
                         fontSize: 18,
                         fontWeight: 700,
-                        color: activeTab === 0 ? colors.textColor : `${colors.textColor}8C`,
+                        //color: theme => theme.palette.text.primary,
                       }}
                     >
                       Symptome
@@ -513,12 +509,12 @@ export default function SymptomsPage({ sessionId }: SymptomsPageProps) {
                       py: 1,
                       borderRadius: 16,
                       transition: 'background-color 0.2s',
-                      backgroundColor: hoveredTab === 1 
-                        ? 'rgba(0, 0, 0, 0.08)' 
-                        : 'transparent',
-                      '&:hover': {
-                        backgroundColor: 'rgba(0, 0, 0, 0.08)',
-                      },
+                       backgroundColor: hoveredTab === 1 
+                         ? 'rgba(0, 0, 0, 0.08)' 
+                         : 'transparent',
+                       '&:hover': {
+                         backgroundColor: 'rgba(0, 0, 0, 0.08)',
+                       },
                     }}
                     onClick={() => setActiveTab(1)}
                     onMouseEnter={() => setHoveredTab(1)}
@@ -528,7 +524,7 @@ export default function SymptomsPage({ sessionId }: SymptomsPageProps) {
                       sx={{
                         fontSize: 18,
                         fontWeight: 700,
-                        color: activeTab === 1 ? colors.textColor : `${colors.textColor}8C`,
+                        //color: theme => theme.palette.text.primary,
                       }}
                     >
                       Krankengeschichte
@@ -543,7 +539,6 @@ export default function SymptomsPage({ sessionId }: SymptomsPageProps) {
               <Tooltip title="Weiter zur Krankengeschichte">
                 <IconButton
                   onClick={handleNextPage}
-                  sx={{ color: colors.textColor }}
                 >
                   <ChevronRight />
                 </IconButton>
@@ -573,7 +568,7 @@ export default function SymptomsPage({ sessionId }: SymptomsPageProps) {
             
             {jsonData.historyOfPresentIllness.keySymptoms.length === 0 && (
               <Box sx={{ textAlign: 'center', py: 4 }}>
-                <Typography variant="body1" color="text.secondary">
+                <Typography variant="body1">
                   Noch keine Symptome erfasst. Fügen Sie das erste Symptom hinzu.
                 </Typography>
               </Box>
@@ -622,14 +617,12 @@ export default function SymptomsPage({ sessionId }: SymptomsPageProps) {
         >
           <Fab
             sx={{
-              backgroundColor: colors.barHeaderColor,
               color: 'black',
               width: 60,
               height: 60,
               boxShadow: '4px 6px 18px rgba(100, 160, 255, 0.35)',
 
               '&:hover': {
-                backgroundColor: colors.buttonHoverColor,
                 boxShadow: '6px 8px 22px rgba(100, 160, 255, 0.55)',
               },
             }}
@@ -706,7 +699,6 @@ export default function SymptomsPage({ sessionId }: SymptomsPageProps) {
           <Button 
             onClick={handleAddHistory}
             variant="contained"
-            sx={{ backgroundColor: colors.buttonColor }}
           >
             Hinzufügen
           </Button>
@@ -760,7 +752,6 @@ export default function SymptomsPage({ sessionId }: SymptomsPageProps) {
           <Button 
             onClick={handleUpdateHistory}
             variant="contained"
-            sx={{ backgroundColor: colors.buttonColor }}
           >
             Aktualisieren
           </Button>

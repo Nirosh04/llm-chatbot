@@ -1,8 +1,7 @@
 // components/ChatBubble.tsx
 'use client';
-
+import { Box, useTheme } from '@mui/material';
 import React from 'react';
-import { colors } from "./../styles/colors";
 
 interface ChatBubbleProps {
   message: string;
@@ -10,6 +9,9 @@ interface ChatBubbleProps {
 }
 
 export const ChatBubble: React.FC<ChatBubbleProps> = ({ message, isMe }) => {
+  const theme = useTheme();
+
+
   return (
     <div
       style={{
@@ -28,8 +30,8 @@ export const ChatBubble: React.FC<ChatBubbleProps> = ({ message, isMe }) => {
       >
         <div
           style={{
-            backgroundColor: isMe ? colors.meChatColor : colors.llmChatColor,
-            color: colors.textColor,
+            backgroundColor: isMe ? theme.palette.chat.me : theme.palette.chat.llm,
+            color: isMe ?  theme.palette.chat.textMe : theme.palette.chat.textLlm,
             padding: '12px',
             borderRadius: '15px',
             maxWidth: '80%',

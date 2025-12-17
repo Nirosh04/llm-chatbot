@@ -12,7 +12,6 @@ import {
   Stack,
 } from '@mui/material';
 import { Edit, Delete, ExpandMore } from '@mui/icons-material';
-import { colors } from './../styles/colors';
 import { Symptom } from './../types/PatientMedicalData';
 
 
@@ -39,7 +38,7 @@ export default function SymptomCard({
       expanded={expanded}
       onChange={() => setExpanded(!expanded)}
       sx={{
-        backgroundColor: colors.llmChatColor,
+        //backgroundColor: theme.palette.paper,
         borderRadius: '12px !important',
         mb: 2,
         '&:before': { display: 'none' },
@@ -54,27 +53,27 @@ export default function SymptomCard({
           },
         }}
       >
-        <Typography sx={{ fontSize: 20, fontWeight: 700, color: colors.textColor }}>
+        <Typography sx={{ fontSize: 20, fontWeight: 700}}>
           {symptom.description}
         </Typography>
       </AccordionSummary>
       
       <AccordionDetails>
         <Stack spacing={1}>
-          <Typography sx={{ fontSize: 16, color: colors.textColor }}>
+          <Typography sx={{ fontSize: 16}}>
             Dauer: {symptom.duration}
           </Typography>
           
-          <Typography sx={{ fontSize: 14, color: colors.textColor }}>
+          <Typography sx={{ fontSize: 14}}>
             Ort: {symptom.location}
           </Typography>
           
           <Box sx={{ mt: 2 }}>
             <Stack direction="row" justifyContent="space-between" alignItems="center" mb={1}>
-              <Typography sx={{ fontSize: 14, fontWeight: 600, color: colors.textColor }}>
+              <Typography sx={{ fontSize: 14, fontWeight: 600}}>
                 Schmerz (1-10)
               </Typography>
-              <Typography sx={{ fontSize: 14, fontWeight: 600, color: colors.textColor }}>
+              <Typography sx={{ fontSize: 14, fontWeight: 600}}>
                 {symptom.pain}
               </Typography>
             </Stack>
@@ -87,12 +86,12 @@ export default function SymptomCard({
               marks
               valueLabelDisplay="auto"
               sx={{
-                color: colors.fabColor,
+                color: '#64a0ff', //colors.fabColor,
                 '& .MuiSlider-track': {
-                  backgroundColor: colors.fabColor,
+                  backgroundColor: '#64a0ff', // colors.fabColor,
                 },
                 '& .MuiSlider-rail': {
-                  backgroundColor: colors.barColor,
+                  backgroundColor: '#dcebff'// colors.barColor,
                 },
               }}
               onChange={(_, value) => onPainChange(index, value as number)}
@@ -105,7 +104,6 @@ export default function SymptomCard({
                 e.stopPropagation();
                 onEdit(index);
               }}
-              sx={{ color: colors.textColor }}
             >
               <Edit />
             </IconButton>
@@ -115,7 +113,6 @@ export default function SymptomCard({
                 e.stopPropagation();
                 onRemove(index);
               }}
-              sx={{ color: colors.textColor }}
             >
               <Delete />
             </IconButton>

@@ -15,7 +15,6 @@ import {
 import { useRouter } from 'next/navigation';
 import Image from 'next/image';
 import CompanionIcon from '@/assets/CompanionIcon.png'; 
-import { colors } from '../../styles/colors';
 import DE from 'country-flag-icons/react/3x2/DE';
 import GB from 'country-flag-icons/react/3x2/GB';
 
@@ -27,12 +26,12 @@ const WelcomePage: React.FC = () => {
   const [selectedLanguage, setSelectedLanguage] = useState<'DE' | 'GB'>('DE');
 
   const textStyles = {
-    headline1: { fontSize: '2.25rem', fontWeight: 600, color: colors.textColor, lineHeight: 1.2 },
-    headline2: { fontSize: '1.625rem', fontWeight: 600, color: colors.textColor, lineHeight: 1.2 },
-    headline2Bold: { fontSize: '1.625rem', fontWeight: 'bold', color: colors.textColor, lineHeight: 1.2 },
-    headline3: { fontSize: '1.625rem', fontWeight: 600, color: colors.textColor, lineHeight: 1.2 },
-    defaultText: { fontSize: '1.5rem', color: colors.textColor, lineHeight: 1.5 },
-    buttonText: { fontSize: '1.625rem', color: colors.textColor },
+    headline1: { fontSize: '2.25rem', fontWeight: 600, lineHeight: 1.2 },
+    headline2: { fontSize: '1.625rem', fontWeight: 600, lineHeight: 1.2 },
+    headline2Bold: { fontSize: '1.625rem', fontWeight: 'bold', lineHeight: 1.2 },
+    headline3: { fontSize: '1.625rem', fontWeight: 600, lineHeight: 1.2 },
+    defaultText: { fontSize: '1.5rem', lineHeight: 1.5 },
+    buttonText: { fontSize: '1.625rem' },
   };
 
   const handleStartClick = () => {
@@ -49,10 +48,10 @@ const WelcomePage: React.FC = () => {
         display: 'flex',
         flexDirection: 'column',
         minHeight: '100vh',
-        backgroundColor: colors.backgroundColor,
+        //backgroundColor: colors.backgroundColor,
       }}
     >
-      <AppBar position="static" sx={{ backgroundColor: colors.backgroundColor, boxShadow: 'none', borderBottom: `1px solid ${theme.palette.divider}` }}>
+      <AppBar position="static" sx={{ boxShadow: 'none', borderBottom: `1px solid ${theme.palette.divider}` }}>
         <Toolbar />
       </AppBar>
 
@@ -84,7 +83,7 @@ const WelcomePage: React.FC = () => {
                 onClick={() => handleLanguageClick('DE')}
                 sx={{
                   padding: 1,
-                  border: selectedLanguage === 'DE' ? `2px solid ${colors.buttonColor}` : '2px solid transparent',
+                  border: selectedLanguage === 'DE' ? `2px solid` : '2px solid transparent',
                   borderRadius: 1,
                   '&:hover': { backgroundColor: 'rgba(0, 0, 0, 0.04)' },
                 }}
@@ -96,7 +95,7 @@ const WelcomePage: React.FC = () => {
                 onClick={() => handleLanguageClick('GB')}
                 sx={{
                   padding: 1,
-                  border: selectedLanguage === 'GB' ? `2px solid ${colors.buttonColor}` : '2px solid transparent',
+                  border: selectedLanguage === 'GB' ? `2px solid`  : '2px solid transparent',
                   borderRadius: 1,
                   '&:hover': { backgroundColor: 'rgba(0, 0, 0, 0.04)' },
                 }}
@@ -108,17 +107,17 @@ const WelcomePage: React.FC = () => {
         </Stack>
       </Container>
 
-      <BottomNavigation sx={{ backgroundColor: colors.backgroundColor, borderTop: `1px solid ${theme.palette.divider}`, height: 50 }} />
+      <BottomNavigation sx={{ borderTop: `1px solid ${theme.palette.divider}`, height: 50 }} />
 
       <Box sx={{ position: 'fixed', bottom: 16, left: 0, right: 0, display: 'flex', justifyContent: 'center', zIndex: theme.zIndex.fab }}>
         <Fab
           variant="extended"
           onClick={handleStartClick}
           sx={{
-            backgroundColor: colors.buttonColor, // || theme.palette.primary.main,
-            color: colors.textColor,
+            // backgroundColor: colors.buttonColor, // || theme.palette.primary.main,
+            // color: colors.textColor,
             padding: theme.spacing(2, 4),
-            '&:hover': { backgroundColor: colors.buttonHoverColor} // || theme.palette.primary.dark },
+            //'&:hover': //  { backgroundColor: colors.buttonHoverColor} // || theme.palette.primary.dark },
           }}
         >
           <Typography sx={textStyles.buttonText}>Fangen wir an</Typography>

@@ -2,25 +2,28 @@
 
 
 import React from 'react';
-import { TextField } from '@mui/material';
+import { TextField, useTheme } from '@mui/material';
 import type { TextFieldProps } from '@mui/material';
-import { colors } from "./../styles/colors";
 
 interface CustomTextFieldProps extends Omit<TextFieldProps, 'variant'> {
   hintText?: string;
-  textColor?: string;
-  cursorColor?: string;
-  backgroundColor?: string;
 }
 
 export const CustomTextField: React.FC<CustomTextFieldProps> = ({
   hintText = "Type a message...",
-  textColor = colors.textColor,
-  cursorColor = colors.fabColor,
-  backgroundColor = colors.backgroundColor,
+
   ...props
 }) => {
+  const theme = useTheme();
+
+  // Define colors using theme
+  const textColor = theme.palette.text.primary;
+  const cursorColor = theme.palette.primary.main;
+  const backgroundColor = theme.palette.background.default;
+
+
   return (
+
     <TextField
       {...props}
       fullWidth

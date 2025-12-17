@@ -11,7 +11,6 @@ import {
   Stack,
   Typography,
 } from '@mui/material';
-import { colors } from './../styles/colors';
 
 
 interface AddSymptomDialogProps {
@@ -83,12 +82,12 @@ export default function AddSymptomDialog({
               marks
               valueLabelDisplay="auto"
               sx={{
-                color: colors.fabColor,
+                color: '#64a0ff', // theme => theme.palette.text.secondary, //colors.fabColor,
                 '& .MuiSlider-track': {
-                  backgroundColor: colors.fabColor,
+                  backgroundColor: '#64a0ff', // theme => theme.palette.text.secondary, //colors.fabColor,
                 },
                 '& .MuiSlider-rail': {
-                  backgroundColor: colors.barColor,
+                  backgroundColor: '#dcebff', //theme => theme.palette.paper, //colors.barColor,
                 },
               }}
               onChange={(_, value) => onSymptomChange({ ...symptom, pain: value as number })}
@@ -101,7 +100,7 @@ export default function AddSymptomDialog({
         <Button 
           onClick={onSave}
           variant="contained"
-          sx={{ backgroundColor: colors.buttonColor }}
+          // sx={{ backgroundColor: colors.buttonColor }}
         >
           {isEditing ? "Aktualisieren" : "Hinzufügen"}
         </Button>
