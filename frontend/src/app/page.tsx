@@ -39,7 +39,6 @@ export default function LanderPage() {
       display: "flex", 
       justifyContent: "center", 
       marginTop: "50px",
-      //backgroundColor: colors.backgroundColor,
       minHeight: '100vh',
       padding: '20px',
     }}>

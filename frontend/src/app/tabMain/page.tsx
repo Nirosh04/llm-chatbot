@@ -38,7 +38,6 @@ import { MessageList } from './../../components/MessageList';
 import { HomeGreeting } from './../../components/HomeGreeting';
 import { CustomTextField } from './../../components/CustomTextField';
 import { InfoTabNoInfo } from './../../components/InfoTabNoInfo';
-//import { LoadingDots } from './components/LoadingDots';
 import {
   getSignalCheck,
   createSession,
@@ -379,7 +378,7 @@ export default function TabMain() {
         <AppBar
           position="static"
           sx={{
-            backgroundColor: theme => theme.palette.background.paper,
+            backgroundColor: theme => theme.palette.background.paper, // uses paper
             boxShadow: 'none',
             flexShrink: 0, // Prevent AppBar from shrinking
           }}

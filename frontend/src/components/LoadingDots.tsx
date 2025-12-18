@@ -1,9 +1,11 @@
 'use client';
 
-
+import { useTheme } from '@mui/material';
 import React from 'react';
 
 export const LoadingDots: React.FC = () => {
+  const theme = useTheme();
+  
   return (
     <div
       style={{
@@ -11,6 +13,7 @@ export const LoadingDots: React.FC = () => {
         justifyContent: 'center',
         alignItems: 'center',
         padding: '20px',
+        backgroundColor: theme.palette.loadingDots.bg, 
       }}
     >
       <div
@@ -26,7 +29,7 @@ export const LoadingDots: React.FC = () => {
               width: '12px',
               height: '12px',
               borderRadius: '50%',
-              //backgroundColor: colors.fabColor,
+              backgroundColor: theme.palette.loadingDots.dots,
               animation: `pulse 1.5s ease-in-out ${dot * 0.3}s infinite`,
             }}
           />

@@ -51,9 +51,7 @@ const WelcomePage: React.FC = () => {
         //backgroundColor: colors.backgroundColor,
       }}
     >
-      <AppBar position="static" sx={{ boxShadow: 'none', borderBottom: `1px solid ${theme.palette.divider}` }}>
-        <Toolbar />
-      </AppBar>
+    
 
       <Container maxWidth="md" sx={{ flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center', py: 4 }}>
         <Stack direction="column" alignItems="center" justifyContent="center" spacing={3} sx={{ width: '100%', textAlign: 'center' }}>

@@ -1,7 +1,7 @@
 
 // app/symptoms/page.tsx - Symptome und Krankengeschichte
 'use client';
-
+import { useTheme } from '@mui/material';
 import { useState, useEffect, useCallback } from 'react';
 import {
   AppBar,
@@ -104,6 +104,8 @@ export default function SymptomsPage({ sessionId }: SymptomsPageProps) {
   const [editSymptomDialogOpen, setEditSymptomDialogOpen] = useState(false);
   const [editHistoryDialogOpen, setEditHistoryDialogOpen] = useState(false);
   const [editingIndex, setEditingIndex] = useState<number | null>(null);
+  
+  const theme = useTheme();
   
   // Form states
   const [newSymptom, setNewSymptom] = useState({
@@ -416,7 +418,7 @@ export default function SymptomsPage({ sessionId }: SymptomsPageProps) {
         elevation={0}
         sx={{
           py: 1,
-          backgroundColor: theme => theme.palette.background.paper,
+          backgroundColor: theme => theme.palette.background.paper, // appbar of symptoms page uses paper
         }}
       >
         <Container maxWidth="lg">
@@ -617,7 +619,8 @@ export default function SymptomsPage({ sessionId }: SymptomsPageProps) {
         >
           <Fab
             sx={{
-              color: 'black',
+              color: theme.palette.text.primary,
+              bgcolor: theme.palette.primary.main, // background color
               width: 60,
               height: 60,
               boxShadow: '4px 6px 18px rgba(100, 160, 255, 0.35)',

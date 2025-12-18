@@ -27,6 +27,10 @@ export const lightPalette = {
     llm: '#e6f0ff',         // pale blue-white bubble // assistant message background in chat contexts
     textMe: '#192846',      // text color inside user bubbles for clarity
     textLlm: '#192846',     // text color inside assistant bubbles for consistency
+  },             
+  loadingDots: {                // when expecting llm answer: loadingdots animation comes up
+    dots: '#3399ff',            // blueish and grey
+    bg: '#f2f2f2',              // very light grey
   },
 };
 
@@ -34,7 +38,7 @@ export const darkPalette = {
   background: '#0a0a0a',
   paper: '#1a1a1a',
   primary: {
-    main: '#646cff',
+    main: '#4d90ff',
     contrastText: '#ffffff',
   },
   secondary: {
@@ -54,5 +58,9 @@ export const darkPalette = {
     llm: '#1a2433',    // dark neutral
     textMe: '#ededed',
     textLlm: '#ededed',
+  },
+  loadingDots: {
+    dots: '#c0c0c0',            // light grey
+    bg: '#141414',              // subtle elevation over black
   },
 };

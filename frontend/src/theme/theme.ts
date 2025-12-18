@@ -26,6 +26,10 @@ declare module '@mui/material/styles' {
       hover: string;
       text: string;
     };
+    loadingDots?: {
+      dots: string;
+      bg: string;
+    };
   }
 }
 
@@ -53,7 +57,8 @@ export const getTheme = (darkMode: boolean) => {
         secondary: palette.text.secondary,
       },
       chat: palette.chat,
-      button: palette.button
+      button: palette.button,
+      loadingDots: palette.loadingDots
     },
     components: {
       MuiButton: {

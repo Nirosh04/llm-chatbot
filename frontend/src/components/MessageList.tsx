@@ -5,6 +5,8 @@
 import React from 'react';
 import { ChatBubble } from './ChatBubble';
 import { LoadingDots } from './LoadingDots';
+import { useTheme } from '@mui/material';
+
 
 export interface Message {
   id: string | number;
@@ -21,6 +23,8 @@ export const MessageList: React.FC<MessageListProps> = ({
   messages,
   isLoading = false,
 }) => {
+  const theme = useTheme();
+  
   // Only render if there are messages or loading
   if (messages.length === 0 && !isLoading) {
     return null; // Return nothing, parent handles greeting
@@ -43,10 +47,10 @@ export const MessageList: React.FC<MessageListProps> = ({
             marginBottom: '12px',
           }}
         >
-          <div style={{ display: 'flex', justifyContent: 'flex-start' }}>
-            <div
+          <div style={{ display: 'flex', justifyContent: 'flex-start' }}> 
+            <div   // this div wraps around loadingDots - this should be inside of loadingDots.tsx - not here
               style={{
-                backgroundColor: '#f0f0f0',
+                backgroundColor: theme.palette.loadingDots.bg,
                 color: '#333',
                 padding: '12px',
                 borderRadius: '15px',
