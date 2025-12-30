@@ -1,9 +1,8 @@
 'use client';
 
-import React, { createContext, useContext, useState, ReactNode } from 'react';
-import { ThemeProvider, createTheme, CssBaseline } from '@mui/material';
+import React, { createContext, useContext, useEffect, useState, ReactNode } from 'react';
+import { ThemeProvider, CssBaseline } from '@mui/material';
 import { getTheme } from '@/theme/theme';
-
 
 type SettingsContextType = {
   darkMode: boolean;
@@ -17,12 +16,41 @@ const SettingsContext = createContext<SettingsContextType | undefined>(undefined
 export const SettingsProvider = ({ children }: { children: ReactNode }) => {
   const [darkMode, setDarkMode] = useState(false);
   const [language, setLanguage] = useState('DE');
+  const [hydrated, setHydrated] = useState(false);
+
+  // Load from localStorage on first client render
+  useEffect(() => {
+    const storedDarkMode = localStorage.getItem('darkMode');
+    const storedLanguage = localStorage.getItem('language');
+
+    if (storedDarkMode !== null) {
+      setDarkMode(storedDarkMode === 'true');
+    }
+
+    if (storedLanguage) {
+      setLanguage(storedLanguage);
+    }
+
+    setHydrated(true);
+  }, []);
+
+  // Persist changes
+  useEffect(() => {
+    if (!hydrated) return;
+    localStorage.setItem('darkMode', String(darkMode));
+  }, [darkMode, hydrated]);
+
+  useEffect(() => {
+    if (!hydrated) return;
+    localStorage.setItem('language', language);
+  }, [language, hydrated]);
 
   const toggleDarkMode = () => setDarkMode(prev => !prev);
 
-  // Create MUI theme dynamically based on darkMode
   const theme = getTheme(darkMode);
 
+  // Prevent theme flash before hydration
+  if (!hydrated) return null;
 
   return (
     <SettingsContext.Provider value={{ darkMode, toggleDarkMode, language, setLanguage }}>
@@ -34,7 +62,6 @@ export const SettingsProvider = ({ children }: { children: ReactNode }) => {
   );
 };
 
-// Hook to use settings anywhere
 export const useSettings = () => {
   const context = useContext(SettingsContext);
   if (!context) {

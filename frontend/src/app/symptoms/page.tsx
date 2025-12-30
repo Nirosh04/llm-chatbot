@@ -42,6 +42,7 @@ import SymptomCard from './../../components/SymptomCard';
 import MedicalHistoryCard from './../../components/MedicalHistoryCard';
 import AddSymptomDialog from './../../components/AddSymptomDialog';
 import { Symptom, MedicalCondition, HealthSummary } from './../../types/PatientMedicalData'; // rename to patient_data.ts
+import { useSettings } from '@/context/SettingsContext';
 
 
 // Mock backend function - replace with actual API call
@@ -105,6 +106,7 @@ export default function SymptomsPage({ sessionId }: SymptomsPageProps) {
   const [editHistoryDialogOpen, setEditHistoryDialogOpen] = useState(false);
   const [editingIndex, setEditingIndex] = useState<number | null>(null);
   
+  const { darkMode, toggleDarkMode, language, setLanguage } = useSettings();
   const theme = useTheme();
   
   // Form states
@@ -458,8 +460,10 @@ export default function SymptomsPage({ sessionId }: SymptomsPageProps) {
                     right: activeTab === 1 ? 4 : '50%',
                     borderRadius: 20,
                     transition: 'all 0.25s ease-in-out',
-                    backgroundColor: theme => theme.palette.button.bg, // or any color like '#e0e0e0'
-                    boxShadow: '0 2px 8px rgba(35, 35, 35, 0.1)',
+                    backgroundColor: theme.palette.button.bg, // or any color like '#e0e0e0'
+                    boxShadow: darkMode
+                      ? '0 2px 8px rgba(255, 255, 255, 0.2)' // lighter shadow for dark mode
+                      : '0 2px 8px rgba(35, 35, 35, 0.2)',   // dark shadow for light mode
                   }}
                 />
                 

@@ -4,13 +4,13 @@
 import React from 'react';
 import Image from 'next/image';
 
-import CompanionIcon from './../assets/CompanionIcon.png';
+import CompanionIcon from '@/components/CompanionIcon';
 
 export const HomeGreeting: React.FC = () => {
   return (
     <div
       style={{
-        height: '100vh',
+        height: '100%',
         width: '100%',
         display: 'flex',
         justifyContent: 'center',
@@ -24,16 +24,7 @@ export const HomeGreeting: React.FC = () => {
           maxWidth: '800px',
         }}
       >
-        <Image
-            src={CompanionIcon}
-            alt="Lumee"
-            width={120}
-            height={120}
-            style={{
-              filter: 'invert(24%) sepia(89%) saturate(1582%) hue-rotate(316deg) brightness(96%) contrast(92%)',
-              marginBottom: '24px',
-            }}
-          />
+        <CompanionIcon />
         <h1
           style={{
             fontSize: '36px',
@@ -60,8 +51,7 @@ export const HomeGreeting: React.FC = () => {
           }}
         >
           Wenn Sie möchten, stelle ich Ihnen ein paar kurze Fragen zu Ihrem befinden. 
-          Dies hilft dem Personal, sich besser um Sie zu kümmern. Klicken Sie dazu einfach 
-          unten auf "Chat beginnen"
+          Dies hilft dem Personal, sich besser um Sie zu kümmern. Benutzen Sie hierfür einfach die Textleiste unten
         </p>
       </div>
     </div>

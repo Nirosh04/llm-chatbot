@@ -20,6 +20,11 @@ migrate_working_dir/
 #.vscode/
 
 
+
+# react is handled in .gitignore in react frontend/ folder
+
+
+
 # Symbolication / obfuscation
 app.*.symbols
 app.*.map.json
@@ -31,8 +36,6 @@ venv/
 # Personal files
 .metadata
 
-#ssh userdata
-.priv.yml
 
 
 # Python-generated files
@@ -46,5 +49,6 @@ venv/
 # Virtual environments
 **/.venv
 
-# react is handled in .gitignore in react frontend/ folder
-
+#ssh userdata
+.priv.yml
+.env.local

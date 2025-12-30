@@ -45,3 +45,6 @@ next-env.d.ts
 #ssh userdata
 .priv.yml
 
+#output after running npm run build
+/out
+

@@ -3,7 +3,6 @@
 import { createTheme } from '@mui/material/styles';
 import { lightPalette, darkPalette } from './colors';
 
-
 declare module '@mui/material/styles' {
   interface Palette {
     chat: {
@@ -11,6 +10,15 @@ declare module '@mui/material/styles' {
       llm: string;
       textMe: string;
       textLlm: string;
+    };
+    button: {
+      bg: string;
+      hover: string;
+      text: string;
+    };
+    loadingDots: {
+      dots: string;
+      bg: string;
     };
   }
 
@@ -32,7 +40,6 @@ declare module '@mui/material/styles' {
     };
   }
 }
-
 
 
 export const getTheme = (darkMode: boolean) => {

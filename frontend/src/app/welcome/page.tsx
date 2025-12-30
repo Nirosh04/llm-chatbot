@@ -14,7 +14,7 @@ import {
 } from '@mui/material';
 import { useRouter } from 'next/navigation';
 import Image from 'next/image';
-import CompanionIcon from '@/assets/CompanionIcon.png'; 
+import CompanionIcon from '@/components/CompanionIcon';
 import DE from 'country-flag-icons/react/3x2/DE';
 import GB from 'country-flag-icons/react/3x2/GB';
 
@@ -56,16 +56,7 @@ const WelcomePage: React.FC = () => {
       <Container maxWidth="md" sx={{ flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center', py: 4 }}>
         <Stack direction="column" alignItems="center" justifyContent="center" spacing={3} sx={{ width: '100%', textAlign: 'center' }}>
           <Box sx={{ width: 50, height: 50, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-            <Image
-              src={CompanionIcon}
-              alt="Lumee"
-              width={120}
-              height={120}
-              style={{
-                filter: 'invert(24%) sepia(89%) saturate(1582%) hue-rotate(316deg) brightness(96%) contrast(92%)',
-                marginBottom: '24px',
-              }}
-            />
+            < CompanionIcon />
           </Box>
 
           <Typography variant="h1" sx={textStyles.headline1}>Willkommen!</Typography>
