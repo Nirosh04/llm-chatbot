@@ -51,7 +51,7 @@ export const HomeGreeting: React.FC = () => {
           }}
         >
           Wenn Sie möchten, stelle ich Ihnen ein paar kurze Fragen zu Ihrem befinden. 
-          Dies hilft dem Personal, sich besser um Sie zu kümmern. Benutzen Sie hierfür einfach die Textleiste unten
+          Dies hilft dem Personal, sich besser um Sie zu kümmern. Benutzen Sie hierfür einfach die Textleiste unten.
         </p>
       </div>
     </div>

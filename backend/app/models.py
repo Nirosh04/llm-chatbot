@@ -1,17 +1,6 @@
-from pydantic import BaseModel, Field
+from pydantic import BaseModel
+from datetime import datetime
 from typing import List, Optional
-from datetime import datetime, timezone
-
-# -----------------------------------------------------------------------------
-# JSON STRUCTURE
-# -----------------------------------------------------------------------------
-
-
-
-
-class SignalResponse(BaseModel):
-    prediction: int
-
 
 class Message(BaseModel):
     content: str
@@ -21,6 +10,7 @@ class SessionResponse(BaseModel):
 
 class ModelReply(BaseModel):
     reply: str
+    tokens_used: Optional[int] = None
 
 class MessageResponse(BaseModel):
     id: str
@@ -32,14 +22,15 @@ class SessionDetail(BaseModel):
     session_id: str
     messages: List[MessageResponse]
 
-class SummaryResponse(BaseModel):
-    summary: str
-    created_at: datetime
-
-
+class HealthStatus(BaseModel):
+    status: str
+    services: dict
 
 class ResetResponse(BaseModel):
     reset: bool
     session_id: str
     message: str
 
+class SummaryResponse(BaseModel):
+    summary: str
+    created_at: datetime
