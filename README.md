@@ -28,12 +28,12 @@ For Linux it depends too much on your OS so just google it yourself, if you mana
 Create the file ```.env.local``` in the root of the project and add content like:
 
 ```(text)
-SSH_USER=<your-fu-user>
-SSH_PASSWORD=<your-fu-password>
+SSH_USER=your-fu-user
+SSH_PASSWORD=your-fu-password
 ```
 
 ### 3: Start the docker compose build
-
+Keep in mind: In order for the SSH connection to the FU Berlin to work, you need an active VPN connection.
 This will use docker compose to run the project in containers. Just run:
 
 ```(bash)
@@ -53,17 +53,6 @@ docker compose down
 
 This will deploy the whole application (Frontend, Backend, and Database) to a Docker container.
 
-## Coding Conventions
-
-To maintain a clean and maintainable codebase, the following conventions are used throughout this project:
-
-### Logging
-- Use `logger.info()` and `logger.debug()` **instead of** `print()`.
-- This ensures:
-  - More control over output levels and verbosity.
-  - Easier integration with monitoring and debugging tools.
-  - Alignment with widely adopted practices in professional software projects.
-
 
 
 
@@ -71,7 +60,7 @@ To maintain a clean and maintainable codebase, the following conventions are use
 
 - Ideal for the frontend team when you want instant feedback on code changes.
 - Running `npm run dev` starts the development server and updates the app in real time as you edit the code.
-
+- general info on React tech-stack: React next.js + typescript + MaterialMUI (no tailwind)
 
 ### 1. Make sure Node.js is installed (version 18+ recommended)
 ```(bash)

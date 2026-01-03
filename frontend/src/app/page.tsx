@@ -49,9 +49,6 @@ export default function LanderPage() {
         <CustomButton onClick={() => router.push("/tabMain")}>
           Main
         </CustomButton>
-        <CustomButton onClick={() => console.log('Page 3 not implemented yet.')}>
-          Page 3
-        </CustomButton>
       </Stack>
     </div>
   );

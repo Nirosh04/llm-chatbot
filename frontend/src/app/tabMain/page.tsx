@@ -290,21 +290,7 @@ export default function TabMain() {
             <ListItemText primary="Dark Mode" />
             <Switch checked={darkMode} onChange={toggleDarkMode} />
           </ListItem>
-
-          {/* Test - Signal Check */}
-          <ListItem>
-            <Button
-              onClick={async () => {
-                const response = await getSignalCheck();
-                console.log('Signal check:', response);
-              }}
-            >
-              <ListItemIcon>
-                <HomeIcon />
-              </ListItemIcon>
-              <ListItemText primary="Test - Signal check" />
-            </Button>
-          </ListItem>
+  
 
           {/* Test - Create Session */}
           <ListItem>
