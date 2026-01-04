@@ -1,3 +1,6 @@
+# Docker Compose Secrets
+.env.local
+
 # Miscellaneous
 *.class
 *.log
@@ -19,46 +22,23 @@ migrate_working_dir/
 # VS Code (optional)
 #.vscode/
 
-# Flutter/Dart/Pub related
-1_frontend/**/doc/api/
-1_frontend/**/ios/Flutter/.last_build_id
-1_frontend/.dart_tool/
-1_frontend/.flutter-plugins
-1_frontend/.flutter-plugins-dependencies
-1_frontend/.pub-cache/
-1_frontend/.pub/
-1_frontend/build/
+# regarding React: .gitignore-file is in frontend/ folder
+
 
 # Symbolication / obfuscation
 app.*.symbols
 app.*.map.json
 
-# Android Studio build artifacts
-1_frontend/android/app/debug
-1_frontend/android/app/profile
-1_frontend/android/app/release
 
-# Platform folders (inside 1_frontend)
-1_frontend/android/
-1_frontend/linux/
-1_frontend/macos/
-1_frontend/windows/
-1_frontend/web/
-1_frontend/test/
-1_frontend/ios/
 
 # Python folder rules
 venv/
 
 # Personal files
 my_info_llm_chatbot.txt
-1_frontend/pubspec.lock
 .metadata
 
 
-
-
-# for database
 
 # Python-generated files
 **/__pycache__/
@@ -73,3 +53,6 @@ my_info_llm_chatbot.txt
 
 #ssh userdata
 .priv.yml
+
+# Local configuration file
+.vscode/
