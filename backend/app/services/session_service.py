@@ -4,6 +4,7 @@ from fastapi import HTTPException
 from typing import Dict
 from database import DatabaseService
 from services.ollama_service import OllamaService
+from services.vector_service import VectorService
 from settings import settings
 
 logger = logging.getLogger(__name__)
@@ -14,6 +15,8 @@ class SessionService:
     def __init__(self):
         self.db = DatabaseService()
         self.model = OllamaService()
+        self.vector = VectorService()
+
     
     def create_session(self) -> str:
         """Create a new patient session."""
@@ -21,6 +24,7 @@ class SessionService:
             session_id = str(uuid.uuid4())
             self.db.create_session(session_id)
             logger.info(f"Created new session: {session_id}")
+
             return session_id
         except Exception as e:
             logger.error(f"Error creating session: {e}")

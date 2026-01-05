@@ -65,8 +65,22 @@ services:
   #     OLLAMA_MODEL: ${OLLAMA_MODEL}
   #   entrypoint: ["/bin/bash", "/usr/local/bin/ollama-entrypoint.sh"]
 
+  # Qdrant Vector Database
+  qdrant:
+    image: qdrant/qdrant:latest
+    container_name: hospital_assistant_qdrant
+    restart: always
+    ports:
+      - "6333:6333"
+      - "6334:6334"
+    volumes:
+      - qdrant_data:/qdrant/storage
+      
+
 volumes:
   postgres_data:
     driver: local
   ollama_data:
+    driver: local
+  qdrant_data:
     driver: local
