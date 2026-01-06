@@ -4,17 +4,19 @@
 import React from 'react';
 import { TextField, useTheme } from '@mui/material';
 import type { TextFieldProps } from '@mui/material';
+import { useTranslations } from 'next-intl';
 
 interface CustomTextFieldProps extends Omit<TextFieldProps, 'variant'> {
   hintText?: string;
 }
 
 export const CustomTextField: React.FC<CustomTextFieldProps> = ({
-  hintText = "Type a message...",
-
   ...props
 }) => {
   const theme = useTheme();
+  const t = useTranslations('chat');
+  
+  const hintText = t('typeMessage');
 
   // Define colors using theme
   const textColor = theme.palette.text.primary;

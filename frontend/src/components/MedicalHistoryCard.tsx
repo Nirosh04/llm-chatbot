@@ -11,6 +11,7 @@ import {
 } from '@mui/material';
 import { Edit, Delete, ExpandMore } from '@mui/icons-material';
 import { MedicalCondition } from './../types/PatientMedicalData'; // rename to patientData.ts
+import { useTranslations } from 'next-intl';
 
 
 
@@ -29,6 +30,7 @@ export default function MedicalHistoryCard({
   onRemove,
 }: MedicalHistoryCardProps) {
   const [expanded, setExpanded] = useState(false);
+  const t = useTranslations('symptoms');
 
   return (
     <Accordion
@@ -58,12 +60,12 @@ export default function MedicalHistoryCard({
       <AccordionDetails>
         <Stack spacing={2}>
           <Typography sx={{ fontSize: 16}}>
-            Seit: {condition.since}
+            {t('since')}: {condition.since}
           </Typography>
           
           {condition.notes && (
             <Typography sx={{ fontSize: 14}}>
-              Notizen: {condition.notes}
+              {t('notes')}: {condition.notes}
             </Typography>
           )}
           

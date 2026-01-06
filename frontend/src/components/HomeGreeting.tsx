@@ -3,10 +3,13 @@
 
 import React from 'react';
 import Image from 'next/image';
+import { useTranslations } from 'next-intl';
 
 import CompanionIcon from '@/components/CompanionIcon';
 
 export const HomeGreeting: React.FC = () => {
+  const t = useTranslations('homeGreeting');
+  
   return (
     <div
       style={{
@@ -32,7 +35,7 @@ export const HomeGreeting: React.FC = () => {
             marginBottom: '16px',
           }}
         >
-          Willkommen!
+          {t('welcome')}
         </h1>
         <p
           style={{
@@ -42,7 +45,7 @@ export const HomeGreeting: React.FC = () => {
             lineHeight: '1.4',
           }}
         >
-          Ich bin Lumee, Ihr digitaler Begleiter. Ich helfe Ihnen, die Wartezeit zu überbrücken.
+          {t('intro')}
         </p>
         <p
           style={{
@@ -50,8 +53,7 @@ export const HomeGreeting: React.FC = () => {
             lineHeight: '1.4',
           }}
         >
-          Wenn Sie möchten, stelle ich Ihnen ein paar kurze Fragen zu Ihrem befinden. 
-          Dies hilft dem Personal, sich besser um Sie zu kümmern. Benutzen Sie hierfür einfach die Textleiste unten.
+          {t('description')}
         </p>
       </div>
     </div>

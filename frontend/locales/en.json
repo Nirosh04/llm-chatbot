@@ -1,0 +1,58 @@
+{
+  "welcome": {
+    "title": "Welcome!",
+    "iAmLumee": "I am Lumee",
+    "subtitle": "Your digital companion for the waiting time.",
+    "lookForward": "I look forward to meeting you!",
+    "startButton": "Let's get started"
+  },
+  "tabs": {
+    "chat": "Chat",
+    "info": "Info",
+    "settings": "Settings"
+  },
+  "chat": {
+    "typeMessage": "Type a message...",
+    "sendMessage": "Send message"
+  },
+  "homeGreeting": {
+    "welcome": "Welcome!",
+    "intro": "I am Lumee, your digital companion. I will help you get through the waiting time.",
+    "description": "If you like, I will ask you a few short questions about how you are feeling. This will help the staff take better care of you. Simply use the text field below."
+  },
+  "settings": {
+    "language": "Language",
+    "darkMode": "Dark Mode",
+    "german": "Deutsch",
+    "english": "English"
+  },
+  "symptoms": {
+    "symptomsTab": "Symptoms",
+    "medicalHistoryTab": "Medical History",
+    "backToSymptoms": "Back to symptoms",
+    "toMedicalHistory": "Continue to medical history",
+    "noSymptomsYet": "No symptoms recorded yet. Add your first symptom.",
+    "noHistoryYet": "No medical history recorded yet. Add your first entry.",
+    "description": "Description",
+    "duration": "Duration",
+    "location": "Location",
+    "pain": "Pain (1-10)",
+    "condition": "Disease / Condition",
+    "since": "Since",
+    "notes": "Notes",
+    "cancel": "Cancel",
+    "save": "Save",
+    "add": "Add",
+    "update": "Update",
+    "addSymptom": "Add new symptom",
+    "editSymptom": "Edit symptom",
+    "addHistory": "Add new medical history entry",
+    "editHistory": "Edit entry",
+    "errorLoading": "Error loading health data",
+    "newSymptom": "New symptom",
+    "noTitle": "No title",
+    "unknown": "Unknown",
+    "noDurationSpecified": "No duration specified",
+    "unnamedCondition": "Unnamed condition"
+  }
+}

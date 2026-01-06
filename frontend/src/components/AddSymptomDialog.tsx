@@ -11,6 +11,7 @@ import {
   Stack,
   Typography,
 } from '@mui/material';
+import { useTranslations } from 'next-intl';
 
 
 interface AddSymptomDialogProps {
@@ -40,29 +41,31 @@ export default function AddSymptomDialog({
   onSave,
   isEditing = false,
 }: AddSymptomDialogProps) {
+  const t = useTranslations('symptoms');
+  
   return (
     <Dialog open={open} onClose={onClose} maxWidth="sm" fullWidth>
       <DialogTitle>
-        {isEditing ? "Symptom bearbeiten" : "Neues Symptom Hinzufügen"}
+        {isEditing ? t('editSymptom') : t('addSymptom')}
       </DialogTitle>
       <DialogContent>
         <Stack spacing={3} sx={{ mt: 1 }}>
           <TextField
-            label="Beschreibung"
+            label={t('description')}
             fullWidth
             value={symptom.description}
             onChange={(e) => onSymptomChange({ ...symptom, description: e.target.value })}
           />
           
           <TextField
-            label="Dauer"
+            label={t('duration')}
             fullWidth
             value={symptom.duration}
             onChange={(e) => onSymptomChange({ ...symptom, duration: e.target.value })}
           />
           
           <TextField
-            label="Ort"
+            label={t('location')}
             fullWidth
             value={symptom.location}
             onChange={(e) => onSymptomChange({ ...symptom, location: e.target.value })}
@@ -70,7 +73,7 @@ export default function AddSymptomDialog({
           
           <Box>
             <Stack direction="row" justifyContent="space-between" alignItems="center" mb={1}>
-              <Typography>Schmerz (1-10)</Typography>
+              <Typography>{t('pain')}</Typography>
               <Typography sx={{ fontWeight: 600 }}>{symptom.pain}</Typography>
             </Stack>
             
@@ -96,13 +99,13 @@ export default function AddSymptomDialog({
         </Stack>
       </DialogContent>
       <DialogActions>
-        <Button onClick={onClose}>Abbrechen</Button>
+        <Button onClick={onClose}>{t('cancel')}</Button>
         <Button 
           onClick={onSave}
           variant="contained"
           // sx={{ backgroundColor: colors.buttonColor }}
         >
-          {isEditing ? "Aktualisieren" : "Hinzufügen"}
+          {isEditing ? t('update') : t('add')}
         </Button>
       </DialogActions>
     </Dialog>

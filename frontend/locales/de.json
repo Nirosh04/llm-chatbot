@@ -1,0 +1,58 @@
+{
+  "welcome": {
+    "title": "Willkommen!",
+    "iAmLumee": "Ich bin Lumee",
+    "subtitle": "Dein digitaler Begleiter für die Wartezeit.",
+    "lookForward": "Ich freue mich, Dich kennenzulernen!",
+    "startButton": "Fangen wir an"
+  },
+  "tabs": {
+    "chat": "Chat",
+    "info": "Info",
+    "settings": "Einstellungen"
+  },
+  "chat": {
+    "typeMessage": "Nachricht eingeben...",
+    "sendMessage": "Nachricht senden"
+  },
+  "homeGreeting": {
+    "welcome": "Willkommen!",
+    "intro": "Ich bin Lumee, Ihr digitaler Begleiter. Ich helfe Ihnen, die Wartezeit zu überbrücken.",
+    "description": "Wenn Sie möchten, stelle ich Ihnen ein paar kurze Fragen zu Ihrem befinden. Dies hilft dem Personal, sich besser um Sie zu kümmern. Benutzen Sie hierfür einfach die Textleiste unten."
+  },
+  "settings": {
+    "language": "Sprache",
+    "darkMode": "Dunkelmodus",
+    "german": "Deutsch",
+    "english": "English"
+  },
+  "symptoms": {
+    "symptomsTab": "Symptome",
+    "medicalHistoryTab": "Krankengeschichte",
+    "backToSymptoms": "Zurück zu Symptomen",
+    "toMedicalHistory": "Weiter zur Krankengeschichte",
+    "noSymptomsYet": "Noch keine Symptome erfasst. Fügen Sie das erste Symptom hinzu.",
+    "noHistoryYet": "Noch keine Krankengeschichte erfasst. Fügen Sie den ersten Eintrag hinzu.",
+    "description": "Beschreibung",
+    "duration": "Dauer",
+    "location": "Ort",
+    "pain": "Schmerz (1-10)",
+    "condition": "Erkrankung / Zustand",
+    "since": "Seit",
+    "notes": "Notizen",
+    "cancel": "Abbrechen",
+    "save": "Speichern",
+    "add": "Hinzufügen",
+    "update": "Aktualisieren",
+    "addSymptom": "Neues Symptom hinzufügen",
+    "editSymptom": "Symptom bearbeiten",
+    "addHistory": "Neuen Krankengeschichte-Eintrag hinzufügen",
+    "editHistory": "Eintrag bearbeiten",
+    "errorLoading": "Fehler beim Laden der Gesundheitsdaten",
+    "newSymptom": "Neues Symptom",
+    "noTitle": "Kein Titel",
+    "unknown": "Unbekannt",
+    "noDurationSpecified": "Keine Dauer angegeben",
+    "unnamedCondition": "Unbenannte Erkrankung"
+  }
+}

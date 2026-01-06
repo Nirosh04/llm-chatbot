@@ -48,6 +48,7 @@ import {
 } from './../../services/serverRequests';
 import SymptomsPage from '@/app/symptoms/page'; // adjust the path if needed
 import { useSettings } from '@/context/SettingsContext';
+import { useTranslations } from 'next-intl';
 
 
 interface ChatMessage {
@@ -69,6 +70,9 @@ export default function TabMain() {
 
   const router = useRouter();
   const { darkMode, toggleDarkMode, language, setLanguage } = useSettings();
+  const tChat = useTranslations('chat');
+  const tTabs = useTranslations('tabs');
+  const tSettings = useTranslations('settings');
 
   
 
@@ -227,10 +231,10 @@ export default function TabMain() {
                   value={inputText}
                   onChange={(e) => setInputText(e.target.value)}
                   onKeyPress={handleKeyPress}
-                  placeholder="Type a message..."
+                  placeholder={tChat('typeMessage')}
                 />
               </Box>
-              <Tooltip title="Send message">
+              <Tooltip title={tChat('sendMessage')}>
                 <IconButton
                   onClick={handleSendMessage}
                   disabled={!inputText.trim()}
@@ -278,16 +282,16 @@ export default function TabMain() {
 
           {/* Language Selector */}
           <ListItem>
-            <ListItemText primary="Language" />
+            <ListItemText primary={tSettings('language')} />
             <Select value={language} onChange={e => setLanguage(e.target.value)} sx={{ minWidth: 100 }}>
-              <MenuItem value="DE">Deutsch</MenuItem>
-              <MenuItem value="EN">English</MenuItem>
+              <MenuItem value="de">{tSettings('german')}</MenuItem>
+              <MenuItem value="en">{tSettings('english')}</MenuItem>
             </Select>
           </ListItem>
 
           {/* Dark Mode Toggle */}
           <ListItem>
-            <ListItemText primary="Dark Mode" />
+            <ListItemText primary={tSettings('darkMode')} />
             <Switch checked={darkMode} onChange={toggleDarkMode} />
           </ListItem>
   
@@ -390,9 +394,9 @@ export default function TabMain() {
               },
             }}
           >
-            <Tab icon={<ChatIcon />} label="Chat" />
-            <Tab icon={<InfoIcon />} label="Info" />
-            <Tab icon={<SettingsIcon />} label="Settings" />
+            <Tab icon={<ChatIcon />} label={tTabs('chat')} />
+            <Tab icon={<InfoIcon />} label={tTabs('info')} />
+            <Tab icon={<SettingsIcon />} label={tTabs('settings')} />
           </Tabs>
         </AppBar>
 
