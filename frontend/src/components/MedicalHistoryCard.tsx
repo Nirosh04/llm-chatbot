@@ -30,7 +30,7 @@ export default function MedicalHistoryCard({
   onRemove,
 }: MedicalHistoryCardProps) {
   const [expanded, setExpanded] = useState(false);
-  const t = useTranslations('symptoms');
+  const t = useTranslations('medicalHistory');
 
   return (
     <Accordion
@@ -65,7 +65,7 @@ export default function MedicalHistoryCard({
           
           {condition.notes && (
             <Typography sx={{ fontSize: 14}}>
-              {t('notes')}: {condition.notes}
+              {t('notesShort')}: {condition.notes}
             </Typography>
           )}
           

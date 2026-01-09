@@ -63,11 +63,11 @@ export default function SymptomCard({
       <AccordionDetails>
         <Stack spacing={1}>
           <Typography sx={{ fontSize: 16}}>
-            {t('duration')}: {symptom.duration}
+            {t('durationShort')}: {symptom.duration}
           </Typography>
           
           <Typography sx={{ fontSize: 14}}>
-            {t('location')}: {symptom.location}
+            {t('locationShort')}: {symptom.location}
           </Typography>
           
           <Box sx={{ mt: 2 }}>

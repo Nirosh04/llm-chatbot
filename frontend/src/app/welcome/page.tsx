@@ -19,6 +19,7 @@ import DE from 'country-flag-icons/react/3x2/DE';
 import GB from 'country-flag-icons/react/3x2/GB';
 import { useTranslations } from 'next-intl';
 import { useSettings } from '@/context/SettingsContext';
+import { text } from 'stream/consumers';
 
 const WelcomePage: React.FC = () => {
   const theme = useTheme();
@@ -30,9 +31,9 @@ const WelcomePage: React.FC = () => {
     headline1: { fontSize: '2.25rem', fontWeight: 600, lineHeight: 1.2 },
     headline2: { fontSize: '1.625rem', fontWeight: 600, lineHeight: 1.2 },
     headline2Bold: { fontSize: '1.625rem', fontWeight: 'bold', lineHeight: 1.2 },
-    headline3: { fontSize: '1.625rem', fontWeight: 600, lineHeight: 1.2 },
+    headline3: { fontSize: '1.5rem', fontWeight: 500, lineHeight: 1.2 },
     defaultText: { fontSize: '1.5rem', lineHeight: 1.5 },
-    buttonText: { fontSize: '1.625rem' },
+    buttonText: { fontSize: '1.625rem', fontWeight: 'bold', textTransform: 'none' },
   };
 
   const handleStartClick = () => {
@@ -62,9 +63,9 @@ const WelcomePage: React.FC = () => {
 
           <Typography variant="h1" sx={textStyles.headline1}>{t('title')}</Typography>
           <Box sx={{ ...textStyles.headline2, textAlign: 'center' }}>
-            {t('iAmLumee')}
+            {t('intro')}
           </Box>
-          <Typography variant="h3" sx={textStyles.headline3}>{t('subtitle')}</Typography>
+          <Typography variant="h3" sx={textStyles.headline3}>{t('description')}</Typography>
           <Typography variant="body1" sx={textStyles.defaultText}>{t('lookForward')}</Typography>
 
           <Box sx={{ mt: 4 }}>

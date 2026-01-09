@@ -1,9 +1,9 @@
 {
   "welcome": {
     "title": "Welcome!",
-    "iAmLumee": "I am Lumee",
-    "subtitle": "Your digital companion for the waiting time.",
-    "lookForward": "I look forward to meeting you!",
+    "intro": "I am Lumee, your digital companion in the emergency department.",
+    "description": "I am here to help you make the best use of your waiting time. Together, we can prepare for your doctor's visit by asking about your condition. I can also answer your questions about the process and provide a map for orientation.",
+    "lookForward": "We can start whenever you are ready.",
     "startButton": "Let's get started"
   },
   "tabs": {
@@ -13,12 +13,8 @@
   },
   "chat": {
     "typeMessage": "Type a message...",
-    "sendMessage": "Send message"
-  },
-  "homeGreeting": {
-    "welcome": "Welcome!",
-    "intro": "I am Lumee, your digital companion. I will help you get through the waiting time.",
-    "description": "If you like, I will ask you a few short questions about how you are feeling. This will help the staff take better care of you. Simply use the text field below."
+    "sendMessage": "Send message",
+    "firstMessage": "What is the reason for your visit to the ED?"
   },
   "settings": {
     "language": "Language",
@@ -27,32 +23,43 @@
     "english": "English"
   },
   "symptoms": {
-    "symptomsTab": "Symptoms",
-    "medicalHistoryTab": "Medical History",
-    "backToSymptoms": "Back to symptoms",
+    "symptomsTab": "Concerns",
     "toMedicalHistory": "Continue to medical history",
-    "noSymptomsYet": "No symptoms recorded yet. Add your first symptom.",
-    "noHistoryYet": "No medical history recorded yet. Add your first entry.",
-    "description": "Description",
-    "duration": "Duration",
-    "location": "Location",
+    "noSymptomsYet": "No concerns recorded yet. Add your first concern.",
+    "description": "Description: What concern do you have?",
+    "duration": "Since when do you have this concern?",
+    "location": "Where exactly do you have this concern ?",
+    "descriptionShort": "Description",
+    "durationShort": "Since when",
+    "locationShort": "Where",
     "pain": "Pain (1-10)",
-    "condition": "Disease / Condition",
-    "since": "Since",
-    "notes": "Notes",
     "cancel": "Cancel",
     "save": "Save",
     "add": "Add",
     "update": "Update",
-    "addSymptom": "Add new symptom",
-    "editSymptom": "Edit symptom",
+    "addSymptom": "Add new Concers",
+    "editSymptom": "Edit Concers",
+    "errorLoading": "Error loading health data",
+    "newSymptom": "New Concern",
+    "unnamedSymptom": "Unnamed concern",
+    "unknown": "Unknown"
+  },
+  "medicalHistory": {
+    "medicalHistoryTab": "Medical History",
+    "backToSymptoms": "Back to concerns",
+    "noHistoryYet": "No medical history recorded yet. Add your first entry.",
+    "condition": "Disease / Condition",
+    "since": "Since when",
+    "notes": "Notes: e.g. How do you treat this condition?",
+    "notesShort": "Notes",
+    "cancel": "Cancel",
+    "save": "Save",
+    "add": "Add",
+    "update": "Update",
     "addHistory": "Add new medical history entry",
     "editHistory": "Edit entry",
     "errorLoading": "Error loading health data",
-    "newSymptom": "New symptom",
-    "noTitle": "No title",
-    "unknown": "Unknown",
-    "noDurationSpecified": "No duration specified",
-    "unnamedCondition": "Unnamed condition"
+    "unnamedCondition": "Unnamed condition",
+    "unknown": "Unknown"
   }
 }

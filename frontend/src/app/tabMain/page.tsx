@@ -35,7 +35,6 @@ import SendIcon from '@mui/icons-material/Send';
 
 //import { ChatBubble } from './components/ChatBubble';
 import { MessageList } from './../../components/MessageList';
-import { HomeGreeting } from './../../components/HomeGreeting';
 import { CustomTextField } from './../../components/CustomTextField';
 import { InfoTabNoInfo } from './../../components/InfoTabNoInfo';
 import {
@@ -85,6 +84,18 @@ export default function TabMain() {
   useEffect(() => {
     scrollToBottom();
   }, [messages]);
+
+  // Add first message
+  useEffect(() => {
+    if (messages.length === 0) {
+      setMessages([{
+          id: 'welcome',
+          text: tChat('firstMessage'),
+          isMe: false,
+        },
+      ]);
+    }
+  }, [tChat, messages.length]);
 
   const handleSendMessage = async () => {
     console.log('1. handleSendMessage called');
@@ -202,14 +213,8 @@ export default function TabMain() {
                 padding: 2,
               }}
             >
-              {messages.length === 0 && !isLoading ? (
-                <HomeGreeting />
-              ) : (
-                <>
-                  <MessageList messages={messages} isLoading={isLoading} />
-                  <div ref={messagesEndRef} />
-                </>
-              )}
+              <MessageList messages={messages} isLoading={isLoading} />
+              <div ref={messagesEndRef} />
             </Box>
 
             {/* Input area */}
