@@ -23,12 +23,12 @@ export const SettingsProvider = ({ children }: { children: ReactNode }) => {
   // Load translations for a given language
   const loadTranslations = async (lang: string) => {
     try {
-      const msgs = await import(`../../locales/${lang}.json`);
+      const msgs = await import(`../i18n/locales/${lang}.json`);
       setTranslations(msgs.default);
     } catch (error) {
       console.error('Failed to load locales:', error);
       // Fallback to Englisch
-      const msgs = await import(`../../locales/en.json`);
+      const msgs = await import(`../i18n/locales/en.json`);
       setTranslations(msgs.default);
     }
   };
