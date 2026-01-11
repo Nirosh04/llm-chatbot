@@ -1,5 +1,5 @@
 
-// app/tabMain/page.tsx - Main page w tabs
+// app/ChatInterface/page.tsx - Main page w tabs
 
 "use client";
 
@@ -34,10 +34,10 @@ import InfoIcon from '@mui/icons-material/Info';
 import SendIcon from '@mui/icons-material/Send';
 
 //import { ChatBubble } from './components/ChatBubble';
-import { MessageList } from './../../components/MessageList';
-import { HomeGreeting } from './../../components/HomeGreeting';
-import { CustomTextField } from './../../components/CustomTextField';
-import { InfoTabNoInfo } from './../../components/InfoTabNoInfo';
+import { MessageList } from '../../components/MessageList';
+import { HomeGreeting } from '../../components/ChatInterface';
+import { CustomTextField } from '../../components/CustomTextField';
+import { InfoTabNoInfo } from '../../components/InfoTabNoInfo';
 import {
   getSignalCheck,
   createSession,
@@ -45,7 +45,7 @@ import {
   getLLMResponseFromServer,
   getHealthSummary,
   resetConversationRequest
-} from './../../services/serverRequests';
+} from '../../services/serverRequests';
 import SymptomsPage from '@/app/symptoms/page'; // adjust the path if needed
 import { useSettings } from '@/context/SettingsContext';
 
@@ -174,7 +174,7 @@ export default function TabMain() {
           display: 'flex',
           flexDirection: 'column',
           minHeight: 0, // Important for proper scrolling
-          overflow: 'hidden',
+          overflow: 'auto', // Allow scroll everywhere
 
         }}
       >
@@ -379,6 +379,10 @@ export default function TabMain() {
               '& .MuiTab-root': { // when not selected
                 color: theme => theme.palette.text.primary,
                 minHeight: 56,
+                transition: 'background-color 0.3s',
+                '&:hover': {
+                  backgroundColor: theme => theme.palette.action.hover,
+                },
               },
               '& .MuiTab-root.Mui-selected': { // when clicked
                 color: theme => theme.palette.text.secondary,

@@ -3,6 +3,7 @@
 'use client';
 import { useTheme } from '@mui/material';
 import { useState, useEffect, useCallback } from 'react';
+import { useRouter } from 'next/navigation';
 import {
   AppBar,
   Box,
@@ -37,6 +38,7 @@ import {
   Edit,
   Delete,
   ExpandMore,
+  Home,
 } from '@mui/icons-material';
 import SymptomCard from './../../components/SymptomCard';
 import MedicalHistoryCard from './../../components/MedicalHistoryCard';
@@ -75,11 +77,13 @@ const getHealthSummary = async (sessionId: string | null) => {
         {
           condition: "Diabetes Typ II",
           since: "seit 2015",
+          medication: "Metformin",
           notes: "Medikamentös eingestellt"
         },
         {
           condition: "Allergien: Pollen",
           since: "Kindheit",
+          medication: "Antihistaminika",
           notes: "Saisonal, Niesreiz"
         }
       ]
@@ -108,6 +112,7 @@ export default function SymptomsPage({ sessionId }: SymptomsPageProps) {
   
   const { darkMode, toggleDarkMode, language, setLanguage } = useSettings();
   const theme = useTheme();
+  const router = useRouter();
   
   // Form states
   const [newSymptom, setNewSymptom] = useState({
@@ -120,6 +125,7 @@ export default function SymptomsPage({ sessionId }: SymptomsPageProps) {
     condition: '',
     since: '',
     notes: '',
+    medication: '',
   });
 
   const fetchHealthSummary = useCallback(async () => {
@@ -149,26 +155,31 @@ export default function SymptomsPage({ sessionId }: SymptomsPageProps) {
             {
               condition: "Diabetes Typ II",
               since: "seit 2015",
+              medication: "Metformin",
               notes: "Medikamentös eingestellt"
             },
             {
               condition: "Allergien: Pollen",
               since: "Kindheit",
+              medication: "Antihistaminika bei Bedarf",
               notes: "Saisonal, Niesreiz"
             },
             {
               condition: "Hypertonie (Bluthochdruck)",
               since: "seit 2019",
+              medication: "Ramipril 5mg",
               notes: "Kontrolliert mit Medikamenten"
             },
             {
               condition: "Asthma bronchiale",
               since: "seit 2005",
+              medication: "Salbutamol Inhaler",
               notes: "Gelegentliche Inhaler-Nutzung"
             },
             {
               condition: "Herzinfarkt",
               since: "2018",
+              medication: "Aspirin, Statin",
               notes: "Stent-Implantation"
             }
           ]
@@ -293,6 +304,7 @@ export default function SymptomsPage({ sessionId }: SymptomsPageProps) {
     const condition: MedicalCondition = {
       condition: newHistory.condition.trim() || "Unbenannte Erkrankung",
       since: newHistory.since.trim() || "Unbekannt",
+      medication: newHistory.medication.trim(),
       notes: newHistory.notes.trim(),
     };
 
@@ -305,7 +317,7 @@ export default function SymptomsPage({ sessionId }: SymptomsPageProps) {
     });
 
     // Reset form and close dialog
-    setNewHistory({ condition: '', since: '', notes: '' });
+    setNewHistory({ condition: '', since: '', notes: '', medication: '' });
     setAddHistoryDialogOpen(false);
   };
 
@@ -316,6 +328,7 @@ export default function SymptomsPage({ sessionId }: SymptomsPageProps) {
     setNewHistory({
       condition: condition.condition,
       since: condition.since,
+      medication: condition.medication,
       notes: condition.notes,
     });
     setEditingIndex(index);
@@ -329,6 +342,7 @@ export default function SymptomsPage({ sessionId }: SymptomsPageProps) {
     updatedConditions[editingIndex] = {
       condition: newHistory.condition.trim() || "Unbenannte Erkrankung",
       since: newHistory.since.trim() || "Unbekannt",
+      medication: newHistory.medication.trim(),
       notes: newHistory.notes.trim(),
     };
 
@@ -341,7 +355,7 @@ export default function SymptomsPage({ sessionId }: SymptomsPageProps) {
     });
 
     // Reset and close
-    setNewHistory({ condition: '', since: '', notes: '' });
+    setNewHistory({ condition: '', since: '', notes: '', medication: '' });
     setEditingIndex(null);
     setEditHistoryDialogOpen(false);
   };
@@ -414,7 +428,7 @@ export default function SymptomsPage({ sessionId }: SymptomsPageProps) {
   }
 
   return (
-    <Box sx={{ minHeight: '100vh' }}>
+    <>
       <AppBar
         position="static"
         elevation={0}
@@ -425,6 +439,15 @@ export default function SymptomsPage({ sessionId }: SymptomsPageProps) {
       >
         <Container maxWidth="lg">
           <Stack direction="row" alignItems="center" spacing={2}>
+            {/* Home button */}
+            <Tooltip title="Zur Startseite">
+              <IconButton
+                onClick={() => router.push('welcome')}
+              >
+                <Home />
+              </IconButton>
+            </Tooltip>
+            
             {/* Left arrow for Krankengeschichte page */}
             {activeTab === 1 && (
               <Tooltip title="Zurück zu Symptomen">
@@ -435,9 +458,6 @@ export default function SymptomsPage({ sessionId }: SymptomsPageProps) {
                 </IconButton>
               </Tooltip>
             )}
-            
-            {/* Empty space when arrow is not shown */}
-            {activeTab === 0 && <Box sx={{ width: 48 }} />}
 
             {/* Tab Navigation */}
             <Box sx={{ flex: 1 }}>
@@ -557,7 +577,7 @@ export default function SymptomsPage({ sessionId }: SymptomsPageProps) {
         </Container>
       </AppBar>
 
-      <Container maxWidth="lg" sx={{ py: 3 }}>
+      <Container maxWidth="lg" sx={{ py: 3, pb: 15 }}>
         {/* Symptoms Tab Content */}
         {activeTab === 0 && jsonData && (
           <Stack spacing={2}>
@@ -676,20 +696,28 @@ export default function SymptomsPage({ sessionId }: SymptomsPageProps) {
         maxWidth="sm"
         fullWidth
       >
-        <DialogTitle>Neuen Krankengeschichte-Eintrag hinzufügen</DialogTitle>
+        <DialogTitle>Neue Vorerkrankung hinzufügen</DialogTitle>
         <DialogContent>
           <Stack spacing={2} sx={{ mt: 1 }}>
             <TextField
-              label="Erkrankung / Zustand"
+              label="Welche Vorerkrankung haben Sie?"
               fullWidth
               value={newHistory.condition}
               onChange={(e) => setNewHistory({...newHistory, condition: e.target.value})}
             />
             <TextField
-              label="Seit"
+              label="Seit wann haben Sie diese Erkrankung?"
               fullWidth
               value={newHistory.since}
               onChange={(e) => setNewHistory({...newHistory, since: e.target.value})}
+            />
+            <TextField
+              label="Nehmen Sie regelmäßig Medikamente wegen dieser Erkrankung ein? Wenn ja, welche?"
+              fullWidth
+              multiline
+              rows={2}
+              value={newHistory.medication}
+              onChange={(e) => setNewHistory({...newHistory, medication: e.target.value})}
             />
             <TextField
               label="Notizen"
@@ -718,7 +746,7 @@ export default function SymptomsPage({ sessionId }: SymptomsPageProps) {
         onClose={() => {
           setEditHistoryDialogOpen(false);
           setEditingIndex(null);
-          setNewHistory({ condition: '', since: '', notes: '' });
+          setNewHistory({ condition: '', since: '', medication: '', notes: '' });
         }}
         maxWidth="sm"
         fullWidth
@@ -739,6 +767,14 @@ export default function SymptomsPage({ sessionId }: SymptomsPageProps) {
               onChange={(e) => setNewHistory({...newHistory, since: e.target.value})}
             />
             <TextField
+              label="Medikamente"
+              fullWidth
+              multiline
+              rows={2}
+              value={newHistory.medication}
+              onChange={(e) => setNewHistory({...newHistory, medication: e.target.value})}
+            />
+            <TextField
               label="Notizen"
               fullWidth
               multiline
@@ -752,7 +788,7 @@ export default function SymptomsPage({ sessionId }: SymptomsPageProps) {
           <Button onClick={() => {
             setEditHistoryDialogOpen(false);
             setEditingIndex(null);
-            setNewHistory({ condition: '', since: '', notes: '' });
+            setNewHistory({ condition: '', since: '', notes: '', medication: '' });
           }}>
             Abbrechen
           </Button>
@@ -764,6 +800,6 @@ export default function SymptomsPage({ sessionId }: SymptomsPageProps) {
           </Button>
         </DialogActions>
       </Dialog>
-    </Box>
+    </>
   );
 }

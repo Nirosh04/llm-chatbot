@@ -46,8 +46,8 @@ export default function LanderPage() {
         <CustomButton onClick={() => router.push("/welcome")}>
           Welcome
         </CustomButton>
-        <CustomButton onClick={() => router.push("/tabMain")}>
-          Main
+        <CustomButton onClick={() => router.push("/ChatInterface")}>
+          Chat
         </CustomButton>
       </Stack>
     </div>

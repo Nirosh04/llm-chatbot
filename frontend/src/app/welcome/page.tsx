@@ -35,7 +35,7 @@ const WelcomePage: React.FC = () => {
   };
 
   const handleStartClick = () => {
-    router.push(`/tabMain`); // we need to pass the selected Language
+    router.push(`/ChatInterface`); // we need to pass the selected Language
   };
 
   const handleLanguageClick = (lang: 'DE' | 'GB') => { // more languages will follow (spanish etc.)

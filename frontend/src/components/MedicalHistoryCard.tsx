@@ -61,6 +61,12 @@ export default function MedicalHistoryCard({
             Seit: {condition.since}
           </Typography>
           
+          {condition.medication && (
+            <Typography sx={{ fontSize: 14}}>
+              Medikamente: {condition.medication}
+            </Typography>
+          )}
+          
           {condition.notes && (
             <Typography sx={{ fontSize: 14}}>
               Notizen: {condition.notes}
