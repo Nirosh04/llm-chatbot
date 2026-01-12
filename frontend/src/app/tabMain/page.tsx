@@ -1,4 +1,3 @@
-
 // app/tabMain/page.tsx - Main page w tabs
 
 "use client";
@@ -32,6 +31,7 @@ import MenuIcon from '@mui/icons-material/Menu';
 import ChatIcon from '@mui/icons-material/Chat';
 import InfoIcon from '@mui/icons-material/Info';
 import SendIcon from '@mui/icons-material/Send';
+import NavigationIcon from '@mui/icons-material/Navigation';
 
 //import { ChatBubble } from './components/ChatBubble';
 import { MessageList } from './../../components/MessageList';
@@ -170,12 +170,11 @@ export default function TabMain() {
     return (
       <Box
         sx={{
-          flex: 1, // This makes it fill remaining space
+          flex: 1,
           display: 'flex',
           flexDirection: 'column',
-          minHeight: 0, // Important for proper scrolling
+          minHeight: 0,
           overflow: 'hidden',
-
         }}
       >
         {activeTab === 0 && (
@@ -351,52 +350,71 @@ export default function TabMain() {
       
           </Box>
         )}
+
+        {activeTab === 3 && ( // NEW: Navigation Tab
+          <Box
+            sx={{
+              flex: 1,
+              display: 'flex',
+              justifyContent: 'center',
+              alignItems: 'center',
+            }}
+          >
+            <iframe
+              title="Navigation"
+              src="/navigation"
+              style={{
+                width: '100%',
+                height: '100%',
+                border: 'none',
+                borderRadius: '8px',
+              }}
+              sandbox="allow-scripts allow-same-origin allow-forms"
+              allow="clipboard-read; clipboard-write; geolocation; microphone; camera"
+            />
+          </Box>
+        )}
       </Box>
     );
   };
 
   return (
     <Box sx={{ display: 'flex', height: '100vh', overflow: 'hidden' }}>
-      
-      {/* Main Content */}
       <Box sx={{ flex: 1, display: 'flex', flexDirection: 'column', minHeight: 0 }}>
-        {/* AppBar */}
         <AppBar
           position="static"
           sx={{
-            backgroundColor: theme => theme.palette.background.paper, // uses paper
+            backgroundColor: theme => theme.palette.background.paper,
             boxShadow: 'none',
-            flexShrink: 0, // Prevent AppBar from shrinking
+            flexShrink: 0,
           }}
         >
-          
-          {/* Tabs */}
           <Tabs
             value={activeTab}
             onChange={(_, newValue) => setActiveTab(newValue)}
             centered
             sx={{
-              '& .MuiTab-root': { // when not selected
+              '& .MuiTab-root': {
                 color: theme => theme.palette.text.primary,
                 minHeight: 56,
               },
-              '& .MuiTab-root.Mui-selected': { // when clicked
+              '& .MuiTab-root.Mui-selected': {
                 color: theme => theme.palette.text.secondary,
               },
-              '& .MuiTabs-indicator': { // bar under clicked - should be the same as clicked
+              '& .MuiTabs-indicator': {
                 backgroundColor: theme => theme.palette.text.secondary,
                 height: 3,
                 borderRadius: 2,
               },
             }}
           >
-            <Tab icon={<ChatIcon />} label="Chat" />
-            <Tab icon={<InfoIcon />} label="Info" />
-            <Tab icon={<SettingsIcon />} label="Settings" />
+            <Tab icon={<ChatIcon />} label="CHAT" />
+            <Tab icon={<SickIcon />} label="INFO" />
+            <Tab icon={<SettingsIcon />} label="SETTINGS" />
+            <Tab icon={<NavigationIcon />} label="NAVIGATION" />
           </Tabs>
         </AppBar>
 
-        {/* Tab Content */}
         {renderTabContent()}
       </Box>
     </Box>
