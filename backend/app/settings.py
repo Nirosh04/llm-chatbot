@@ -61,6 +61,14 @@ class Settings(BaseModel):
     class Conversation(BaseModel):
         MAX_HISTORY: int = 20
 
+    # ------------------------------------------------------------
+    # Qdrant
+    # ------------------------------------------------------------
+    class Qdrant(BaseModel):
+        VECTOR_SIZE: int = 384
+        HOST: str = os.getenv("QDRANT_HOST", "qdrant")
+        PORT: int = int(os.getenv("QDRANT_PORT", "6333"))
+
     # Instantiate subsections
     DEPLOYMENT: Deployment = Deployment()
     DATABASE: Database = Database()
@@ -68,5 +76,6 @@ class Settings(BaseModel):
     OLLAMA: Ollama = Ollama()
     CONVERSATION: Conversation = Conversation()
     SSH: Ssh = Ssh()
+    QDRANT: Qdrant = Qdrant()
 
 settings = Settings()
