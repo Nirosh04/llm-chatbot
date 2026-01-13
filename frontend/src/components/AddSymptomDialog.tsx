@@ -133,9 +133,6 @@ export default function AddSymptomDialog({
               <Typography variant="body2" color="text.secondary" sx={{ fontSize: '0.85rem' }}>
                 {t('painlevel0')}
               </Typography>
-              <Typography variant="h6" sx={{ fontWeight: 600, color: getPainColor(symptom.pain) }}>
-                {symptom.pain}
-              </Typography>
               <Typography variant="body2" color="text.secondary" sx={{ fontSize: '0.85rem' }}>
                 {t('painlevel10')}
               </Typography>
