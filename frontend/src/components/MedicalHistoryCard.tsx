@@ -60,12 +60,12 @@ export default function MedicalHistoryCard({
       <AccordionDetails>
         <Stack spacing={2}>
           <Typography sx={{ fontSize: 16}}>
-            {t('since')}: {condition.since}
+            {t('sinceShort')}: {condition.since}
           </Typography>
           
           {condition.medication && (
             <Typography sx={{ fontSize: 14}}>
-              Medikamente: {condition.medication}
+              {t('medicationShort')}: {condition.medication}
             </Typography>
           )}
           

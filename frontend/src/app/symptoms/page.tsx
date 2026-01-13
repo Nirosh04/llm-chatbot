@@ -703,21 +703,19 @@ export default function SymptomsPage({ sessionId }: SymptomsPageProps) {
         <DialogContent>
           <Stack spacing={2} sx={{ mt: 1 }}>
             <TextField
-              label="Welche Vorerkrankung haben Sie?"
-              //label={tMedicalHistory('condition')}
+              label={tMedicalHistory('condition')}
               fullWidth
               value={newHistory.condition}
               onChange={(e) => setNewHistory({...newHistory, condition: e.target.value})}
             />
             <TextField
-              label="Seit wann haben Sie diese Erkrankung?"
-              //label={tMedicalHistory('since')}
+              label={tMedicalHistory('since')}
               fullWidth
               value={newHistory.since}
               onChange={(e) => setNewHistory({...newHistory, since: e.target.value})}
             />
             <TextField
-              label="Nehmen Sie regelmäßig Medikamente wegen dieser Erkrankung ein? Wenn ja, welche?"
+              label={tMedicalHistory('medication')}
               fullWidth
               multiline
               rows={2}
@@ -772,7 +770,7 @@ export default function SymptomsPage({ sessionId }: SymptomsPageProps) {
               onChange={(e) => setNewHistory({...newHistory, since: e.target.value})}
             />
             <TextField
-              label="Medikamente"
+              label={tMedicalHistory('medication')}
               fullWidth
               multiline
               rows={2}

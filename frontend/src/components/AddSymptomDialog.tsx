@@ -90,7 +90,6 @@ export default function AddSymptomDialog({
           />
           
           <TextField
-            //label="Seit wann haben Sie diese Beschwerden?"
             label={t('duration')}
             fullWidth
             value={symptom.duration}
@@ -98,7 +97,6 @@ export default function AddSymptomDialog({
           />
           
           <TextField
-            //label="Wo genau sind die Beschwerden?"
             label={t('location')}
             fullWidth
             value={symptom.location}
