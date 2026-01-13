@@ -45,7 +45,7 @@ export default function AddSymptomDialog({
   // Farbverlauf: hellgrün -> gelb -> orange -> hellrot -> dunkelrot
   const getPainColor = (value: number): string => {
     const colorStops = [
-      { value: 1, color: { r: 144, g: 238, b: 144 } },  // hellgrün
+      { value: 0, color: { r: 144, g: 238, b: 144 } },  // hellgrün
       { value: 5, color: { r: 255, g: 255, b: 0 } },    // gelb
       { value: 7, color: { r: 255, g: 165, b: 0 } },    // orange
       { value: 8, color: { r: 255, g: 85, b: 0 } },  // hellrot
@@ -83,7 +83,6 @@ export default function AddSymptomDialog({
       <DialogContent>
         <Stack spacing={3} sx={{ mt: 1 }}>
           <TextField
-            label="Welche Beschwerden haben Sie?"
             label={t('description')}
             fullWidth
             value={symptom.description}
@@ -91,30 +90,27 @@ export default function AddSymptomDialog({
           />
           
           <TextField
-            label="Seit wann haben Sie diese Beschwerden?"
-            //label={t('duration')}
+            //label="Seit wann haben Sie diese Beschwerden?"
+            label={t('duration')}
             fullWidth
             value={symptom.duration}
             onChange={(e) => onSymptomChange({ ...symptom, duration: e.target.value })}
           />
           
           <TextField
-            label="Wo genau sind die Beschwerden?"
-            //label={t('location')}
+            //label="Wo genau sind die Beschwerden?"
+            label={t('location')}
             fullWidth
             value={symptom.location}
             onChange={(e) => onSymptomChange({ ...symptom, location: e.target.value })}
           />
           
           <Box>
-            <Stack direction="row" justifyContent="space-between" alignItems="center" mb={1}>
-              <Typography>{t('pain')}</Typography>
-              <Typography sx={{ fontWeight: 600 }}>{symptom.pain}</Typography>
-            </Stack>
+            <Typography mb={1}>{t('pain')}</Typography>
             
             <Slider
               value={symptom.pain}
-              min={1}
+              min={0}
               max={10}
               step={1}
               marks
@@ -133,12 +129,15 @@ export default function AddSymptomDialog({
               }}
               onChange={(_, value) => onSymptomChange({ ...symptom, pain: value as number })}
             />
-            <Stack direction="row" justifyContent="space-between" sx={{ mt: 1 }}>
-              <Typography variant="body2" color="text.primary" sx={{ fontSize: '0.9rem' }}>
-                1 = kein Schmerz
+            <Stack direction="row" justifyContent="space-between" alignItems="center" sx={{ mt: 1 }}>
+              <Typography variant="body2" color="text.secondary" sx={{ fontSize: '0.85rem' }}>
+                {t('painlevel0')}
               </Typography>
-              <Typography variant="body2" color="text.primary" sx={{ fontSize: '0.9rem' }}>
-                10 = stärkster vorstellbarer Schmerz
+              <Typography variant="h6" sx={{ fontWeight: 600, color: getPainColor(symptom.pain) }}>
+                {symptom.pain}
+              </Typography>
+              <Typography variant="body2" color="text.secondary" sx={{ fontSize: '0.85rem' }}>
+                {t('painlevel10')}
               </Typography>
             </Stack>
           </Box>

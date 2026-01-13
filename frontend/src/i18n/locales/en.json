@@ -33,6 +33,8 @@
     "durationShort": "Since when",
     "locationShort": "Where",
     "pain": "Pain (1-10)",
+    "painlevel0":"1 = No pain",
+    "painlevel10": "10 = Worst pain you can imagine",
     "cancel": "Cancel",
     "save": "Save",
     "add": "Add",

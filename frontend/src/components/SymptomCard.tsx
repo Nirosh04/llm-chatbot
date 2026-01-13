@@ -39,7 +39,7 @@ export default function SymptomCard({
   // Farbverlauf: hellgrün -> gelb -> orange -> hellrot -> dunkelrot
   const getPainColor = (value: number): string => {
     const colorStops = [
-      { value: 1, color: { r: 144, g: 238, b: 144 } },  // hellgrün
+      { value: 0, color: { r: 144, g: 238, b: 144 } },  // hellgrün
       { value: 5, color: { r: 255, g: 255, b: 0 } },    // gelb
       { value: 7, color: { r: 255, g: 165, b: 0 } },    // orange
       { value: 8, color: { r: 255, g: 85, b: 0 } },  // hellrot
@@ -135,10 +135,10 @@ export default function SymptomCard({
             />
             <Stack direction="row" justifyContent="space-between" sx={{ mt: 1 }}>
               <Typography variant="body2" color="text.primary" sx={{ fontSize: '0.9rem' }}>
-                1 = kein Schmerz
+                  {t('painlevel0')}
               </Typography>
               <Typography variant="body2" color="text.primary" sx={{ fontSize: '0.9rem' }}>
-                10 = stärkster vorstellbarer Schmerz
+                {t('painlevel10')}
               </Typography>
             </Stack>
           </Box>

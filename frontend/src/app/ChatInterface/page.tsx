@@ -4,7 +4,6 @@
 "use client";
 
 import React, { useState, useRef, useEffect } from 'react';
-import { useRouter } from "next/navigation";
 import {
   AppBar,
   Switch,
@@ -19,28 +18,21 @@ import {
   Tab,
   Tabs,
   Box,
-  Container,
   Tooltip,
 } from '@mui/material';
 
-import SickIcon from '@mui/icons-material/Sick';
 import HomeIcon from '@mui/icons-material/Home';
 import PersonIcon from '@mui/icons-material/Person';
 import SettingsIcon from '@mui/icons-material/Settings';
 import LogoutIcon from '@mui/icons-material/Logout';
-import MenuIcon from '@mui/icons-material/Menu';
 import ChatIcon from '@mui/icons-material/Chat';
 import InfoIcon from '@mui/icons-material/Info';
 import SendIcon from '@mui/icons-material/Send';
 
-//import { ChatBubble } from './components/ChatBubble';
 import { MessageList } from './../../components/MessageList';
 import { CustomTextField } from './../../components/CustomTextField';
-import { InfoTabNoInfo } from './../../components/InfoTabNoInfo';
 import {
-  getSignalCheck,
   createSession,
-  dummyGetLLMResponseFromServer,
   getLLMResponseFromServer,
   getHealthSummary,
   resetConversationRequest
@@ -58,22 +50,23 @@ interface ChatMessage {
 
 
 export default function TabMain() {
-  const [messages, setMessages] = useState<ChatMessage[]>([]);
-  const [inputText, setInputText] = useState('');
-  const [isLoading, setIsLoading] = useState(false);
-  const [activeTab, setActiveTab] = useState(0);
-  const [sessionId, setSessionId] = useState<string | null>(null);
-  const [healthSummaryText, setHealthSummaryText] = useState(
-    "No Health summary was requested yet"
-  );
-
-  const router = useRouter();
   const { darkMode, toggleDarkMode, language, setLanguage } = useSettings();
   const tChat = useTranslations('chat');
   const tTabs = useTranslations('tabs');
   const tSettings = useTranslations('settings');
 
-  
+  const [messages, setMessages] = useState<ChatMessage[]>(() => [{
+    id: 'welcome',
+    text: tChat('firstMessage'),
+    isMe: false,
+  }]);
+  const [inputText, setInputText] = useState('');
+  const [isLoading, setIsLoading] = useState(false);
+  const [activeTab, setActiveTab] = useState(0);
+  const [sessionId, setSessionId] = useState<string | null>(null);
+  const [, setHealthSummaryText] = useState(
+    "No Health summary was requested yet"
+  );
 
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
@@ -84,18 +77,6 @@ export default function TabMain() {
   useEffect(() => {
     scrollToBottom();
   }, [messages]);
-
-  // Add first message
-  useEffect(() => {
-    if (messages.length === 0) {
-      setMessages([{
-          id: 'welcome',
-          text: tChat('firstMessage'),
-          isMe: false,
-        },
-      ]);
-    }
-  }, [tChat, messages.length]);
 
   const handleSendMessage = async () => {
     console.log('1. handleSendMessage called');
@@ -149,7 +130,7 @@ export default function TabMain() {
   };
 
 
-  const handleKeyPress = (e: React.KeyboardEvent) => {
+  const handleKeyDown = (e: React.KeyboardEvent) => {
     // Don't send if Enter is pressed while loading
     if (e.key === 'Enter' && !isLoading && inputText.trim()) {
       handleSendMessage();
@@ -235,7 +216,7 @@ export default function TabMain() {
                 <CustomTextField
                   value={inputText}
                   onChange={(e) => setInputText(e.target.value)}
-                  onKeyPress={handleKeyPress}
+                  onKeyDown={handleKeyDown}
                   placeholder={tChat('typeMessage')}
                 />
               </Box>
