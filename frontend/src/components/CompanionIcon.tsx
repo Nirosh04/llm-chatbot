@@ -1,7 +1,7 @@
 'use client';
 
 import Image from 'next/image';
-import CompanionIconSrc from '@/assets/CompanionIcon.png'; 
+import CompanionIconSrc from '@/assets/Lumee.png'; 
 
 type CompanionIconProps = {
   width?: number;
@@ -26,7 +26,7 @@ export default function CompanionIcon({
       height={height}
       className={className}
       style={{
-        filter: 'saturate(1582%) brightness(76%) contrast(92%)',
+        // filter: 'saturate(1582%) brightness(76%) contrast(92%)',
         marginBottom: '24px',
         ...style,
       }}

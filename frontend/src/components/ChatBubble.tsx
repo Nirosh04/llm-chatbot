@@ -2,6 +2,7 @@
 'use client';
 import { Box, useTheme } from '@mui/material';
 import React from 'react';
+import CompanionIcon from './CompanionIcon';
 
 interface ChatBubbleProps {
   message: string;
@@ -26,8 +27,18 @@ export const ChatBubble: React.FC<ChatBubbleProps> = ({ message, isMe }) => {
         style={{
           display: 'flex',
           justifyContent: isMe ? 'flex-end' : 'flex-start',
+          alignItems: 'flex-start',
+          gap: '8px',
         }}
-      >
+      > 
+        {!isMe && (
+          <CompanionIcon 
+            width={45} 
+            height={45} 
+            style={{ marginTop: '8px', flexShrink: 0 }}
+          />
+        )}
+        
         <div
           style={{
             backgroundColor: isMe ? theme.palette.chat.me : theme.palette.chat.llm,
