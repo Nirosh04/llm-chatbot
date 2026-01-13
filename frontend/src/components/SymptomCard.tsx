@@ -13,6 +13,7 @@ import {
 } from '@mui/material';
 import { Edit, Delete, ExpandMore } from '@mui/icons-material';
 import { Symptom } from './../types/PatientMedicalData';
+import { useTranslations } from 'next-intl';
 
 
 
@@ -32,6 +33,7 @@ export default function SymptomCard({
   onPainChange,
 }: SymptomCardProps) {
   const [expanded, setExpanded] = useState(false);
+  const t = useTranslations('symptoms');
 
   // Funktion zur Berechnung der Farbe basierend auf dem Schmerzwert
   // Farbverlauf: hellgrün -> gelb -> orange -> hellrot -> dunkelrot
@@ -93,17 +95,17 @@ export default function SymptomCard({
       <AccordionDetails>
         <Stack spacing={1}>
           <Typography sx={{ fontSize: 16}}>
-            Dauer: {symptom.duration}
+            {t('durationShort')}: {symptom.duration}
           </Typography>
           
           <Typography sx={{ fontSize: 14}}>
-            Ort: {symptom.location}
+            {t('locationShort')}: {symptom.location}
           </Typography>
           
           <Box sx={{ mt: 2 }}>
             <Stack direction="row" justifyContent="space-between" alignItems="center" mb={1}>
               <Typography sx={{ fontSize: 14, fontWeight: 600}}>
-                Schmerz (1-10)
+                {t('pain')}
               </Typography>
               <Typography sx={{ fontSize: 14, fontWeight: 600}}>
                 {symptom.pain}

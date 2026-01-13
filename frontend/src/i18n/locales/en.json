@@ -1,0 +1,65 @@
+{
+  "welcome": {
+    "title": "Welcome!",
+    "intro": "I am Lumee, your digital companion in the emergency department.",
+    "description": "I am here to help you make the best use of your waiting time. Together, we can prepare for your doctor's visit by asking about your condition. I can also answer your questions about the process and provide a map for orientation.",
+    "lookForward": "We can start whenever you are ready.",
+    "startButton": "Let's get started"
+  },
+  "tabs": {
+    "chat": "Chat",
+    "info": "Info",
+    "settings": "Settings"
+  },
+  "chat": {
+    "typeMessage": "Type a message...",
+    "sendMessage": "Send message",
+    "firstMessage": "What is the reason for your visit to the ED?"
+  },
+  "settings": {
+    "language": "Language",
+    "darkMode": "Dark Mode",
+    "german": "Deutsch",
+    "english": "English"
+  },
+  "symptoms": {
+    "symptomsTab": "Concerns",
+    "toMedicalHistory": "Continue to medical history",
+    "noSymptomsYet": "No concerns recorded yet. Add your first concern.",
+    "description": "Description: What concern do you have?",
+    "duration": "Since when do you have this concern?",
+    "location": "Where exactly do you have this concern ?",
+    "descriptionShort": "Description",
+    "durationShort": "Since when",
+    "locationShort": "Where",
+    "pain": "Pain (1-10)",
+    "cancel": "Cancel",
+    "save": "Save",
+    "add": "Add",
+    "update": "Update",
+    "addSymptom": "Add new Concers",
+    "editSymptom": "Edit Concers",
+    "errorLoading": "Error loading health data",
+    "newSymptom": "New Concern",
+    "unnamedSymptom": "Unnamed concern",
+    "unknown": "Unknown"
+  },
+  "medicalHistory": {
+    "medicalHistoryTab": "Medical History",
+    "backToSymptoms": "Back to concerns",
+    "noHistoryYet": "No medical history recorded yet. Add your first entry.",
+    "condition": "Disease / Condition",
+    "since": "Since when",
+    "notes": "Notes: e.g. How do you treat this condition?",
+    "notesShort": "Notes",
+    "cancel": "Cancel",
+    "save": "Save",
+    "add": "Add",
+    "update": "Update",
+    "addHistory": "Add new medical history entry",
+    "editHistory": "Edit entry",
+    "errorLoading": "Error loading health data",
+    "unnamedCondition": "Unnamed condition",
+    "unknown": "Unknown"
+  }
+}

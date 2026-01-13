@@ -45,6 +45,7 @@ import MedicalHistoryCard from './../../components/MedicalHistoryCard';
 import AddSymptomDialog from './../../components/AddSymptomDialog';
 import { Symptom, MedicalCondition, HealthSummary } from './../../types/PatientMedicalData'; // rename to patient_data.ts
 import { useSettings } from '@/context/SettingsContext';
+import { useTranslations } from 'next-intl';
 
 
 // Mock backend function - replace with actual API call
@@ -113,6 +114,8 @@ export default function SymptomsPage({ sessionId }: SymptomsPageProps) {
   const { darkMode, toggleDarkMode, language, setLanguage } = useSettings();
   const theme = useTheme();
   const router = useRouter();
+  const tSymptoms = useTranslations('symptoms');
+  const tMedicalHistory = useTranslations('medicalHistory');
   
   // Form states
   const [newSymptom, setNewSymptom] = useState({
@@ -196,7 +199,7 @@ export default function SymptomsPage({ sessionId }: SymptomsPageProps) {
       setJsonData(data);
       setError(null);
     } catch (err) {
-      setError('Fehler beim Laden der Gesundheitsdaten');
+      setError(tSymptoms('errorLoading'));
       console.error('Error fetching health summary:', err);
     } finally {
       setIsLoading(false);
@@ -223,10 +226,10 @@ export default function SymptomsPage({ sessionId }: SymptomsPageProps) {
     if (!jsonData) return;
     
     const symptom: Symptom = {
-      description: newSymptom.description.trim() || "Neues Symptom",
-      location: newSymptom.location.trim() || "unbekannt",
+      description: newSymptom.description.trim() || tSymptoms('unnamedSymptom'),
+      location: newSymptom.location.trim() || tSymptoms('unknown'),
       severity: `${newSymptom.pain}/10`,
-      duration: newSymptom.duration.trim() || "Keine Dauer angegeben",
+      duration: newSymptom.duration.trim() || tSymptoms('unknown'),
       pain: Math.max(1, Math.min(10, newSymptom.pain)),
     };
 
@@ -262,10 +265,10 @@ export default function SymptomsPage({ sessionId }: SymptomsPageProps) {
     
     const updatedSymptoms = [...jsonData.historyOfPresentIllness.keySymptoms];
     updatedSymptoms[editingIndex] = {
-      description: newSymptom.description.trim() || "Kein Titel",
-      location: newSymptom.location.trim() || "unbekannt",
+      description: newSymptom.description.trim() || tSymptoms('unnamedSymptom'),
+      location: newSymptom.location.trim() || tSymptoms('unknown'),
       severity: `${newSymptom.pain}/10`,
-      duration: newSymptom.duration.trim() || "Keine Dauer angegeben",
+      duration: newSymptom.duration.trim() || tSymptoms('unknown'),
       pain: Math.max(1, Math.min(10, newSymptom.pain)),
     };
 
@@ -302,8 +305,8 @@ export default function SymptomsPage({ sessionId }: SymptomsPageProps) {
     if (!jsonData) return;
     
     const condition: MedicalCondition = {
-      condition: newHistory.condition.trim() || "Unbenannte Erkrankung",
-      since: newHistory.since.trim() || "Unbekannt",
+      condition: newHistory.condition.trim() || tMedicalHistory('unnamedCondition'),
+      since: newHistory.since.trim() || tMedicalHistory('unknown'),
       medication: newHistory.medication.trim(),
       notes: newHistory.notes.trim(),
     };
@@ -450,7 +453,7 @@ export default function SymptomsPage({ sessionId }: SymptomsPageProps) {
             
             {/* Left arrow for Krankengeschichte page */}
             {activeTab === 1 && (
-              <Tooltip title="Zurück zu Symptomen">
+              <Tooltip title={tMedicalHistory('backToSymptoms')}>
                 <IconButton
                   onClick={handlePreviousPage}
                 >
@@ -519,7 +522,7 @@ export default function SymptomsPage({ sessionId }: SymptomsPageProps) {
                         //color: theme => theme.palette.text.primary,
                       }}
                     >
-                      Symptome
+                      {tSymptoms('symptomsTab')}
                     </Typography>
                   </Box>
                   
@@ -553,7 +556,7 @@ export default function SymptomsPage({ sessionId }: SymptomsPageProps) {
                         //color: theme => theme.palette.text.primary,
                       }}
                     >
-                      Krankengeschichte
+                      {tMedicalHistory('medicalHistoryTab')}
                     </Typography>
                   </Box>
                 </Stack>
@@ -562,7 +565,7 @@ export default function SymptomsPage({ sessionId }: SymptomsPageProps) {
 
             {/* Right arrow for Symptome page */}
             {activeTab === 0 && (
-              <Tooltip title="Weiter zur Krankengeschichte">
+              <Tooltip title={tSymptoms('toMedicalHistory')}>
                 <IconButton
                   onClick={handleNextPage}
                 >
@@ -595,7 +598,7 @@ export default function SymptomsPage({ sessionId }: SymptomsPageProps) {
             {jsonData.historyOfPresentIllness.keySymptoms.length === 0 && (
               <Box sx={{ textAlign: 'center', py: 4 }}>
                 <Typography variant="body1">
-                  Noch keine Symptome erfasst. Fügen Sie das erste Symptom hinzu.
+                  {tSymptoms('noSymptomsYet')}
                 </Typography>
               </Box>
             )}
@@ -618,7 +621,7 @@ export default function SymptomsPage({ sessionId }: SymptomsPageProps) {
             {jsonData.medicalHistory.conditions.length === 0 && (
               <Box sx={{ textAlign: 'center', py: 4 }}>
                 <Typography variant="body1" color="text.secondary">
-                  Noch keine Krankengeschichte erfasst. Fügen Sie den ersten Eintrag hinzu.
+                  {tMedicalHistory('noHistoryYet')}
                 </Typography>
               </Box>
             )}
@@ -637,8 +640,8 @@ export default function SymptomsPage({ sessionId }: SymptomsPageProps) {
       }}>
         <Tooltip
           title={activeTab === 0 
-            ? "Neues Symptom hinzufügen" 
-            : "Neuen Eintrag zur Krankengeschichte hinzufügen"
+            ? tSymptoms('addSymptom') 
+            : tMedicalHistory('addHistory')
           }
         >
           <Fab
@@ -696,17 +699,19 @@ export default function SymptomsPage({ sessionId }: SymptomsPageProps) {
         maxWidth="sm"
         fullWidth
       >
-        <DialogTitle>Neue Vorerkrankung hinzufügen</DialogTitle>
+        <DialogTitle>{tMedicalHistory('addHistory')}</DialogTitle>
         <DialogContent>
           <Stack spacing={2} sx={{ mt: 1 }}>
             <TextField
               label="Welche Vorerkrankung haben Sie?"
+              //label={tMedicalHistory('condition')}
               fullWidth
               value={newHistory.condition}
               onChange={(e) => setNewHistory({...newHistory, condition: e.target.value})}
             />
             <TextField
               label="Seit wann haben Sie diese Erkrankung?"
+              //label={tMedicalHistory('since')}
               fullWidth
               value={newHistory.since}
               onChange={(e) => setNewHistory({...newHistory, since: e.target.value})}
@@ -720,7 +725,7 @@ export default function SymptomsPage({ sessionId }: SymptomsPageProps) {
               onChange={(e) => setNewHistory({...newHistory, medication: e.target.value})}
             />
             <TextField
-              label="Notizen"
+              label={tMedicalHistory('notes')}
               fullWidth
               multiline
               rows={3}
@@ -730,12 +735,12 @@ export default function SymptomsPage({ sessionId }: SymptomsPageProps) {
           </Stack>
         </DialogContent>
         <DialogActions>
-          <Button onClick={() => setAddHistoryDialogOpen(false)}>Abbrechen</Button>
+          <Button onClick={() => setAddHistoryDialogOpen(false)}>{tMedicalHistory('cancel')}</Button>
           <Button 
             onClick={handleAddHistory}
             variant="contained"
           >
-            Hinzufügen
+            {tMedicalHistory('add')}
           </Button>
         </DialogActions>
       </Dialog>
@@ -751,17 +756,17 @@ export default function SymptomsPage({ sessionId }: SymptomsPageProps) {
         maxWidth="sm"
         fullWidth
       >
-        <DialogTitle>Eintrag bearbeiten</DialogTitle>
+        <DialogTitle>{tMedicalHistory('editHistory')}</DialogTitle>
         <DialogContent>
           <Stack spacing={2} sx={{ mt: 1 }}>
             <TextField
-              label="Erkrankung / Zustand"
+              label={tMedicalHistory('condition')}
               fullWidth
               value={newHistory.condition}
               onChange={(e) => setNewHistory({...newHistory, condition: e.target.value})}
             />
             <TextField
-              label="Seit"
+              label={tMedicalHistory('since')}
               fullWidth
               value={newHistory.since}
               onChange={(e) => setNewHistory({...newHistory, since: e.target.value})}
@@ -775,7 +780,7 @@ export default function SymptomsPage({ sessionId }: SymptomsPageProps) {
               onChange={(e) => setNewHistory({...newHistory, medication: e.target.value})}
             />
             <TextField
-              label="Notizen"
+              label={tMedicalHistory('notes')}
               fullWidth
               multiline
               rows={3}
@@ -790,13 +795,13 @@ export default function SymptomsPage({ sessionId }: SymptomsPageProps) {
             setEditingIndex(null);
             setNewHistory({ condition: '', since: '', notes: '', medication: '' });
           }}>
-            Abbrechen
+            {tMedicalHistory('cancel')}
           </Button>
           <Button 
             onClick={handleUpdateHistory}
             variant="contained"
           >
-            Aktualisieren
+            {tMedicalHistory('update')}
           </Button>
         </DialogActions>
       </Dialog>

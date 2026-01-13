@@ -17,29 +17,31 @@ import Image from 'next/image';
 import CompanionIcon from '@/components/CompanionIcon';
 import DE from 'country-flag-icons/react/3x2/DE';
 import GB from 'country-flag-icons/react/3x2/GB';
+import { useTranslations } from 'next-intl';
+import { useSettings } from '@/context/SettingsContext';
+import { text } from 'stream/consumers';
 
 const WelcomePage: React.FC = () => {
   const theme = useTheme();
   const router = useRouter();
-
-  // Track selected language
-  const [selectedLanguage, setSelectedLanguage] = useState<'DE' | 'GB'>('DE');
+  const t = useTranslations('welcome');
+  const { language, setLanguage } = useSettings();
 
   const textStyles = {
     headline1: { fontSize: '2.25rem', fontWeight: 600, lineHeight: 1.2 },
     headline2: { fontSize: '1.625rem', fontWeight: 600, lineHeight: 1.2 },
     headline2Bold: { fontSize: '1.625rem', fontWeight: 'bold', lineHeight: 1.2 },
-    headline3: { fontSize: '1.625rem', fontWeight: 600, lineHeight: 1.2 },
+    headline3: { fontSize: '1.5rem', fontWeight: 500, lineHeight: 1.2 },
     defaultText: { fontSize: '1.5rem', lineHeight: 1.5 },
-    buttonText: { fontSize: '1.625rem' },
+    buttonText: { fontSize: '1.625rem', fontWeight: 'bold', textTransform: 'none' },
   };
 
   const handleStartClick = () => {
     router.push(`/ChatInterface`); // we need to pass the selected Language
   };
 
-  const handleLanguageClick = (lang: 'DE' | 'GB') => { // more languages will follow (spanish etc.)
-    setSelectedLanguage(lang);
+  const handleLanguageClick = (lang: 'de' | 'en') => {
+    setLanguage(lang);
   };
 
   return (
@@ -59,20 +61,20 @@ const WelcomePage: React.FC = () => {
             < CompanionIcon />
           </Box>
 
-          <Typography variant="h1" sx={textStyles.headline1}>Willkommen!</Typography>
+          <Typography variant="h1" sx={textStyles.headline1}>{t('title')}</Typography>
           <Box sx={{ ...textStyles.headline2, textAlign: 'center' }}>
-            Ich bin <Box component="span" sx={textStyles.headline2Bold}>Lumee</Box>,
+            {t('intro')}
           </Box>
-          <Typography variant="h3" sx={textStyles.headline3}>Dein digitaler Begleiter für die Wartezeit.</Typography>
-          <Typography variant="body1" sx={textStyles.defaultText}>Ich freue mich, Dich kennenzulernen!</Typography>
+          <Typography variant="h3" sx={textStyles.headline3}>{t('description')}</Typography>
+          <Typography variant="body1" sx={textStyles.defaultText}>{t('lookForward')}</Typography>
 
           <Box sx={{ mt: 4 }}>
             <Stack direction="row" spacing={4} justifyContent="center">
               <IconButton
-                onClick={() => handleLanguageClick('DE')}
+                onClick={() => handleLanguageClick('de')}
                 sx={{
                   padding: 1,
-                  border: selectedLanguage === 'DE' ? `2px solid` : '2px solid transparent',
+                  border: language === 'de' ? `2px solid` : '2px solid transparent',
                   borderRadius: 1,
                   '&:hover': { backgroundColor: 'rgba(0, 0, 0, 0.04)' },
                 }}
@@ -81,10 +83,10 @@ const WelcomePage: React.FC = () => {
               </IconButton>
 
               <IconButton
-                onClick={() => handleLanguageClick('GB')}
+                onClick={() => handleLanguageClick('en')}
                 sx={{
                   padding: 1,
-                  border: selectedLanguage === 'GB' ? `2px solid`  : '2px solid transparent',
+                  border: language === 'en' ? `2px solid`  : '2px solid transparent',
                   borderRadius: 1,
                   '&:hover': { backgroundColor: 'rgba(0, 0, 0, 0.04)' },
                 }}
@@ -109,7 +111,7 @@ const WelcomePage: React.FC = () => {
             //'&:hover': //  { backgroundColor: colors.buttonHoverColor} // || theme.palette.primary.dark },
           }}
         >
-          <Typography sx={textStyles.buttonText}>Fangen wir an</Typography>
+          <Typography sx={textStyles.buttonText}>{t('startButton')}</Typography>
         </Fab>
       </Box>
     </Box>
