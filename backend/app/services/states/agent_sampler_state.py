@@ -1,7 +1,7 @@
 from typing import Annotated, List
 from typing_extensions import TypedDict
 import operator
-from sampler_state import SamplerState
+from services.states.sampler_state import SamplerState
 
 class AgentState(TypedDict):
     messages: Annotated[List[dict], operator.add]

@@ -1,6 +1,8 @@
 from langgraph.graph import StateGraph, END
-from backend.app.services.states.agent_sampler_state import AgentState
-from backend.app.services.nodes.agent_sampler_nodes import guardrail_node, extraction_node, interviewer_node
+from services.states.agent_sampler_state import AgentState
+from services.nodes.agent_sampler_nodes import guardrail_node, extraction_node, interviewer_node
+from langgraph.checkpoint.memory import MemorySaver
+
 
 workflow = StateGraph(AgentState)
 
@@ -17,12 +19,13 @@ workflow.add_edge("guardrail", "extractor")
 workflow.add_edge("extractor", "interviewer")
 
 # Conditional End
-def should_continue(state: AgentState):
-    if state["is_complete"]:
-        return END
-    return END 
+# def should_continue(state: AgentState):
+#     if state["is_complete"]:
+#         return END
+#     return END 
 
-workflow.add_conditional_edges("interviewer", should_continue)
+# workflow.add_conditional_edges("interviewer", should_continue)
 
 # Compile
-app = workflow.compile()
+memory = MemorySaver()
+app = workflow.compile(checkpointer=memory)

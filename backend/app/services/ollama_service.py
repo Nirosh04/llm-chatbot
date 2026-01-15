@@ -68,7 +68,8 @@ class OllamaService:
     
     async def invoke(
         self, 
-        message: str
+        message: str,
+        format: dict = None
     ) -> Dict[str, any]:
         """
         Send a single chat request to Ollama.
@@ -89,6 +90,10 @@ class OllamaService:
                         "num_predict": settings.OLLAMA.MAX_TOKENS
                     }
                 }
+
+                if format is not None:
+                    payload["format"] = format
+
                 response = await client.post(
                     f"{settings.OLLAMA.URL}/api/chat",
                     json=payload
