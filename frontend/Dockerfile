@@ -17,7 +17,10 @@ RUN --mount=type=cache,target=/root/.npm \
 # Copy only what you actually need to build
 COPY src ./src
 COPY public ./public
-COPY next.config.ts tsconfig.json next-env.d.ts declarations.d.ts eslint.config.mjs README.md ./
+COPY next.config.ts tsconfig.json ./
+COPY declarations.d.ts* ./
+COPY eslint.config.mjs* ./
+COPY README.md* ./
 
 # Cache Next build artifacts between builds
 RUN --mount=type=cache,target=/app/.next/cache \

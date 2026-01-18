@@ -7,5 +7,6 @@ class AgentState(TypedDict):
     messages: Annotated[List[dict], operator.add]
     sampler_data: SamplerState
     is_emergency: bool
-    is_off_topic: bool
+    medical_advice_requested: bool
+    contains_new_medical_info: bool
     is_complete: bool
