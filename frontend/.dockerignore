@@ -1,0 +1,23 @@
+# Big / generated folders (never send to Docker build context)
+node_modules
+.next
+out
+
+# Git + editor
+.git
+.gitignore
+.vscode
+.idea
+
+# Logs
+npm-debug.log
+yarn-error.log
+pnpm-debug.log
+
+# OS junk
+.DS_Store
+Thumbs.db
+
+# Env files (don’t bake secrets into images)
+.env
+.env.*

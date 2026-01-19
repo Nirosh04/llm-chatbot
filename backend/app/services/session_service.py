@@ -64,7 +64,7 @@ class SessionService:
             config = {"configurable": {"thread_id": session_id}}
     
             input_state = {
-                "messages": [{"role": "user", "content": message_content}]
+                "messages": [{"role": "user", "content": message_content}] 
             }
 
             ai_result = await agent_app.ainvoke(input_state, config=config)
