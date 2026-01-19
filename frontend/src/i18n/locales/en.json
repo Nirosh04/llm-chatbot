@@ -1,0 +1,69 @@
+{
+  "welcome": {
+    "title": "Welcome!",
+    "intro": "I am Lumee, your digital companion in the emergency department.",
+    "description": "I am here to help you make the best use of your waiting time. Together, we can prepare for your doctor's visit by asking about your condition. I can also answer your questions about the process and provide a map for orientation.",
+    "lookForward": "We can start whenever you are ready.",
+    "startButton": "Let's get started"
+  },
+  "tabs": {
+    "chat": "Chat",
+    "info": "Info",
+    "settings": "Settings"
+  },
+  "chat": {
+    "typeMessage": "Type a message...",
+    "sendMessage": "Send message",
+    "firstMessage": "What is the reason for your visit to the ED?"
+  },
+  "settings": {
+    "language": "Language",
+    "darkMode": "Dark Mode",
+    "german": "Deutsch",
+    "english": "English"
+  },
+  "symptoms": {
+    "symptomsTab": "Concerns",
+    "toMedicalHistory": "Continue to medical history",
+    "noSymptomsYet": "No concerns recorded yet. Add your first concern.",
+    "description": "What concern do you have?",
+    "duration": "Since when do you have this concern?",
+    "location": "Where exactly do you have this concern ?",
+    "descriptionShort": "Description",
+    "durationShort": "Since when",
+    "locationShort": "Where",
+    "pain": "Pain (0-10)",
+    "painlevel0":"0 = No pain",
+    "painlevel10": "10 = Worst pain you can imagine",
+    "cancel": "Cancel",
+    "save": "Save",
+    "add": "Add",
+    "update": "Update",
+    "addSymptom": "Add new concern",
+    "editSymptom": "Edit concern",
+    "errorLoading": "Error loading health data",
+    "unnamedSymptom": "Unnamed concern",
+    "unknown": "Unknown"
+  },
+  "medicalHistory": {
+    "medicalHistoryTab": "Medical History",
+    "backToSymptoms": "Back to concerns",
+    "noHistoryYet": "No medical history recorded yet. Add your first entry.",
+    "condition": "What pre-existing condition do you have?",
+    "since": "Since when do you have this condition?",
+    "sinceShort": "Since when",
+    "medication": "Which medications do you take for this condition?",
+    "medicationShort": "Medications",
+    "notes": "Notes: e.g. any other treatments, triggers or relevant details",
+    "notesShort": "Notes",
+    "cancel": "Cancel",
+    "save": "Save",
+    "add": "Add",
+    "update": "Update",
+    "addHistory": "Add new pre-existing condition",
+    "editHistory": "Edit entry",
+    "errorLoading": "Error loading health data",
+    "unnamedCondition": "Unnamed condition",
+    "unknown": "Unknown"
+  }
+}

@@ -1,0 +1,69 @@
+{
+  "welcome": {
+    "title": "Willkommen!",
+    "intro": "Ich bin Lumee, Ihr digitaler Begleiter in der Notaufnahme.",
+    "description": "Ich helfe Ihnen, die Wartezeit bestmöglich zu nutzen. Ich bereite mit Ihnen gemeinsam das anstehende Arztgespräch vor, indem ich Fragen zu Ihrem Befinden stelle. Zudem beantworte ich gern Ihre Fragen zum Ablauf und helfe Ihnen mit einer Karte bei der Orientierung.",
+    "lookForward": "Wir können direkt starten, wenn Sie bereit sind.",
+    "startButton": "Fangen wir an"
+  },
+  "tabs": {
+    "chat": "Chat",
+    "info": "Info",
+    "settings": "Einstellungen"
+  },
+  "chat": {
+    "typeMessage": "Nachricht eingeben...",
+    "sendMessage": "Nachricht senden",
+    "firstMessage": "Was ist der Grund für Ihren Besuch in der Notaufnahme?"
+  },
+  "settings": {
+    "language": "Sprache",
+    "darkMode": "Dunkelmodus",
+    "german": "Deutsch",
+    "english": "English"
+  },
+  "symptoms": {
+    "symptomsTab": "Aktuelle Beschwerden",
+    "toMedicalHistory": "Weiter zur Krankengeschichte",
+    "noSymptomsYet": "Noch keine aktuellen Beschwerden erfasst. Fügen Sie die erste aktuelle Beschwerde hinzu.",
+    "description": "Welche Beschwerde haben Sie?",
+    "duration": "Seit wann haben Sie diese Beschwerde?",
+    "location": "Wo genau haben Sie diese Beschwerde?",
+    "descriptionShort": "Beschreibung",
+    "durationShort": "Seit wann",
+    "locationShort": "Wo",
+    "pain": "Schmerz (0-10)",
+    "painlevel0":"0 = Kein Schmerz",
+    "painlevel10": "10 = Stärkster vorstellbarer Schmerz",
+    "cancel": "Abbrechen",
+    "save": "Speichern",
+    "add": "Hinzufügen",
+    "update": "Aktualisieren",
+    "addSymptom": "Neue aktuelle Beschwerde hinzufügen",
+    "editSymptom": "Aktuelle Beschwerde bearbeiten",
+    "errorLoading": "Fehler beim Laden der Gesundheitsdaten",
+    "unnamedSymptom": "Unbenannte Beschwerde",
+    "unknown": "Unbekannt"
+  },
+  "medicalHistory": {
+    "medicalHistoryTab": "Krankengeschichte",
+    "backToSymptoms": "Zurück zu Aktuelle Beschwerden",
+    "noHistoryYet": "Noch keine Krankengeschichte erfasst. Fügen Sie den ersten Eintrag hinzu.",
+    "condition": "Welche Vorerkrankung haben Sie?",
+    "since": "Seit wann haben Sie diese Erkrankung?",
+    "sinceShort": "Seit wann",
+    "medication": "Welche Medikamente nehmen Sie wegen dieser Erkrankung ein?",
+    "medicationShort": "Medikamente",
+    "notes": "Notizen: z.B. andere Behandlungen, Auslöser oder relevante Details",
+    "notesShort": "Notizen",
+    "cancel": "Abbrechen",
+    "save": "Speichern",
+    "add": "Hinzufügen",
+    "update": "Aktualisieren",
+    "addHistory": "Neue Vorerkrankung hinzufügen",
+    "editHistory": "Eintrag bearbeiten",
+    "errorLoading": "Fehler beim Laden der Gesundheitsdaten",
+    "unnamedCondition": "Unbenannte Erkrankung",
+    "unknown": "Unbekannt"
+  }
+}

@@ -68,6 +68,24 @@ export const getTheme = (darkMode: boolean) => {
       loadingDots: palette.loadingDots
     },
     components: {
+      MuiCssBaseline: {
+        styleOverrides: `
+          html {
+            height: auto !important;
+            overflow-y: auto !important;
+            overflow-x: hidden !important;
+          }
+          body {
+            height: auto !important;
+            overflow-y: auto !important;
+            overflow-x: hidden !important;
+          }
+          #__next {
+            height: auto !important;
+            overflow: visible !important;
+          }
+        `,
+      },
       MuiButton: {
         styleOverrides: {
           root: {

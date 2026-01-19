@@ -9,6 +9,7 @@ export interface Symptom {
 export interface MedicalCondition {
   condition: string;
   since: string;
+  medication: string;
   notes: string;
 }
 

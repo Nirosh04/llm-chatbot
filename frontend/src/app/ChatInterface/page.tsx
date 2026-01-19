@@ -1,10 +1,9 @@
 
-// app/tabMain/page.tsx - Main page w tabs
+// app/ChatInterface/page.tsx - Main page w tabs
 
 "use client";
 
 import React, { useState, useRef, useEffect } from 'react';
-import { useRouter } from "next/navigation";
 import {
   AppBar,
   Switch,
@@ -19,35 +18,28 @@ import {
   Tab,
   Tabs,
   Box,
-  Container,
   Tooltip,
 } from '@mui/material';
 
-import SickIcon from '@mui/icons-material/Sick';
 import HomeIcon from '@mui/icons-material/Home';
 import PersonIcon from '@mui/icons-material/Person';
 import SettingsIcon from '@mui/icons-material/Settings';
 import LogoutIcon from '@mui/icons-material/Logout';
-import MenuIcon from '@mui/icons-material/Menu';
 import ChatIcon from '@mui/icons-material/Chat';
 import InfoIcon from '@mui/icons-material/Info';
 import SendIcon from '@mui/icons-material/Send';
 
-//import { ChatBubble } from './components/ChatBubble';
 import { MessageList } from './../../components/MessageList';
-import { HomeGreeting } from './../../components/HomeGreeting';
 import { CustomTextField } from './../../components/CustomTextField';
-import { InfoTabNoInfo } from './../../components/InfoTabNoInfo';
 import {
-  getSignalCheck,
   createSession,
-  dummyGetLLMResponseFromServer,
   getLLMResponseFromServer,
   getHealthSummary,
   resetConversationRequest
-} from './../../services/serverRequests';
+} from '../../services/serverRequests';
 import SymptomsPage from '@/app/symptoms/page'; // adjust the path if needed
 import { useSettings } from '@/context/SettingsContext';
+import { useTranslations } from 'next-intl';
 
 
 interface ChatMessage {
@@ -58,19 +50,23 @@ interface ChatMessage {
 
 
 export default function TabMain() {
-  const [messages, setMessages] = useState<ChatMessage[]>([]);
+  const { darkMode, toggleDarkMode, language, setLanguage } = useSettings();
+  const tChat = useTranslations('chat');
+  const tTabs = useTranslations('tabs');
+  const tSettings = useTranslations('settings');
+
+  const [messages, setMessages] = useState<ChatMessage[]>(() => [{
+    id: 'welcome',
+    text: tChat('firstMessage'),
+    isMe: false,
+  }]);
   const [inputText, setInputText] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const [activeTab, setActiveTab] = useState(0);
   const [sessionId, setSessionId] = useState<string | null>(null);
-  const [healthSummaryText, setHealthSummaryText] = useState(
+  const [, setHealthSummaryText] = useState(
     "No Health summary was requested yet"
   );
-
-  const router = useRouter();
-  const { darkMode, toggleDarkMode, language, setLanguage } = useSettings();
-
-  
 
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
@@ -134,7 +130,7 @@ export default function TabMain() {
   };
 
 
-  const handleKeyPress = (e: React.KeyboardEvent) => {
+  const handleKeyDown = (e: React.KeyboardEvent) => {
     // Don't send if Enter is pressed while loading
     if (e.key === 'Enter' && !isLoading && inputText.trim()) {
       handleSendMessage();
@@ -174,7 +170,7 @@ export default function TabMain() {
           display: 'flex',
           flexDirection: 'column',
           minHeight: 0, // Important for proper scrolling
-          overflow: 'hidden',
+          overflow: 'auto', // Allow scroll everywhere
 
         }}
       >
@@ -198,14 +194,8 @@ export default function TabMain() {
                 padding: 2,
               }}
             >
-              {messages.length === 0 && !isLoading ? (
-                <HomeGreeting />
-              ) : (
-                <>
-                  <MessageList messages={messages} isLoading={isLoading} />
-                  <div ref={messagesEndRef} />
-                </>
-              )}
+              <MessageList messages={messages} isLoading={isLoading} />
+              <div ref={messagesEndRef} />
             </Box>
 
             {/* Input area */}
@@ -226,11 +216,11 @@ export default function TabMain() {
                 <CustomTextField
                   value={inputText}
                   onChange={(e) => setInputText(e.target.value)}
-                  onKeyPress={handleKeyPress}
-                  placeholder="Type a message..."
+                  onKeyDown={handleKeyDown}
+                  placeholder={tChat('typeMessage')}
                 />
               </Box>
-              <Tooltip title="Send message">
+              <Tooltip title={tChat('sendMessage')}>
                 <IconButton
                   onClick={handleSendMessage}
                   disabled={!inputText.trim()}
@@ -278,16 +268,16 @@ export default function TabMain() {
 
           {/* Language Selector */}
           <ListItem>
-            <ListItemText primary="Language" />
+            <ListItemText primary={tSettings('language')} />
             <Select value={language} onChange={e => setLanguage(e.target.value)} sx={{ minWidth: 100 }}>
-              <MenuItem value="DE">Deutsch</MenuItem>
-              <MenuItem value="EN">English</MenuItem>
+              <MenuItem value="de">{tSettings('german')}</MenuItem>
+              <MenuItem value="en">{tSettings('english')}</MenuItem>
             </Select>
           </ListItem>
 
           {/* Dark Mode Toggle */}
           <ListItem>
-            <ListItemText primary="Dark Mode" />
+            <ListItemText primary={tSettings('darkMode')} />
             <Switch checked={darkMode} onChange={toggleDarkMode} />
           </ListItem>
   
@@ -379,6 +369,10 @@ export default function TabMain() {
               '& .MuiTab-root': { // when not selected
                 color: theme => theme.palette.text.primary,
                 minHeight: 56,
+                transition: 'background-color 0.3s',
+                '&:hover': {
+                  backgroundColor: theme => theme.palette.action.hover,
+                },
               },
               '& .MuiTab-root.Mui-selected': { // when clicked
                 color: theme => theme.palette.text.secondary,
@@ -390,9 +384,9 @@ export default function TabMain() {
               },
             }}
           >
-            <Tab icon={<ChatIcon />} label="Chat" />
-            <Tab icon={<InfoIcon />} label="Info" />
-            <Tab icon={<SettingsIcon />} label="Settings" />
+            <Tab icon={<ChatIcon />} label={tTabs('chat')} />
+            <Tab icon={<InfoIcon />} label={tTabs('info')} />
+            <Tab icon={<SettingsIcon />} label={tTabs('settings')} />
           </Tabs>
         </AppBar>
 
