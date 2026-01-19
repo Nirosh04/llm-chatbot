@@ -6,6 +6,7 @@ from database import DatabaseService
 from services.ollama_service import OllamaService
 from services.vector_service import VectorService
 from settings import settings
+from services.agent_graph_service import app as agent_app
 
 logger = logging.getLogger(__name__)
 
@@ -58,8 +59,18 @@ class SessionService:
                 session_id, 
                 limit=settings.CONVERSATION.MAX_HISTORY
             )
-            ai_result = await self.model.chat(history)
-            ai_response = ai_result["content"]
+            # ai_result = await self.model.chat(history)
+
+            config = {"configurable": {"thread_id": session_id}}
+    
+            input_state = {
+                "messages": [{"role": "user", "content": message_content}] 
+            }
+
+            ai_result = await agent_app.ainvoke(input_state, config=config)
+            # ai_response = ai_result["content"]
+            logger.info("AI result: %s", ai_result)
+            ai_response = ai_result["messages"][-1]['content']
             self.db.save_message(session_id, ai_response, is_ai=True)
             self.db.update_session_timestamp(session_id)
             logger.info(

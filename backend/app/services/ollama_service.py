@@ -65,6 +65,64 @@ class OllamaService:
                 status_code=500, 
                 detail=f"Failed to get AI response: {str(e)}"
             )
+    
+    async def invoke(
+        self, 
+        message: str,
+        format: dict = None
+    ) -> Dict[str, any]:
+        """
+        Send a single chat request to Ollama.
+        Args:
+            message: Single message
+        Returns:
+            Dict with content, model, and token count
+        """
+        try:
+            async with httpx.AsyncClient(timeout=settings.OLLAMA.TIMEOUT) as client:
+                ollama_messages = [{"role": "user", "content": message}]
+                payload = {
+                    "model": settings.OLLAMA.MODEL,
+                    "messages": ollama_messages,
+                    "stream": False,
+                    "options": {
+                        "temperature": settings.OLLAMA.TEMPERATURE,
+                        "num_predict": settings.OLLAMA.MAX_TOKENS
+                    }
+                }
+
+                if format is not None:
+                    payload["format"] = format
+
+                response = await client.post(
+                    f"{settings.OLLAMA.URL}/api/chat",
+                    json=payload
+                )
+                if response.status_code != 200:
+                    logger.error(f"Ollama error: {response.text}")
+                    raise HTTPException(
+                        status_code=500, 
+                        detail="Ollama API error"
+                    )
+                result = response.json()
+                return {
+                    "content": result["message"]["content"],
+                    "tokens": result.get("eval_count", 0)
+                }
+        except httpx.TimeoutException:
+            logger.error("Ollama request timeout")
+            raise HTTPException(
+                status_code=504, 
+                detail="AI model timeout"
+            )
+        except HTTPException:
+            raise
+        except Exception as e:
+            logger.error(f"Error calling Ollama: {e}")
+            raise HTTPException(
+                status_code=500, 
+                detail=f"Failed to get AI response: {str(e)}"
+            )
         
     async def summarize(
         self, 
