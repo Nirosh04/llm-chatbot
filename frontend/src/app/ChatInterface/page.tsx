@@ -19,6 +19,7 @@ import {
   Tabs,
   Box,
   Tooltip,
+  Slider
 } from '@mui/material';
 
 import HomeIcon from '@mui/icons-material/Home';
@@ -29,6 +30,7 @@ import ChatIcon from '@mui/icons-material/Chat';
 import InfoIcon from '@mui/icons-material/Info';
 import SendIcon from '@mui/icons-material/Send';
 
+import { FontSizeSelect } from './../../components/FontSizeSelect';
 import { MessageList } from './../../components/MessageList';
 import { CustomTextField } from './../../components/CustomTextField';
 import {
@@ -50,7 +52,7 @@ interface ChatMessage {
 
 
 export default function TabMain() {
-  const { darkMode, toggleDarkMode, language, setLanguage } = useSettings();
+  const { darkMode, toggleDarkMode, language, setLanguage, fontSize, setFontSize } = useSettings();
   const tChat = useTranslations('chat');
   const tTabs = useTranslations('tabs');
   const tSettings = useTranslations('settings');
@@ -67,6 +69,7 @@ export default function TabMain() {
   const [, setHealthSummaryText] = useState(
     "No Health summary was requested yet"
   );
+  // dummy function
 
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
@@ -274,6 +277,13 @@ export default function TabMain() {
               <MenuItem value="en">{tSettings('english')}</MenuItem>
             </Select>
           </ListItem>
+
+          <FontSizeSelect
+            label={tSettings('selectFontSize')}
+            value={fontSize}
+            onChange={setFontSize}
+          />
+
 
           {/* Dark Mode Toggle */}
           <ListItem>

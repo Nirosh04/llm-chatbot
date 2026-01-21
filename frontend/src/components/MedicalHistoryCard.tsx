@@ -58,23 +58,23 @@ export default function MedicalHistoryCard({
       </AccordionSummary>
       
       <AccordionDetails>
-        <Stack spacing={2}>
-          <Typography sx={{ fontSize: 16}}>
-            {t('sinceShort')}: {condition.since}
-          </Typography>
-          
-          {condition.medication && (
-            <Typography sx={{ fontSize: 14}}>
-              {t('medicationShort')}: {condition.medication}
+          <Stack spacing={2}>
+            <Typography variant="body1">
+              {t('sinceShort')}: {condition.since}
             </Typography>
-          )}
-          
-          {condition.notes && (
-            <Typography sx={{ fontSize: 14}}>
-              {t('notesShort')}: {condition.notes}
-            </Typography>
-          )}
-          
+
+            {condition.medication && (
+              <Typography variant="body2">
+                {t('medicationShort')}: {condition.medication}
+              </Typography>
+            )}
+
+            {condition.notes && (
+              <Typography variant="body2">
+                {t('notesShort')}: {condition.notes}
+              </Typography>
+            )}
+                  
           <Stack direction="row" justifyContent="flex-end" spacing={1}>
             <IconButton
               onClick={(e) => {

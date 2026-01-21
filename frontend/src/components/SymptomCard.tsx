@@ -87,31 +87,31 @@ export default function SymptomCard({
           },
         }}
       >
-        <Typography sx={{ fontSize: 20, fontWeight: 700}}>
+        <Typography variant="h6" sx={{ fontWeight: 700 }}>
           {symptom.description}
         </Typography>
       </AccordionSummary>
       
       <AccordionDetails>
         <Stack spacing={1}>
-          <Typography sx={{ fontSize: 16}}>
+          <Typography variant="body1">
             {t('durationShort')}: {symptom.duration}
           </Typography>
-          
-          <Typography sx={{ fontSize: 14}}>
+
+          <Typography variant="body2">
             {t('locationShort')}: {symptom.location}
           </Typography>
-          
+
           <Box sx={{ mt: 2 }}>
             <Stack direction="row" justifyContent="space-between" alignItems="center" mb={1}>
-              <Typography sx={{ fontSize: 14, fontWeight: 600}}>
+              <Typography variant="subtitle2" sx={{ fontWeight: 600 }}>
                 {t('pain')}
               </Typography>
-              <Typography sx={{ fontSize: 14, fontWeight: 600}}>
+              <Typography variant="subtitle2" sx={{ fontWeight: 600 }}>
                 {symptom.pain}
               </Typography>
             </Stack>
-            
+                  
             <Slider
               value={symptom.pain}
               min={1}
@@ -134,10 +134,10 @@ export default function SymptomCard({
               onChange={(_, value) => onPainChange(index, value as number)}
             />
             <Stack direction="row" justifyContent="space-between" sx={{ mt: 1 }}>
-              <Typography variant="body2" color="text.primary" sx={{ fontSize: '0.9rem' }}>
-                  {t('painlevel0')}
+              <Typography variant="caption" color="text.primary">
+                {t('painlevel0')}
               </Typography>
-              <Typography variant="body2" color="text.primary" sx={{ fontSize: '0.9rem' }}>
+              <Typography variant="caption" color="text.primary">
                 {t('painlevel10')}
               </Typography>
             </Stack>

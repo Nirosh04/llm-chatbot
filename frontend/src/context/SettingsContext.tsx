@@ -10,6 +10,8 @@ type SettingsContextType = {
   toggleDarkMode: () => void;
   language: string;
   setLanguage: (lang: string) => void;
+  fontSize: number;
+  setFontSize: (size: number) => void;
 };
 
 const SettingsContext = createContext<SettingsContextType | undefined>(undefined);
@@ -17,6 +19,7 @@ const SettingsContext = createContext<SettingsContextType | undefined>(undefined
 export const SettingsProvider = ({ children }: { children: ReactNode }) => {
   const [darkMode, setDarkMode] = useState(false);
   const [language, setLanguageState] = useState('en');
+  const [fontSize, setFontSizeState] = useState(16);
   const [hydrated, setHydrated] = useState(false);
   const [translations, setTranslations] = useState<any>(null);
 
@@ -42,13 +45,28 @@ export const SettingsProvider = ({ children }: { children: ReactNode }) => {
     await loadTranslations(lang);
   };
 
+  const setFontSize = (size: number) => {
+    setFontSizeState(size);
+    if (hydrated) {
+      localStorage.setItem('fontSize', String(size));
+    }
+  };
+
   // Load from localStorage on first client render
   useEffect(() => {
     const storedDarkMode = localStorage.getItem('darkMode');
     const storedLanguage = localStorage.getItem('language') || 'en';
+    const storedFontSize = localStorage.getItem('fontSize');
 
     if (storedDarkMode !== null) {
       setDarkMode(storedDarkMode === 'true');
+    }
+
+    if (storedFontSize !== null) {
+      const parsedFontSize = Number(storedFontSize);
+      if (!Number.isNaN(parsedFontSize)) {
+        setFontSizeState(parsedFontSize);
+      }
     }
 
     // Load initial language
@@ -65,13 +83,13 @@ export const SettingsProvider = ({ children }: { children: ReactNode }) => {
 
   const toggleDarkMode = () => setDarkMode(prev => !prev);
 
-  const theme = getTheme(darkMode);
+  const theme = getTheme(darkMode, fontSize);
 
   // Prevent theme flash before hydration
   if (!hydrated || !translations) return null;
 
   return (
-    <SettingsContext.Provider value={{ darkMode, toggleDarkMode, language, setLanguage }}>
+    <SettingsContext.Provider value={{ darkMode, toggleDarkMode, language, setLanguage, fontSize, setFontSize }}>
       <NextIntlClientProvider locale={language} messages={translations}>
         <ThemeProvider theme={theme}>
           <CssBaseline />

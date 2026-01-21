@@ -15,6 +15,7 @@ import {
 import { useRouter } from 'next/navigation';
 import Image from 'next/image';
 import CompanionIcon from '@/components/CompanionIcon';
+import { FontSizeSelect } from './../../components/FontSizeSelect';
 import DE from 'country-flag-icons/react/3x2/DE';
 import GB from 'country-flag-icons/react/3x2/GB';
 import { useTranslations } from 'next-intl';
@@ -25,16 +26,18 @@ const WelcomePage: React.FC = () => {
   const theme = useTheme();
   const router = useRouter();
   const t = useTranslations('welcome');
-  const { language, setLanguage } = useSettings();
+  const tSettings = useTranslations('settings');
+  const {language, setLanguage, fontSize, setFontSize } = useSettings();
+  // temporary state until logic is ready
 
   const textStyles = {
-    headline1: { fontSize: '2.25rem', fontWeight: 600, lineHeight: 1.2 },
-    headline2: { fontSize: '1.625rem', fontWeight: 600, lineHeight: 1.2 },
-    headline2Bold: { fontSize: '1.625rem', fontWeight: 'bold', lineHeight: 1.2 },
-    headline3: { fontSize: '1.5rem', fontWeight: 500, lineHeight: 1.2 },
-    defaultText: { fontSize: '1.5rem', lineHeight: 1.5 },
-    buttonText: { fontSize: '1.625rem', fontWeight: 'bold', textTransform: 'none' },
+    headline1: { fontSize: theme.typography.pxToRem(fontSize * 2.25), fontWeight: 600, lineHeight: 1.2 },
+    headline2: { fontSize: theme.typography.pxToRem(fontSize * 1.625), fontWeight: 600, lineHeight: 1.2 },
+    headline3: { fontSize: theme.typography.pxToRem(fontSize * 1.5), fontWeight: 500, lineHeight: 1.2 },
+    defaultText: { fontSize: theme.typography.pxToRem(fontSize * 1.5), lineHeight: 1.5 },
+    buttonText: { fontSize: theme.typography.pxToRem(fontSize * 1.625), fontWeight: 'bold', textTransform: 'none' },
   };
+
 
   const handleStartClick = () => {
     router.push(`/ChatInterface`); // we need to pass the selected Language
@@ -93,7 +96,17 @@ const WelcomePage: React.FC = () => {
               >
                 <GB style={{ width: 40, height: 30 }} />
               </IconButton>
-            </Stack>
+            </Stack>  
+            
+            <Box sx={{ height: 18 }} />
+            
+            <FontSizeSelect
+              label={tSettings('selectFontSize')}
+              value={fontSize}
+              onChange={setFontSize}
+            />
+
+
           </Box>
         </Stack>
       </Container>

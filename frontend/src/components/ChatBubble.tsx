@@ -1,7 +1,8 @@
 // components/ChatBubble.tsx
 'use client';
-import { Box, useTheme } from '@mui/material';
+
 import React from 'react';
+import { Box, Typography, useTheme } from '@mui/material';
 import CompanionIcon from './CompanionIcon';
 
 interface ChatBubbleProps {
@@ -12,48 +13,52 @@ interface ChatBubbleProps {
 export const ChatBubble: React.FC<ChatBubbleProps> = ({ message, isMe }) => {
   const theme = useTheme();
 
-
   return (
-    <div
-      style={{
-        // REDUCED from 110px to 20-40px for less side padding
-        padding: `0 ${isMe ? '4px' : '8px'} 0 ${isMe ? '8px' : '4px'}`,
-        marginBottom: '12px',
+    <Box
+      sx={{
+        px: 1,            // horizontal padding around the row
+        mb: 1.5,
         width: '100%',
         boxSizing: 'border-box',
       }}
     >
-      <div
-        style={{
+      <Box
+        sx={{
           display: 'flex',
           justifyContent: isMe ? 'flex-end' : 'flex-start',
           alignItems: 'flex-start',
-          gap: '8px',
+          gap: 1,
         }}
-      > 
+      >
         {!isMe && (
-          <CompanionIcon 
-            width={45} 
-            height={45} 
-            style={{ marginTop: '8px', flexShrink: 0 }}
-          />
+          <Box sx={{ mt: 1, flexShrink: 0 }}>
+            <CompanionIcon width={45} height={45} />
+          </Box>
         )}
-        
-        <div
-          style={{
-            backgroundColor: isMe ? theme.palette.chat.me : theme.palette.chat.llm,
-            color: isMe ?  theme.palette.chat.textMe : theme.palette.chat.textLlm,
-            padding: '12px',
-            borderRadius: '15px',
+
+        <Box
+          sx={{
+            bgcolor: isMe ? theme.palette.chat.me : theme.palette.chat.llm,
+            color: isMe ? theme.palette.chat.textMe : theme.palette.chat.textLlm,
+            p: 1.5,
+            borderRadius: 2,
             maxWidth: '80%',
-            fontSize: '16px',
-            lineHeight: '1.4',
-            wordBreak: 'break-word', // Better text wrapping
+            wordBreak: 'break-word',
           }}
         >
-          {message}
-        </div>
-      </div>
-    </div>
+          <Typography
+            variant="body1"
+            sx={{
+              // optional: ensure it tracks theme scaling
+              fontSize: 'inherit',
+              lineHeight: 1.4,
+              whiteSpace: 'pre-wrap', // keeps line breaks if your messages have them
+            }}
+          >
+            {message}
+          </Typography>
+        </Box>
+      </Box>
+    </Box>
   );
 };

@@ -20,7 +20,8 @@
     "language": "Sprache",
     "darkMode": "Dunkelmodus",
     "german": "Deutsch",
-    "english": "English"
+    "english": "English",
+    "selectFontSize": "Schriftgröße"
   },
   "symptoms": {
     "symptomsTab": "Aktuelle Beschwerden",
