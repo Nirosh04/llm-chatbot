@@ -42,7 +42,7 @@ declare module '@mui/material/styles' {
 }
 
 
-export const getTheme = (darkMode: boolean) => {
+export const getTheme = (darkMode: boolean, fontSize: number) => {
   const palette = darkMode ? darkPalette : lightPalette;
 
   return createTheme({
@@ -66,6 +66,10 @@ export const getTheme = (darkMode: boolean) => {
       chat: palette.chat,
       button: palette.button,
       loadingDots: palette.loadingDots
+    },
+    typography: {
+    fontSize,      // base font size in px
+    htmlFontSize: 16, // keep rem math stable (optional but sensible)
     },
     components: {
       MuiCssBaseline: {
