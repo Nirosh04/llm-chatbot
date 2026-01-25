@@ -139,7 +139,7 @@ export default function SymptomsPage({ sessionId }: SymptomsPageProps) {
           keySymptoms: [
             {
               description: "Kopfschmerzen",
-              location: "Stirn",
+              location: "Kopf",
               severity: "6/10",
               duration: "seit 2 Tagen",
               pain: 6

@@ -14,7 +14,14 @@
   "chat": {
     "typeMessage": "Nachricht eingeben...",
     "sendMessage": "Nachricht senden",
-    "firstMessage": "Was ist der Grund für Ihren Besuch in der Notaufnahme?"
+    "firstMessage": "Was ist der Grund für Ihren Besuch in der Notaufnahme?",
+    "painLevel": "Schmerzskala",
+    "sendPainLevel": "Schmerzstärke senden",    
+    "bodyMap": "Körperansicht",
+    "selectBodyPart": "Körperteil auswählen",
+    "painLocation": "Ort des Schmerzes",    
+    "cancel": "Abbrechen",
+    "send": "Senden"
   },
   "settings": {
     "language": "Sprache",
@@ -66,5 +73,27 @@
     "errorLoading": "Fehler beim Laden der Gesundheitsdaten",
     "unnamedCondition": "Unbenannte Erkrankung",
     "unknown": "Unbekannt"
+  },
+  "bodyMap": {
+    "selectArea": "Wählen Sie aus, wo Sie Schmerzen haben",
+    "selected": "Ausgewählt",
+    "front": "Vorne",
+    "back": "Hinten",
+    "head": "Kopf",
+    "neck": "Nacken",
+    "chest": "Brust",
+    "abdomen": "Bauch",
+    "upperBack": "Oberer Rücken",
+    "lowerBack": "Unterer Rücken",
+    "leftShoulder": "Linke Schulter",
+    "rightShoulder": "Rechte Schulter",
+    "leftArm": "Linker Arm",
+    "rightArm": "Rechter Arm",
+    "leftHand": "Linke Hand",
+    "rightHand": "Rechte Hand",
+    "leftLeg": "Linkes Bein",
+    "rightLeg": "Rechtes Bein",
+    "leftFoot": "Linker Fuß",
+    "rightFoot": "Rechter Fuß"
   }
 }

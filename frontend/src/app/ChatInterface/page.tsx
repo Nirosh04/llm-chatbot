@@ -19,7 +19,8 @@ import {
   Tabs,
   Box,
   Tooltip,
-  Slider
+  Collapse,
+  Stack,
 } from '@mui/material';
 
 import HomeIcon from '@mui/icons-material/Home';
@@ -29,10 +30,14 @@ import LogoutIcon from '@mui/icons-material/Logout';
 import ChatIcon from '@mui/icons-material/Chat';
 import InfoIcon from '@mui/icons-material/Info';
 import SendIcon from '@mui/icons-material/Send';
+import PainIcon from '@mui/icons-material/Scale';
+import BodyIcon from '@mui/icons-material/AccessibilityNew';
 
 import { FontSizeSelect } from './../../components/FontSizeSelect';
 import { MessageList } from './../../components/MessageList';
 import { CustomTextField } from './../../components/CustomTextField';
+import PainSlider from './../../components/PainSlider';
+import BodyMap from './../../components/BodyMap';
 import {
   createSession,
   getLLMResponseFromServer,
@@ -70,6 +75,10 @@ export default function TabMain() {
     "No Health summary was requested yet"
   );
   // dummy function
+  const [sliderOpen, setSliderOpen] = useState(false);
+  const [painLevel, setPainLevel] = useState(5);
+  const [bodyMapOpen, setBodyMapOpen] = useState(false);
+  const [selectedBodyPart, setSelectedBodyPart] = useState<string | null>(null);
 
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
@@ -81,23 +90,25 @@ export default function TabMain() {
     scrollToBottom();
   }, [messages]);
 
-  const handleSendMessage = async () => {
+  const handleSendMessage = async (message?: string) => {
     console.log('1. handleSendMessage called');
     
-    if (!inputText.trim() || isLoading) {
+    const messageToSend = message || inputText.trim();
+    
+    if (!messageToSend || isLoading) {
       console.log('2. Early return - input empty or loading');
       return;
     }
 
     const newMessage: ChatMessage = {
       id: Date.now().toString(),
-      text: inputText.trim(),
+      text: messageToSend,
       isMe: true,
     };
 
     console.log('3. Adding user message:', newMessage.text);
     setMessages(prev => [...prev, newMessage]);
-    setInputText('');
+    if (!message) setInputText(''); // Only clear input if it was from the text field
     setIsLoading(true);
     console.log('4. Loading set to true');
 
@@ -138,6 +149,24 @@ export default function TabMain() {
     if (e.key === 'Enter' && !isLoading && inputText.trim()) {
       handleSendMessage();
     }
+  };
+
+  const handleSendPainLevel = async () => {
+    const painMessage = `${tChat('painLevel')}: ${painLevel}/10`;
+    setSliderOpen(false);
+    await handleSendMessage(painMessage);
+  };
+
+  const handleBodyPartSelect = (bodyPart: string | null) => {
+    setSelectedBodyPart(bodyPart);
+  };
+
+  const handleSendBodyPart = async () => {
+    if (!selectedBodyPart) return;
+
+    const bodyMessage = `${tChat('painLocation')}: ${selectedBodyPart}`;
+    setBodyMapOpen(false);
+    await handleSendMessage(bodyMessage);
   };
 
   const loadHealthSummary = async () => {
@@ -206,41 +235,162 @@ export default function TabMain() {
               sx={{
                 padding: 2,
                 display: 'flex',
+                flexDirection: 'column',
                 gap: 1,
-                alignItems: 'center',
                 flexShrink: 0, // Prevent input area from shrinking
                 backgroundColor: theme => theme.palette.background.paper,
-
               }}
             >
-              <Box sx={{ 
-                flex: 1,                 
-                }}>
-                <CustomTextField
-                  value={inputText}
-                  onChange={(e) => setInputText(e.target.value)}
-                  onKeyDown={handleKeyDown}
-                  placeholder={tChat('typeMessage')}
-                />
-              </Box>
-              <Tooltip title={tChat('sendMessage')}>
-                <IconButton
-                  onClick={handleSendMessage}
-                  disabled={!inputText.trim()}
+              {/* Pain Level Slider - Collapsible */}
+              <Collapse in={sliderOpen}>
+                <Box
                   sx={{
-                    borderRadius: '20px',
-                    padding: '12px',
-                    backgroundColor: theme => theme.palette.primary.main,
-
-                    '&:hover': {
-                      backgroundColor: theme => theme.palette.primary.main,
-                      opacity: 0.9,
-                    },
+                    p: 2,
+                    mb: 1,
+                    borderRadius: 2,
+                    backgroundColor: theme => theme.palette.background.default,
+                    border: theme => `1px solid ${theme.palette.divider}`,
                   }}
                 >
-                  <SendIcon />
-                </IconButton>
-              </Tooltip>
+                  <PainSlider
+                    value={painLevel}
+                    onChange={setPainLevel}
+                    showLabels={true}
+                    showValue={true}
+                  />
+
+                  <Stack direction="row" spacing={1} justifyContent="flex-end" sx={{ mt: 2 }}>
+                    <Button
+                      size="small"
+                      onClick={() => setSliderOpen(false)}
+                      sx={{ textTransform: 'none' }}
+                    >
+                      {tChat('cancel')}
+                    </Button>
+                    <Button
+                      size="small"
+                      onClick={handleSendPainLevel}
+                      disabled={isLoading}
+                      sx={{ textTransform: 'none' }}
+                    >
+                      {tChat('send')}
+                    </Button>
+                  </Stack>
+                </Box>
+              </Collapse>
+
+              {/* Body Map - Collapsible */}
+              <Collapse in={bodyMapOpen}>
+                <Box
+                  sx={{
+                    p: 2,
+                    mb: 1,
+                    borderRadius: 2,
+                    backgroundColor: theme => theme.palette.background.default,
+                    border: theme => `1px solid ${theme.palette.divider}`,
+                    maxHeight: '56vh',
+                    overflowY: 'auto',
+                    overflowX: 'hidden',
+                  }}
+                >
+                  <BodyMap 
+                    onBodyPartSelect={handleBodyPartSelect} 
+                    highlightLocation={selectedBodyPart || undefined}
+                  />
+
+                  <Stack direction="row" spacing={1} justifyContent="flex-end" sx={{ mt: 2 }}>
+                    <Button
+                      size="small"
+                      onClick={() => {
+                        setBodyMapOpen(false);
+                        setSelectedBodyPart(null);
+                      }}
+                      sx={{ textTransform: 'none' }}
+                    >
+                      {tChat('cancel')}
+                    </Button>
+                    <Button
+                      size="small"
+                      onClick={handleSendBodyPart}
+                      disabled={isLoading || !selectedBodyPart}
+                      sx={{ textTransform: 'none' }}
+                    >
+                      {tChat('send')}
+                    </Button>
+                  </Stack>
+                </Box>
+              </Collapse>
+
+              {/* Pain Level and Body Map Buttons - Above text field */}
+              <Box sx={{ display: 'flex', gap: 1 }}>
+                <Tooltip title={tChat('sendPainLevel')}>
+                  <Button
+                    onClick={() => {
+                      setSliderOpen(!sliderOpen);
+                      if (!sliderOpen) setBodyMapOpen(false);
+                    }}
+                    startIcon={<PainIcon />}
+                    variant={sliderOpen ? 'contained' : 'outlined'}
+                    size="small"
+                    sx={{ 
+                      textTransform: 'none',
+                      borderRadius: '20px',
+                    }}
+                  >
+                    {tChat('painLevel')}
+                  </Button>
+                </Tooltip>
+                
+                <Tooltip title={tChat('selectBodyPart')}>
+                  <Button
+                    onClick={() => {
+                      setBodyMapOpen(!bodyMapOpen);
+                      if (!bodyMapOpen) setSliderOpen(false);
+                    }}
+                    startIcon={<BodyIcon />}
+                    variant={bodyMapOpen ? 'contained' : 'outlined'}
+                    size="small"
+                    sx={{ 
+                      textTransform: 'none',
+                      borderRadius: '20px',
+                    }}
+                  >
+                    {tChat('bodyMap')}
+                  </Button>
+                </Tooltip>
+              </Box>
+
+              {/* Text Input and Send Button Row */}
+              <Box sx={{ display: 'flex', gap: 1, alignItems: 'center' }}>
+                {/* Text Input */}
+                <Box sx={{ flex: 1 }}>
+                  <CustomTextField
+                    value={inputText}
+                    onChange={(e) => setInputText(e.target.value)}
+                    onKeyDown={handleKeyDown}
+                    placeholder={tChat('typeMessage')}
+                  />
+                </Box>
+
+                {/* Send Button */}
+                <Tooltip title={tChat('sendMessage')}>
+                  <IconButton
+                    onClick={() => handleSendMessage()}
+                    disabled={!inputText.trim() || isLoading}
+                    sx={{
+                      borderRadius: '20px',
+                      padding: '12px',
+                      backgroundColor: theme => theme.palette.primary.main,
+                      '&:hover': {
+                        backgroundColor: theme => theme.palette.primary.main,
+                        opacity: 0.9,
+                      },
+                    }}
+                  >
+                    <SendIcon />
+                  </IconButton>
+                </Tooltip>
+              </Box>
             </Box>
           </Box>
         )}

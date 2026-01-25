@@ -32,6 +32,11 @@ export const lightPalette = {
     dots: '#3399ff',            // blueish and grey
     bg: '#f2f2f2',              // very light grey
   },
+  bodyMap: {
+    highlighted: 'rgba(100, 160, 255, 0.5)',  // selected/highlighted body part fill
+    highlightedStroke: '#64a0ff',             // selected/highlighted body part border
+    hovered: 'rgba(100, 160, 255, 0.2)',       // hovered body part fill
+  },
 };
 
 export const darkPalette = {
@@ -62,5 +67,10 @@ export const darkPalette = {
   loadingDots: {
     dots: '#c0c0c0',            // light grey
     bg: '#141414',              // subtle elevation over black
+  },
+  bodyMap: {
+    highlighted: 'rgba(77, 144, 255, 0.5)',   // selected/highlighted body part fill
+    highlightedStroke: '#4d90ff',              // selected/highlighted body part border
+    hovered: 'rgba(77, 144, 255, 0.2)',        // hovered body part fill
   },
 };
