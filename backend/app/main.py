@@ -4,35 +4,21 @@ import logging
 from settings import settings
 from routes import session_router, health_router
 from services.ssh_manager import SSHManager
+#for lifespan instead of on_event
+from contextlib import asynccontextmanager
 
 # Configure logging
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
-# Create the FastAPI app
-app = FastAPI(
-    title=settings.API.TITLE,
-    description=settings.API.DESCRIPTION,
-    version=settings.API.VERSION,
-)
-
-# Configure CORS
-app.add_middleware(
-    CORSMiddleware,
-    allow_origins=["*"],
-    allow_methods=["*"],
-    allow_headers=["*"],
-)
-
-# Include routers
-app.include_router(session_router)
-app.include_router(health_router)
-
 # Global instance for the SSH Manager
 ssh_manager = SSHManager()
 
-@app.on_event("startup")
-async def startup_event():
+@asynccontextmanager
+async def lifespan(app: FastAPI):
+    #put code here that should run on startup
+    logger.info(f"APP HAS STARTED")
+
     """Log startup information."""
     logger.info(f"Starting {settings.API.TITLE} v{settings.API.VERSION}")
 
@@ -52,14 +38,36 @@ async def startup_event():
     logger.info(f"Ollama URL: {settings.OLLAMA.URL}")
     logger.info(f"Default model: {settings.OLLAMA.MODEL}")
 
-@app.on_event("shutdown")
-async def shutdown_event():
+    yield
+    #run when app is closed
+
     """Log shutdown information."""
     logger.info("Shutting down application")
     
     # Clean up SSH Tunnel
     if settings.SSH.USE_SSH:
         ssh_manager.stop()
+
+# Create the FastAPI app
+app = FastAPI(
+    title=settings.API.TITLE,
+    description=settings.API.DESCRIPTION,
+    version=settings.API.VERSION,
+    lifespan=lifespan,
+)
+
+# Configure CORS
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
+
+# Include routers
+app.include_router(session_router)
+app.include_router(health_router)
+
 
 if __name__ == "__main__":
     import uvicorn
