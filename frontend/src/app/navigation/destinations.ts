@@ -22,6 +22,10 @@ const destinations: Destination[] = [
     label: 'HNO',
     id: '9a583b46-4d02-4d09-8f41-c08cdc81a6f5',
   },
+  {
+    label: 'WC',
+    id: 'dc5062ed-0c36-4717-b8cb-a29cc3367fa2',
+  },
 ];
 
 export { destinations };
