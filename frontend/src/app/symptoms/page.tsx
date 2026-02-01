@@ -139,7 +139,7 @@ export default function SymptomsPage({ sessionId }: SymptomsPageProps) {
           keySymptoms: [
             {
               description: "Kopfschmerzen",
-              location: "Stirn",
+              location: "Kopf",
               severity: "6/10",
               duration: "seit 2 Tagen",
               pain: 6
@@ -230,7 +230,7 @@ export default function SymptomsPage({ sessionId }: SymptomsPageProps) {
       location: newSymptom.location.trim() || tSymptoms('unknown'),
       severity: `${newSymptom.pain}/10`,
       duration: newSymptom.duration.trim() || tSymptoms('unknown'),
-      pain: Math.max(1, Math.min(10, newSymptom.pain)),
+      pain: Math.max(0, Math.min(10, newSymptom.pain)),
     };
 
     setJsonData({
@@ -269,7 +269,7 @@ export default function SymptomsPage({ sessionId }: SymptomsPageProps) {
       location: newSymptom.location.trim() || tSymptoms('unknown'),
       severity: `${newSymptom.pain}/10`,
       duration: newSymptom.duration.trim() || tSymptoms('unknown'),
-      pain: Math.max(1, Math.min(10, newSymptom.pain)),
+      pain: Math.max(0, Math.min(10, newSymptom.pain)),
     };
 
     setJsonData({
@@ -384,7 +384,7 @@ export default function SymptomsPage({ sessionId }: SymptomsPageProps) {
     const updatedSymptoms = [...jsonData.historyOfPresentIllness.keySymptoms];
     updatedSymptoms[index] = {
       ...updatedSymptoms[index],
-      pain: Math.max(1, Math.min(10, value)),
+      pain: Math.max(0, Math.min(10, value)),
       severity: `${value}/10`,
     };
 

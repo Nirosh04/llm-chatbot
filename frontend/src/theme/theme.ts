@@ -20,6 +20,11 @@ declare module '@mui/material/styles' {
       dots: string;
       bg: string;
     };
+    bodyMap: {
+      highlighted: string;
+      highlightedStroke: string;
+      hovered: string;
+    };
   }
 
   interface PaletteOptions {
@@ -37,6 +42,11 @@ declare module '@mui/material/styles' {
     loadingDots?: {
       dots: string;
       bg: string;
+    };
+    bodyMap?: {
+      highlighted: string;
+      highlightedStroke: string;
+      hovered: string;
     };
   }
 }
@@ -65,7 +75,8 @@ export const getTheme = (darkMode: boolean, fontSize: number) => {
       },
       chat: palette.chat,
       button: palette.button,
-      loadingDots: palette.loadingDots
+      loadingDots: palette.loadingDots,
+      bodyMap: palette.bodyMap,
     },
     typography: {
     fontSize,      // base font size in px

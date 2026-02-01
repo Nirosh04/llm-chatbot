@@ -14,7 +14,14 @@
   "chat": {
     "typeMessage": "Type a message...",
     "sendMessage": "Send message",
-    "firstMessage": "What is the reason for your visit to the ED?"
+    "firstMessage": "What is the reason for your visit to the ED?",
+    "painLevel": "Pain Scale",
+    "sendPainLevel": "Send pain level",
+    "bodyMap": "Body Map",
+    "selectBodyPart": "Select body part",
+    "painLocation": "Pain location",
+    "cancel": "Cancel",
+    "send": "Send"
   },
   "settings": {
     "language": "Language",
@@ -66,5 +73,27 @@
     "errorLoading": "Error loading health data",
     "unnamedCondition": "Unnamed condition",
     "unknown": "Unknown"
+  },
+  "bodyMap": {
+    "selectArea": "Select where you have pain",
+    "selected": "Selected",
+    "front": "Front",
+    "back": "Back",
+    "head": "Head",
+    "neck": "Neck",
+    "chest": "Chest",
+    "abdomen": "Abdomen",
+    "upperBack": "Upper Back",
+    "lowerBack": "Lower Back",
+    "leftShoulder": "Left Shoulder",
+    "rightShoulder": "Right Shoulder",
+    "leftArm": "Left Arm",
+    "rightArm": "Right Arm",
+    "leftHand": "Left Hand",
+    "rightHand": "Right Hand",
+    "leftLeg": "Left Leg",
+    "rightLeg": "Right Leg",
+    "leftFoot": "Left Foot",
+    "rightFoot": "Right Foot"
   }
 }
