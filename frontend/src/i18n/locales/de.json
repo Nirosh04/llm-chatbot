@@ -9,6 +9,7 @@
   "tabs": {
     "chat": "Chat",
     "info": "Info",
+    "navigation": "Navigation",
     "settings": "Einstellungen"
   },
   "chat": {
@@ -95,5 +96,17 @@
     "rightLeg": "Rechtes Bein",
     "leftFoot": "Linker Fuß",
     "rightFoot": "Rechter Fuß"
+  },
+  "navigation": {
+    "startPoint": "📍 Startpunkt: Eingang Zentrale Notaufnahme Campus Charité Mitte",
+    "selectDestination": "Ziel auswählen",
+    "barrierFree": "Barrierefrei"
+  },
+  "destinations": {
+    "xray": "Röntgendiagnostik",
+    "intensiveCare": "Intensivmedizin",
+    "gynecology": "Gynäkologie",
+    "ent": "HNO",
+    "restroom": "WC"
   }
 }

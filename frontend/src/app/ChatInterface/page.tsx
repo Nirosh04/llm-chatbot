@@ -29,6 +29,7 @@ import SettingsIcon from '@mui/icons-material/Settings';
 import LogoutIcon from '@mui/icons-material/Logout';
 import ChatIcon from '@mui/icons-material/Chat';
 import InfoIcon from '@mui/icons-material/Info';
+import NavigationIcon from '@mui/icons-material/Navigation';
 import SendIcon from '@mui/icons-material/Send';
 import PainIcon from '@mui/icons-material/Scale';
 import BodyIcon from '@mui/icons-material/AccessibilityNew';
@@ -45,6 +46,7 @@ import {
   resetConversationRequest
 } from '../../services/serverRequests';
 import SymptomsPage from '@/app/symptoms/page'; // adjust the path if needed
+import NavigationPage from '@/app/navigation/page';
 import { useSettings } from '@/context/SettingsContext';
 import { useTranslations } from 'next-intl';
 
@@ -478,8 +480,11 @@ export default function TabMain() {
           <SymptomsPage sessionId={sessionId} />
         )}
         
+        {activeTab === 2 && (
+          <NavigationPage />
+        )}
 
-        {activeTab === 2 && ( // Settings Tab
+        {activeTab === 3 && ( // Settings Tab
           <Box
             sx={{
               flex: 1,
@@ -625,6 +630,7 @@ export default function TabMain() {
           >
             <Tab icon={<ChatIcon />} label={tTabs('chat')} />
             <Tab icon={<InfoIcon />} label={tTabs('info')} />
+            <Tab icon={<NavigationIcon />} label={tTabs('navigation')} />
             <Tab icon={<SettingsIcon />} label={tTabs('settings')} />
           </Tabs>
         </AppBar>
