@@ -70,7 +70,7 @@ export default function TabMain() {
   const router = useRouter();
   const { darkMode, toggleDarkMode, language, setLanguage } = useSettings();
 
-  
+
 
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
@@ -84,7 +84,7 @@ export default function TabMain() {
 
   const handleSendMessage = async () => {
     console.log('1. handleSendMessage called');
-    
+
     if (!inputText.trim() || isLoading) {
       console.log('2. Early return - input empty or loading');
       return;
@@ -115,7 +115,7 @@ export default function TabMain() {
       currentSessionId,
       newMessage.text
     );
-    
+
     console.log('7. Got response:', response);
 
     const aiMessage: ChatMessage = {
@@ -142,19 +142,19 @@ export default function TabMain() {
   };
 
   const loadHealthSummary = async () => {
-  let id = sessionId;
+    let id = sessionId;
 
-  if (!id) {
-    id = await createSession();
-    setSessionId(id);
-    console.log('[health] created session:', id);
-  }
+    if (!id) {
+      id = await createSession();
+      setSessionId(id);
+      console.log('[health] created session:', id);
+    }
 
-  const response = await getHealthSummary(id);
-  console.log('[health] summary received');
+    const response = await getHealthSummary(id);
+    console.log('[health] summary received');
 
-  setHealthSummaryText(response.ai_summary);
-};
+    setHealthSummaryText(response.ai_summary);
+  };
 
 
   const resetConversation = async () => {
@@ -219,9 +219,9 @@ export default function TabMain() {
 
               }}
             >
-              <Box sx={{ 
-                flex: 1,                 
-                }}>
+              <Box sx={{
+                flex: 1,
+              }}>
                 <CustomTextField
                   value={inputText}
                   onChange={(e) => setInputText(e.target.value)}
@@ -254,7 +254,7 @@ export default function TabMain() {
         {activeTab === 1 && (
           <SymptomsPage sessionId={sessionId} />
         )}
-        
+
 
         {activeTab === 2 && ( // Settings Tab
           <Box
@@ -267,87 +267,87 @@ export default function TabMain() {
               //color: colors.textColor,
             }}
           >
-          <List
-            sx={{
-              display: 'flex',
-              flexDirection: 'column',
-              alignItems: 'center', // centers all ListItems horizontally
-              gap: 1,               // optional: space between items
-            }}>
+            <List
+              sx={{
+                display: 'flex',
+                flexDirection: 'column',
+                alignItems: 'center', // centers all ListItems horizontally
+                gap: 1,               // optional: space between items
+              }}>
 
-          {/* Language Selector */}
-          <ListItem>
-            <ListItemText primary="Language" />
-            <Select value={language} onChange={e => setLanguage(e.target.value)} sx={{ minWidth: 100 }}>
-              <MenuItem value="DE">Deutsch</MenuItem>
-              <MenuItem value="EN">English</MenuItem>
-            </Select>
-          </ListItem>
+              {/* Language Selector */}
+              <ListItem>
+                <ListItemText primary="Language" />
+                <Select value={language} onChange={e => setLanguage(e.target.value)} sx={{ minWidth: 100 }}>
+                  <MenuItem value="DE">Deutsch</MenuItem>
+                  <MenuItem value="EN">English</MenuItem>
+                </Select>
+              </ListItem>
 
-          {/* Dark Mode Toggle */}
-          <ListItem>
-            <ListItemText primary="Dark Mode" />
-            <Switch checked={darkMode} onChange={toggleDarkMode} />
-          </ListItem>
-  
+              {/* Dark Mode Toggle */}
+              <ListItem>
+                <ListItemText primary="Dark Mode" />
+                <Switch checked={darkMode} onChange={toggleDarkMode} />
+              </ListItem>
 
-          {/* Test - Create Session */}
-          <ListItem>
-            <Button
-              onClick={async () => {
-                const newSessionId = await createSession();
-                console.log ('Session created:', newSessionId);
-                setSessionId(newSessionId);
-              }}
-            >
-              <ListItemIcon>
-                <HomeIcon />
-              </ListItemIcon>
-              <ListItemText primary="Test - Create session" />
-            </Button>
-          </ListItem>
 
-          {/* Test - Health Summary */}
-          <ListItem>
-            <Button onClick={loadHealthSummary}>
-              <ListItemIcon>
-                <HomeIcon />
-              </ListItemIcon>
-              <ListItemText primary="Test health summary" />
-            </Button>
-          </ListItem>
+              {/* Test - Create Session */}
+              <ListItem>
+                <Button
+                  onClick={async () => {
+                    const newSessionId = await createSession();
+                    console.log('Session created:', newSessionId);
+                    setSessionId(newSessionId);
+                  }}
+                >
+                  <ListItemIcon>
+                    <HomeIcon />
+                  </ListItemIcon>
+                  <ListItemText primary="Test - Create session" />
+                </Button>
+              </ListItem>
 
-          {/* Test - Reset Conversation */}
-          <ListItem>
-            <Button onClick={resetConversation}>
-              <ListItemIcon>
-                <HomeIcon />
-              </ListItemIcon>
-              <ListItemText primary="Test Reset conversation" />
-            </Button>
-          </ListItem>
+              {/* Test - Health Summary */}
+              <ListItem>
+                <Button onClick={loadHealthSummary}>
+                  <ListItemIcon>
+                    <HomeIcon />
+                  </ListItemIcon>
+                  <ListItemText primary="Test health summary" />
+                </Button>
+              </ListItem>
 
-          {/* Profile */}
-          <ListItem>
-            <Button>
-              <ListItemIcon>
-                <PersonIcon />
-              </ListItemIcon>
-              <ListItemText primary="Profile" />
-            </Button>
-          </ListItem>
+              {/* Test - Reset Conversation */}
+              <ListItem>
+                <Button onClick={resetConversation}>
+                  <ListItemIcon>
+                    <HomeIcon />
+                  </ListItemIcon>
+                  <ListItemText primary="Test Reset conversation" />
+                </Button>
+              </ListItem>
 
-          {/* Logout */}
-          <ListItem>
-            <Button>
-              <ListItemIcon>
-                <LogoutIcon />
-              </ListItemIcon>
-              <ListItemText primary="Logout" />
-            </Button>
-          </ListItem>
-        </List>
-      
+              {/* Profile */}
+              <ListItem>
+                <Button>
+                  <ListItemIcon>
+                    <PersonIcon />
+                  </ListItemIcon>
+                  <ListItemText primary="Profile" />
+                </Button>
+              </ListItem>
+
+              {/* Logout */}
+              <ListItem>
+                <Button>
+                  <ListItemIcon>
+                    <LogoutIcon />
+                  </ListItemIcon>
+                  <ListItemText primary="Logout" />
+                </Button>
+              </ListItem>
+            </List>
+
           </Box>
         )}
 

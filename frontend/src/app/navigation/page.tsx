@@ -11,10 +11,12 @@ import {
   Switch,
   Typography,
 } from '@mui/material';
+import { useTheme } from '@mui/material/styles';
 import styles from './page.module.css';
 import { destinations } from './destinations';
 
 export default function NavigationPage() {
+  const theme = useTheme();
   // State to track the currently selected destination
   const [selectedDestination, setSelectedDestination] = useState<string>(
     destinations[0].id
@@ -60,7 +62,7 @@ export default function NavigationPage() {
         className={styles.controls}
         sx={{
           padding: '16px',
-          backgroundColor: '#f5f5f5',
+          backgroundColor: theme.palette.background.default,
           display: 'flex',
           gap: '16px',
           alignItems: 'center',
@@ -68,7 +70,7 @@ export default function NavigationPage() {
         }}
       >
         {/* Starting point information */}
-        <Typography variant="body2" sx={{ color: '#666', fontSize: '0.9rem' }}>
+        <Typography variant="body2" sx={{ color: theme.palette.text.primary, fontSize: '0.9rem' }}>
           📍 Startpunkt: Eingang Zentrale Notaufnahme Campus Charité Mitte
         </Typography>
 
