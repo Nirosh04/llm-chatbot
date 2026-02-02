@@ -27,7 +27,6 @@ export default function CompanionIcon({
       className={className}
       style={{
         // filter: 'saturate(1582%) brightness(76%) contrast(92%)',
-        marginBottom: '24px',
         ...style,
       }}
       priority

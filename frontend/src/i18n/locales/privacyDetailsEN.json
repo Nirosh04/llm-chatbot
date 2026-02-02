@@ -1,0 +1,45 @@
+{
+  "sections": [
+    {
+      "heading": "1. Consent to Use Lumee",
+      "content": "Lumee collects your information (symptoms, complaints) so that medical staff can optimally prepare for your treatment. Use is voluntary and your data is securely encrypted."
+    },
+    {
+      "heading": "2. Purpose of Data Processing",
+      "content": "Treatment Preparation: Lumee is used to collect information for initial assessment and preparation of your medical care. Your information will be made available digitally to the treating medical staff.\n\n Optional Use (if activated): Further use of anonymized or pseudonymized data for quality assurance, statistics, or research purposes only occurs if you have given separate consent."
+    },
+    {
+      "heading": "§2 What Data is Processed?",
+      "content": "Depending on your information, the following categories in particular are processed:\n\nHealth Data: Symptoms, pain intensity, duration of complaints, pre-existing conditions, medications, allergies, and relevant events (e.g., accident history).\n\nOrganizational Data: Timestamp of entry, case or process number, waiting area.\n\nIdentification Data: Name or date of birth are only collected if this is absolutely necessary for secure assignment to your treatment file.\n\nNote: Please only provide information that is necessary for your current care."
+    },
+    {
+      "heading": "§3 Legal Basis (Art. 9 DSGVO)",
+      "content": "Health data is subject to high protection as \"special categories of personal data\". Processing is based on:\n\nYour express consent (Art. 9 Abs. 2 lit. a DSGVO) through use of the application. The necessity for medical diagnosis and treatment (Art. 9 Abs. 2 lit. h DSGVO) under the responsibility of professional staff.\n\n(Optional) Appropriate safeguards for research/statistics (Art. 9 Abs. 2 lit. j DSGVO)."
+    },
+    {
+     "heading": "§4 Voluntary Nature and Revocation",
+     "content": "The use of Lumee is voluntary. If you decline to use it, you will not experience any disadvantages in treatment or waiting time; data collection will be done personally by staff in this case. You can revoke your consent at any time with effect for the future. The lawfulness of processing carried out until revocation remains unaffected."
+    },
+    {
+     "heading": "§5 Recipients / Data Processing / External AI Services",
+     "content": "Data Processing: For technical operation (hosting), we use specialized service providers who are strictly bound to our instructions and secured through data processing agreements (Art. 28 DSGVO).\n\nAI Services: If AI services (e.g., language models) are used to structure data, your data is transmitted in pseudonymized form. The providers are contractually obligated neither to store this data permanently nor to use it for training their own models.\n\nThird Countries: Transfer to countries outside the EU only occurs in compliance with the level of protection required by DSGVO (e.g., through EU standard contractual clauses)."
+    },
+    {
+     "heading": "§6 Security Measures",
+     "content": "To protect your data, we use state-of-the-art security standards:\n\nEnd-to-end encryption during transmission (TLS/HTTPS).\n\nEncrypted storage on certified servers.\n\nStrict access control: Only authorized medical personnel have access.\n\nLogging: Every access to sensitive data is logged in an audit-proof manner.\n\nSecurity by Design: Regular security updates and staff training.\n\nData minimization and storage only as long as necessary"
+    },
+    {
+     "heading": "§7 Storage Period",
+     "content": "Your data will only be stored for as long as necessary for treatment and legal documentation requirements (according to § 630f BGB, generally 10 years). Afterwards, the data will be deleted or completely anonymized."
+    },
+    {
+     "heading": "§8 Your Rights",
+      "content": "You have the right to access, rectification, deletion, restriction of processing, data portability, and the right to object (Art. 15-21 DSGVO).\n\nYou also have the right to lodge a complaint with a data protection supervisory authority (Art. 77 DSGVO).\n\nContact: If you have any questions, please contact our data protection officer at: [Insert contact details here]."
+    },
+    {
+        "heading": "Responsible Party",
+        "content": "Responsible (Art. 4 Nr. 7 DSGVO):\n\n[Hospital Name, Address]\n\nData Protection Officer:\n\n[Contact (Email/Phone)]"
+    }
+  ],
+  "fullText": "Or insert your complete unfiltered text here if you don't want sections. This text can be as long as needed and supports line breaks with \\n\\n for paragraphs."
+}

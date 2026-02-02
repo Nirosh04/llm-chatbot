@@ -3,12 +3,12 @@
     "title": "Welcome!",
     "intro": "I am Lumee, your digital companion in the emergency department.",
     "description": "I am here to help you make the best use of your waiting time. Together, we can prepare for your doctor's visit by asking about your condition. I can also answer your questions about the process and provide a map for orientation.",
-    "lookForward": "We can start whenever you are ready.",
+    "lookForward": "Set your default settings here first:",
     "startButton": "Let's get started"
   },
   "tabs": {
     "chat": "Chat",
-    "info": "Info",
+    "info": "Medical profile",
     "navigation": "Navigation",
     "settings": "Settings"
   },
@@ -29,7 +29,17 @@
     "darkMode": "Dark Mode",
     "german": "Deutsch",
     "english": "English",
-    "selectFontSize": "Font size"
+    "selectFontSize": "Font size",
+    "verySmall": "Very small",
+    "small": "Small",
+    "medium": "Medium",
+    "large": "Large",
+    "veryLarge": "Very large",
+    "logout": "Logout",
+    "logoutConfirmLine1": "If you continue, all entered data will be deleted and your active session will be closed.",
+    "logoutConfirmLine2": "Are you sure you want to proceed?",
+    "confirmCancel": "Cancel",
+    "confirmYes": "Yes, end session"
   },
   "symptoms": {
     "symptomsTab": "Concerns",
@@ -100,7 +110,8 @@
   "navigation": {
     "startPoint": "📍 Starting point: Central emergency entrance Campus Charité Mitte",
     "selectDestination": "Select destination",
-    "barrierFree": "Barrier-free"
+    "barrierFree": "Barrier-free",
+    "barrierFreeTooltip": "This allows for accessibility for people with mobility issues"
   },
   "destinations": {
     "xray": "X-ray Diagnostics",
@@ -108,5 +119,75 @@
     "gynecology": "Gynecology",
     "ent": "ENT",
     "restroom": "Restroom"
+  },
+  "walkthrough": {
+    "step1": {
+      "title": "Customize Lumee",
+      "description": "Adjust your settings at any time for an experience that fits your needs."
+    },
+    "step2": {
+      "title": "Chat with Lumee",
+      "description": "Lumee listens, responds with empathy, and supports you during your waiting time. You can ask general questions about the emergency department, such as:\n\n\"How does the emergency room process work?\"\n\n\"Where is the nearest restroom?\""
+    },
+    "step3": {
+      "title": "Symptom Intake Made Easy",
+      "description": "In addition to general information, Lumee can also help you record your symptoms step by step.\n\nSelect the type of pain, the affected body area, the intensity, and the duration.\n\nYou can also add allergies, medications, and your medical history.\n\nLumee does not provide diagnoses — but Lumee supports, reassures, and explains."
+    },
+    "step4": {
+      "title": "Your Symptom Overview",
+      "description": "Keep track of your current symptoms and complete your medical history — all in one place."
+    },
+    "step5": {
+      "title": "Your data at Lumee",
+      "description": "",
+      "bulletPoints": [
+        "Health data may be processed (special data according to Art. 9 DSGVO).",
+        "Use is voluntary. If you do not consent, you can provide your information directly to the staff.",
+        "Data is transmitted and stored in encrypted form.",
+        "Staff access is logged.",
+        "Only necessary data is collected and stored only as long as required.",
+        "If external AI/LLM services are used: Data is transmitted pseudonymized and not used for training."
+      ],
+      "imageCaptions": [
+        "Lumee is optional\nDeclining the Privacy policy does not affect your waiting time or the of your care.",
+        "Your data can only be viewed by authorized medical personnel.",
+        "We only store information that is strictly necessary for your medical care.",
+        "Data is encrypted during transmission and storage and only kept as long as necessary."
+      ],
+      "mandatoryConsent": "I expressly consent that [Hospital Name] processes my information including health data for treatment preparation and makes it available to medical staff. (Art. 9 Abs. 2 lit. a DSGVO)",
+      "mandatoryRequired": "(this is a mandatory checkbox)",
+      "optionalConsent": "I additionally consent that my information may be used pseudonymized for quality/statistics/research. (Art. 9 Abs. 2 lit. j DSGVO)",
+      "showDetails": "Show Details",
+      "detailsTitle": "Detailed Privacy Information",
+      "detailsText": "Here you can insert your detailed privacy information. This should include all relevant information about data processing, storage, sharing, and your rights.\n\nYou can customize this text in the file src/i18n/locales/en.json under walkthrough.step5.detailsText.",
+      "closeDetails": "Close",
+      "decline": "Decline",
+      "acceptAndStart": "Accept & Start",
+      "responsibleParty": "Responsible Party",
+      "responsible": "Responsible (Art. 4 No. 7 DSGVO): [Hospital Name, Address]",
+      "dataProtection": "Data Protection Officer: [Contact (Email/Phone)]"
+    },
+    "step6": {
+      "title": "No problem — we are here for you!",
+      "description": "You have chosen not to use Lumee. That is perfectly fine. Please wait in the seating area until your name is called.",
+      "important": "Important: If your condition worsens, please contact the hospital staff immediately.",
+      "backToWelcome": "Return to Home Screen"
+    },
+    "darkMode": "Dark Mode",
+    "fontSize": "Font size",
+    "small": "Small",
+    "medium": "Medium",
+    "large": "Large",
+    "goBack": "Go back",
+    "next": "Next"
+    ,
+    "medicalConcerns": {
+      "title": "Medical Profile - Concerns",
+      "description": "Keep track of all symptoms you’ve shared with Lumee and add new information whenever needed."
+    },
+    "medicalHistory": {
+      "title": "Medical Profile - Medical History",
+      "description": "Enter allergies, chronic conditions, and other relevant medical details that may be important for your care."
+    }
   }
 }

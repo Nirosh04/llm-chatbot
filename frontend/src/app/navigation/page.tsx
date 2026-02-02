@@ -11,6 +11,7 @@ import {
   FormControlLabel,
   Switch,
   Typography,
+  Tooltip,
 } from '@mui/material';
 import { useTheme } from '@mui/material/styles';
 import styles from './page.module.css';
@@ -103,15 +104,17 @@ export default function NavigationPage() {
         </FormControl>
 
         {/* Toggle switch for barrier-free navigation */}
-        <FormControlLabel
-          control={
-            <Switch
-              checked={isAccessible}
-              onChange={(e) => setIsAccessible(e.target.checked)}
-            />
-          }
-          label={tNav('barrierFree')}
-        />
+        <Tooltip title="This allows for mobility for people with mobility issues" arrow>
+          <FormControlLabel
+            control={
+              <Switch
+                checked={isAccessible}
+                onChange={(e) => setIsAccessible(e.target.checked)}
+              />
+            }
+            label={tNav('barrierFree')}
+          />
+        </Tooltip>
       </Box>
 
       {/* Embedded map iframe with navigation functionality */}

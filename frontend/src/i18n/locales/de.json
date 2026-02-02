@@ -3,12 +3,12 @@
     "title": "Willkommen!",
     "intro": "Ich bin Lumee, Ihr digitaler Begleiter in der Notaufnahme.",
     "description": "Ich helfe Ihnen, die Wartezeit bestmöglich zu nutzen. Ich bereite mit Ihnen gemeinsam das anstehende Arztgespräch vor, indem ich Fragen zu Ihrem Befinden stelle. Zudem beantworte ich gern Ihre Fragen zum Ablauf und helfe Ihnen mit einer Karte bei der Orientierung.",
-    "lookForward": "Wir können direkt starten, wenn Sie bereit sind.",
+    "lookForward": "Legen Sie hier zunächst Ihre Standardeinstellungen fest:",
     "startButton": "Fangen wir an"
   },
   "tabs": {
     "chat": "Chat",
-    "info": "Info",
+    "info": "Gesundheitsprofil",
     "navigation": "Navigation",
     "settings": "Einstellungen"
   },
@@ -29,7 +29,17 @@
     "darkMode": "Dunkelmodus",
     "german": "Deutsch",
     "english": "English",
-    "selectFontSize": "Schriftgröße"
+    "selectFontSize": "Schriftgröße",
+    "verySmall": "Sehr klein",
+    "small": "Klein",
+    "medium": "Mittel",
+    "large": "Groß",
+    "veryLarge": "Sehr groß",
+    "logout": "Ausloggen",
+    "logoutConfirmLine1": "Wenn Sie fortfahren, werden alle eingegebenen Daten gelöscht und die aktuelle Session wird geschlossen.",
+    "logoutConfirmLine2": "Sind Sie sicher, dass Sie fortfahren möchten?",
+    "confirmCancel": "Abbrechen",
+    "confirmYes": "Ja, beenden"
   },
   "symptoms": {
     "symptomsTab": "Aktuelle Beschwerden",
@@ -100,7 +110,8 @@
   "navigation": {
     "startPoint": "📍 Startpunkt: Eingang Zentrale Notaufnahme Campus Charité Mitte",
     "selectDestination": "Ziel auswählen",
-    "barrierFree": "Barrierefrei"
+    "barrierFree": "Barrierefrei",
+    "barrierFreeTooltip": "Dies ermöglicht Zugänglichkeit für Menschen mit Mobilitätseinschränkungen"
   },
   "destinations": {
     "xray": "Röntgendiagnostik",
@@ -108,5 +119,67 @@
     "gynecology": "Gynäkologie",
     "ent": "HNO",
     "restroom": "WC"
+  },
+
+  "walkthrough": {
+    "step1": {
+      "title": "Lumee anpassen",
+      "description": "Passen Sie Ihre Einstellungen jederzeit an – für eine Nutzung, die zu Ihnen passt."
+    },
+    "step2": {
+      "title": "Chatten Sie mit Lumee",
+      "description": "Lumee hört zu, reagiert einfühlsam und begleitet Sie durch Ihre Wartezeit. Sie können allgemeine Fragen zur Notaufnahme stellen, zum Beispiel:\n\n\"Wie funktioniert der Ablauf in der Notaufnahme?\"\n\n\"Wo ist die nächste Toilette?\""
+    },
+    "step3": {
+      "title": "Symptome einfach erfassen",
+      "description": "Neben allgemeinen Informationen kann Lumee auch Ihre Beschwerden Schritt für Schritt erfassen.\n\nWählen Sie Art des Schmerzes, die betroffene Körperstelle, die Intensität und die Dauer aus.\n\nZusätzlich können Sie Allergien, Medikamente und Ihre Krankengeschichte angeben.\n\nLumee stellt keine Diagnosen – aber Lumee unterstützt, beruhigt und erklärt."
+    },
+    "step4": {
+      "title": "Ihre Symptomübersicht",
+      "description": "Behalten Sie den Überblick über <b>aktuelle Beschwerden</b> und vervollständigen Sie Ihre <b>Krankengeschichte</b> – alles an einem Ort."
+    },
+    "step5": {
+      "title": "Ihre Daten bei Lumee",
+      "description": "",
+      "bulletPoints": [
+        "Es können Gesundheitsdaten verarbeitet werden (besondere Daten nach Art. 9 DSGVO).",
+        "Die Nutzung ist freiwillig. Wenn Sie nicht einwilligen, können Sie Ihre Angaben direkt beim Personal machen.",
+        "Daten werden verschlüsselt übertragen und gespeichert.",
+        "Zugriffe durch Personal werden protokolliert.",
+        "Es werden nur notwendige Daten erhoben und nur so lange wie erforderlich gespeichert.",
+        "Falls externe KI/LLM-Dienste genutzt werden: Daten werden pseudonymisiert übermittelt und nicht für Training verwendet."
+      ],
+      "imageCaptions": [
+        "Die Nutzung von Lumee ist freiwillig\nBeim Ablehnen der Datenschutzerklärung entstehen keine Nachteile bei Wartezeit oder Behandlung.",
+        "Ihre Daten können nur von medizinischem Personal eingesehen werden.",
+        "Wir speichern nur Informationen, die für Ihre medizinische Versorgung wirklich notwendig sind.",
+        "Daten werden verschlüsselt übertragen und gespeichert und nur so lange aufbewahrt, wie dies erforderlich ist."
+      ],
+      "mandatoryConsent": "Ich willige ausdrücklich ein, dass [Krankenhausname] meine Angaben inkl. Gesundheitsdaten zur Behandlungsvorbereitung verarbeitet und dem medizinischen Personal bereitstellt. (Art. 9 Abs. 2 lit. a DSGVO)",
+      "mandatoryRequired": "(dies ist eine Pflichtangabe)",
+      "optionalConsent": "Ich willige zusätzlich ein, dass meine Angaben pseudonymisiert für Qualität/Statistik/Forschung genutzt werden. (Art. 9 Abs. 2 lit. j DSGVO)",
+      "showDetails": "Details anzeigen",
+      "detailsTitle": "Detaillierte Datenschutzinformationen",
+      "detailsText": "Hier können Sie Ihre detaillierten Datenschutzinformationen einfügen. Diese sollten alle relevanten Informationen zur Datenverarbeitung, Speicherung, Weitergabe und Ihren Rechten enthalten.\n\nSie können diesen Text in der Datei src/i18n/locales/de.json unter walkthrough.step5.detailsText anpassen.",
+      "closeDetails": "Schließen",
+      "decline": "Ablehnen",
+      "acceptAndStart": "Akzeptieren & Starten",
+      "responsibleParty": "Verantwortliche Stelle",
+      "responsible": "Verantwortlich (Art. 4 Nr. 7 DSGVO): [Krankenhausname, Anschrift]",
+      "dataProtection": "Datenschutzbeauftragte*r: [Kontakt (E-Mail/Telefon)]"
+    },
+    "step6": {
+      "title": "Kein Problem — wir sind für Sie da!",
+      "description": "Sie haben sich gegen die Nutzung von Lumee entschieden. Das ist völlig in Ordnung. Bitte nehmen Sie im Wartebereich Platz und gedulden Sie sich noch etwas, bis Sie aufgerufen werden.",
+      "important": "Wichtig: Sollte sich Ihr Zustand verschlimmern, wenden Sie sich bitte umgehend an das Krankenhauspersonal.",
+      "backToWelcome": "Zurück zur Startseite"
+    },
+    "darkMode": "Dunkelmodus",
+    "fontSize": "Schriftgröße",
+    "small": "Klein",
+    "medium": "Mittel",
+    "large": "Groß",
+    "goBack": "Zurück",
+    "next": "Weiter"
   }
 }

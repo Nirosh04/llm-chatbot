@@ -7,6 +7,7 @@ import React, { useState, useRef, useEffect } from 'react';
 import {
   AppBar,
   Switch,
+  Slider,
   Select,
   MenuItem,
   List,
@@ -15,18 +16,24 @@ import {
   ListItemIcon,
   ListItemText,
   IconButton,
+  useTheme,
   Tab,
   Tabs,
   Box,
   Tooltip,
   Collapse,
   Stack,
+  Container,
 } from '@mui/material';
 
 import HomeIcon from '@mui/icons-material/Home';
 import PersonIcon from '@mui/icons-material/Person';
 import SettingsIcon from '@mui/icons-material/Settings';
 import LogoutIcon from '@mui/icons-material/Logout';
+import Dialog from '@mui/material/Dialog';
+import DialogTitle from '@mui/material/DialogTitle';
+import DialogContent from '@mui/material/DialogContent';
+import DialogActions from '@mui/material/DialogActions';
 import ChatIcon from '@mui/icons-material/Chat';
 import InfoIcon from '@mui/icons-material/Info';
 import NavigationIcon from '@mui/icons-material/Navigation';
@@ -34,7 +41,7 @@ import SendIcon from '@mui/icons-material/Send';
 import PainIcon from '@mui/icons-material/Scale';
 import BodyIcon from '@mui/icons-material/AccessibilityNew';
 
-import { FontSizeSelect } from './../../components/FontSizeSelect';
+// removed FontSizeSelect in favor of a slider
 import { MessageList } from './../../components/MessageList';
 import { CustomTextField } from './../../components/CustomTextField';
 import PainSlider from './../../components/PainSlider';
@@ -63,6 +70,9 @@ export default function TabMain() {
   const tChat = useTranslations('chat');
   const tTabs = useTranslations('tabs');
   const tSettings = useTranslations('settings');
+  const theme = useTheme();
+
+  console.log('=== PAGE.TSX fontSize:', fontSize);
 
   const [messages, setMessages] = useState<ChatMessage[]>(() => [{
     id: 'welcome',
@@ -76,6 +86,7 @@ export default function TabMain() {
   const [, setHealthSummaryText] = useState(
     "No Health summary was requested yet"
   );
+  const [logoutOpen, setLogoutOpen] = useState(false);
   // dummy function
   const [sliderOpen, setSliderOpen] = useState(false);
   const [painLevel, setPainLevel] = useState(5);
@@ -270,6 +281,22 @@ export default function TabMain() {
     }
   };
 
+  const handleConfirmLogout = async () => {
+    try {
+      if (sessionId) {
+        await resetConversationRequest(sessionId);
+      }
+      setSessionId(null);
+      setMessages([]);
+      setLogoutOpen(false);
+      // Navigate to welcome/start page
+      window.location.href = '/welcome';
+    } catch (e) {
+      console.error('Error ending session:', e);
+      setLogoutOpen(false);
+    }
+  };
+
 
   // Main content container
   const renderTabContent = () => {
@@ -296,22 +323,24 @@ export default function TabMain() {
             }}
           >
             {/* Messages area */}
-            <Box               // Parent component
-              sx={{
-                flex: 1,
-                overflowY: 'auto',
-                overflowX: 'hidden', // Prevent horizontal scrolling
-                padding: 2,
-              }}
-            >
-              <MessageList messages={messages} isLoading={isLoading} />
+            <Container maxWidth={false} sx={{ flex: 1, display: 'flex', flexDirection: 'column', px: 0 }}>
+              <Box               // Parent component
+                sx={{
+                  flex: 1,
+                  overflowY: 'auto',
+                  overflowX: 'hidden', // Prevent horizontal scrolling
+                  padding: { xs: 1, sm: 2 },
+                }}
+              >
+                <MessageList messages={messages} isLoading={isLoading} />
               <div ref={messagesEndRef} />
-            </Box>
+              </Box>
+            </Container>
 
             {/* Input area */}
             <Box
               sx={{
-                padding: 2,
+                padding: {xs: 0.5, sm: 1},
                 display: 'flex',
                 flexDirection: 'column',
                 gap: 1,
@@ -460,7 +489,7 @@ export default function TabMain() {
                     disabled={!inputText.trim() || isLoading}
                     sx={{
                       borderRadius: '20px',
-                      padding: '12px',
+                      padding: {xs: '10px', sm: '12px' },
                       backgroundColor: theme => theme.palette.primary.main,
                       '&:hover': {
                         backgroundColor: theme => theme.palette.primary.main,
@@ -468,7 +497,7 @@ export default function TabMain() {
                       },
                     }}
                   >
-                    <SendIcon />
+                    <SendIcon sx={{ fontSize: { xs: '1.2rem', sm: '1.5rem' } }}/>
                   </IconButton>
                 </Tooltip>
               </Box>
@@ -485,22 +514,29 @@ export default function TabMain() {
         )}
 
         {activeTab === 3 && ( // Settings Tab
-          <Box
+          <Container maxWidth={false} sx={{ flex: 1, py: 2 }}>
+            <Box
+              sx={{
+                flex: 1,
+                display: 'flex',
+                justifyContent: 'center',
+                alignItems: 'center',
+              }}
+            >
+            <List
             sx={{
-              flex: 1,
-              display: 'flex',
-              justifyContent: 'center',
-              alignItems: 'center',
-              //backgroundColor: colors.backgroundColor,
-              //color: colors.textColor,
-            }}
-          >
-          <List
-            sx={{
+              width: '100%',
+              maxWidth: 600,
               display: 'flex',
               flexDirection: 'column',
               alignItems: 'center', // centers all ListItems horizontally
               gap: 1,               // optional: space between items
+              '& .MuiListItemText-primary': {
+                fontSize: `${fontSize}px`,
+              },
+              '& .MuiMenuItem-root': {
+                fontSize: `${fontSize}px`,
+              },
             }}>
 
           {/* Language Selector */}
@@ -512,11 +548,47 @@ export default function TabMain() {
             </Select>
           </ListItem>
 
-          <FontSizeSelect
-            label={tSettings('selectFontSize')}
-            value={fontSize}
-            onChange={setFontSize}
-          />
+          {/* Font size slider */}
+          <ListItem sx={{ width: '100%', flexDirection: 'column', alignItems: 'stretch' }}>
+            <Box sx={{ width: '100%' }}>
+              <Box sx={{ display: 'flex', justifyContent: 'flex-start' }}>
+                <ListItemText primary={tSettings('selectFontSize')} />
+              </Box>
+              <Box sx={{ px: 3, mt: 1 }}>
+                <Slider
+                  min={12}
+                  max={20}
+                  step={2}
+                  marks={[
+                    { value: 12, label: tSettings('verySmall') },
+                    { value: 14, label: tSettings('small') },
+                    { value: 16, label: tSettings('medium') },
+                    { value: 18, label: tSettings('large') },
+                    { value: 20, label: tSettings('veryLarge') }
+                  ]}
+                  value={fontSize}
+                  onChange={(_, v) => setFontSize(Array.isArray(v) ? v[0] : v)}
+                  sx={{ 
+                    width: '100%',
+                    mb: 2,
+                    '& .MuiSlider-markLabel': {
+                      fontSize: theme.typography.pxToRem(fontSize * 0.75),
+                      whiteSpace: 'normal',
+                      width: '60px',
+                      textAlign: 'center',
+                      color: theme.palette.primary.main
+                    },
+                    '& .MuiSlider-markLabelActive': {
+                      color: theme.palette.primary.main
+                    },
+                    [`& .MuiSlider-markLabel[data-index="${(fontSize - 12) / 2}"]`]: {
+                      color: theme.palette.text.primary
+                    }
+                  }}
+                />
+              </Box>
+            </Box>
+          </ListItem>
 
 
           {/* Dark Mode Toggle */}
@@ -574,16 +646,17 @@ export default function TabMain() {
 
           {/* Logout */}
           <ListItem>
-            <Button>
+            <Button onClick={() => setLogoutOpen(true)}>
               <ListItemIcon>
                 <LogoutIcon />
               </ListItemIcon>
-              <ListItemText primary="Logout" />
+              <ListItemText primary={tSettings('logout')} />
             </Button>
           </ListItem>
         </List>
       
-          </Box>
+            </Box>
+          </Container>
         )}
       </Box>
     );
@@ -609,13 +682,21 @@ export default function TabMain() {
             value={activeTab}
             onChange={(_, newValue) => setActiveTab(newValue)}
             centered
+            variant="fullWidth"
             sx={{
               '& .MuiTab-root': { // when not selected
                 color: theme => theme.palette.text.primary,
-                minHeight: 56,
+                minHeight: { xs: 56, sm: 64 },
+                fontSize: `${fontSize}px`,
+                padding: { xs: '6px 4px', sm: '12px 16px' },
+                minWidth: { xs: 60, sm: 90 },
                 transition: 'background-color 0.3s',
                 '&:hover': {
                   backgroundColor: theme => theme.palette.action.hover,
+                },
+                '& .MuiTab-wrapper': {
+                  whiteSpace: 'normal',
+                  lineHeight: 1.2,
                 },
               },
               '& .MuiTab-root.Mui-selected': { // when clicked
@@ -626,18 +707,68 @@ export default function TabMain() {
                 height: 3,
                 borderRadius: 2,
               },
+              '& .MuiSvgIcon-root': {
+                fontSize: { xs: '1.2rem', sm: '1.5rem' },
+              },
             }}
           >
-            <Tab icon={<ChatIcon />} label={tTabs('chat')} />
-            <Tab icon={<InfoIcon />} label={tTabs('info')} />
-            <Tab icon={<NavigationIcon />} label={tTabs('navigation')} />
-            <Tab icon={<SettingsIcon />} label={tTabs('settings')} />
+            <Tab 
+              icon={<ChatIcon />} 
+              label={tTabs('chat')} 
+              sx={{ 
+                '& .MuiTab-iconWrapper': { mb: 0.5 },
+                hyphens: 'auto',
+              }} 
+              lang="de" 
+            />
+            <Tab 
+              icon={<PersonIcon />} 
+              label={tTabs('info')} 
+              sx={{ 
+                '& .MuiTab-iconWrapper': { mb: 0.5 },
+                hyphens: 'auto',
+              }} 
+              lang="de" 
+            />
+            <Tab 
+              icon={<NavigationIcon />} 
+              label={tTabs('navigation')} 
+              sx={{ 
+                '& .MuiTab-iconWrapper': { mb: 0.5 },
+                hyphens: 'auto',
+              }} 
+              lang="de"
+            />
+            <Tab 
+              icon={<SettingsIcon />} 
+              label={tTabs('settings')} 
+              sx={{ 
+                '& .MuiTab-iconWrapper': { mb: 0.5 },
+                hyphens: 'auto',
+              }} 
+              lang="de" 
+            />
           </Tabs>
         </AppBar>
 
         {/* Tab Content */}
         {renderTabContent()}
       </Box>
+
+      {/* Logout confirmation dialog */}
+      <Dialog open={logoutOpen} onClose={() => setLogoutOpen(false)} maxWidth="xs" fullWidth>
+        <DialogTitle>{tSettings('logout')}</DialogTitle>
+        <DialogContent>
+          <Box sx={{ fontSize: `${fontSize}px` }}>
+            <div>{tSettings('logoutConfirmLine1')}</div>
+            <div style={{ marginTop: 8 }}>{tSettings('logoutConfirmLine2')}</div>
+          </Box>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={() => setLogoutOpen(false)}>{tSettings('confirmCancel')}</Button>
+          <Button color="error" variant="contained" onClick={handleConfirmLogout}>{tSettings('confirmYes')}</Button>
+        </DialogActions>
+      </Dialog>
     </Box>
   );
 };
