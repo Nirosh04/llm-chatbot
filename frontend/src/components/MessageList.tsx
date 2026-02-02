@@ -6,6 +6,7 @@ import React from 'react';
 import { ChatBubble } from './ChatBubble';
 import { LoadingDots } from './LoadingDots';
 import { useTheme } from '@mui/material';
+import { useSettings } from '@/context/SettingsContext';
 
 
 export interface Message {
@@ -24,6 +25,7 @@ export const MessageList: React.FC<MessageListProps> = ({
   isLoading = false,
 }) => {
   const theme = useTheme();
+  const { fontSize } = useSettings();
   
   // Only render if there are messages or loading
   if (messages.length === 0 && !isLoading) {
@@ -43,7 +45,7 @@ export const MessageList: React.FC<MessageListProps> = ({
       {isLoading && (
         <div
           style={{
-            padding: '0 110px 0 10px',
+            padding: '0 10px 0 10px',
             marginBottom: '12px',
           }}
         >
@@ -55,7 +57,7 @@ export const MessageList: React.FC<MessageListProps> = ({
                 padding: '12px',
                 borderRadius: '15px',
                 maxWidth: '70%',
-                fontSize: '16px',
+                fontSize: `${fontSize}px`,
                 lineHeight: '1.4',
               }}
             >

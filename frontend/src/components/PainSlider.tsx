@@ -2,6 +2,7 @@
 
 import { Box, Typography, Slider, Stack } from '@mui/material';
 import { useTranslations } from 'next-intl';
+import { useSettings } from '@/context/SettingsContext';
 
 interface PainSliderProps {
   value: number;
@@ -47,15 +48,16 @@ export default function PainSlider({
   showValue = true,
 }: PainSliderProps) {
   const t = useTranslations('symptoms');
+  const { fontSize } = useSettings();
 
   return (
     <Box>
       {showValue && (
         <Stack direction="row" justifyContent="space-between" alignItems="center" mb={1}>
-          <Typography variant="subtitle2" sx={{ fontWeight: 600 }}>
+          <Typography variant="subtitle2" sx={{ fontWeight: 600, fontSize: `${fontSize}px` }}>
                 {t('pain')}
           </Typography>
-          <Typography variant="subtitle2" sx={{ fontWeight: 600 }}>
+          <Typography variant="subtitle2" sx={{ fontWeight: 600, fontSize: `${fontSize}px` }}>
                 {value}
           </Typography>
         </Stack>
@@ -85,10 +87,10 @@ export default function PainSlider({
       
       {showLabels && (
         <Stack direction="row" justifyContent="space-between" sx={{ mt: 1 }}>
-          <Typography variant="caption" color="text.primary">
+          <Typography variant="caption" color="text.primary" sx={{ fontSize: `${fontSize * 0.75}px` }}>
                 {t('painlevel0')}
           </Typography>
-          <Typography variant="caption" color="text.primary">
+          <Typography variant="caption" color="text.primary" sx={{ fontSize: `${fontSize * 0.75}px` }}>
                 {t('painlevel10')}
           </Typography>
         </Stack>

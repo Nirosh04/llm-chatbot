@@ -12,6 +12,7 @@ import {
 import { Edit, Delete, ExpandMore } from '@mui/icons-material';
 import { MedicalCondition } from './../types/PatientMedicalData'; // rename to patientData.ts
 import { useTranslations } from 'next-intl';
+import { useSettings } from '@/context/SettingsContext';
 
 
 
@@ -31,6 +32,7 @@ export default function MedicalHistoryCard({
 }: MedicalHistoryCardProps) {
   const [expanded, setExpanded] = useState(false);
   const t = useTranslations('medicalHistory');
+  const { fontSize } = useSettings();
 
   return (
     <Accordion
@@ -41,36 +43,54 @@ export default function MedicalHistoryCard({
         borderRadius: '12px !important',
         mb: 2,
         '&:before': { display: 'none' },
+        width: '100%',
+        overflowX: 'hidden',
       }}
     >
       <AccordionSummary
         expandIcon={<ExpandMore />}
         sx={{
-          minHeight: 64,
+          minHeight: { xs: 56, sm: 64 },
+          px: { xs: 1, sm: 2 },
           '& .MuiAccordionSummary-content': {
             my: 1,
+            mr: 0,
+            overflow: 'hidden',
+            maxWidth: 'calc(100% - 48px)',
+          },
+          '& .MuiAccordionSummary-expandIconWrapper': {
+            marginLeft: 'auto',
           },
         }}
       >
-        <Typography sx={{ fontSize: 20, fontWeight: 700}}>
+        <Typography 
+          sx={{ 
+            fontSize: `${fontSize}px`, 
+            fontWeight: 700,
+            overflow: 'hidden',
+            textOverflow: 'ellipsis',
+            whiteSpace: 'nowrap',
+            maxWidth: '100%',
+          }}
+        >
           {condition.condition}
         </Typography>
       </AccordionSummary>
       
       <AccordionDetails>
           <Stack spacing={2}>
-            <Typography variant="body1">
+            <Typography variant="body1" sx={{ fontSize: `${fontSize}px` }}>
               {t('sinceShort')}: {condition.since}
             </Typography>
 
             {condition.medication && (
-              <Typography variant="body2">
+              <Typography variant="body2" sx={{ fontSize: `${fontSize}px` }}>
                 {t('medicationShort')}: {condition.medication}
               </Typography>
             )}
 
             {condition.notes && (
-              <Typography variant="body2">
+              <Typography variant="body2" sx={{ fontSize: `${fontSize}px` }}>
                 {t('notesShort')}: {condition.notes}
               </Typography>
             )}

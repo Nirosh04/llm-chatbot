@@ -5,6 +5,7 @@ import React from 'react';
 import { TextField, useTheme } from '@mui/material';
 import type { TextFieldProps } from '@mui/material';
 import { useTranslations } from 'next-intl';
+import { useSettings } from '@/context/SettingsContext';
 
 interface CustomTextFieldProps extends Omit<TextFieldProps, 'variant'> {
   hintText?: string;
@@ -15,6 +16,9 @@ export const CustomTextField: React.FC<CustomTextFieldProps> = ({
 }) => {
   const theme = useTheme();
   const t = useTranslations('chat');
+  const { fontSize } = useSettings();
+  
+  console.log('CustomTextField fontSize:', fontSize);
   
   const hintText = t('typeMessage');
 
@@ -48,6 +52,7 @@ export const CustomTextField: React.FC<CustomTextFieldProps> = ({
         '& .MuiInputBase-input': {
           color: textColor,
           caretColor: cursorColor,
+          fontSize: `${fontSize}px`,
         },
         '& .MuiInputLabel-root': {
           color: `${textColor}99`,

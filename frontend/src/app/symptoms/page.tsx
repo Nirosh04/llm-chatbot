@@ -1,7 +1,7 @@
 
 // app/symptoms/page.tsx - Symptome und Krankengeschichte
 'use client';
-import { useTheme } from '@mui/material';
+import { useTheme, useMediaQuery } from '@mui/material';
 import { useState, useEffect, useCallback } from 'react';
 import { useRouter } from 'next/navigation';
 import {
@@ -14,30 +14,18 @@ import {
   Fab,
   CircularProgress,
   Alert,
-  Tabs,
-  Tab,
-  Slider,
   TextField,
   Dialog,
   DialogTitle,
   DialogContent,
   DialogActions,
   Button,
-  Card,
-  CardContent,
-  CardActions,
-  Accordion,
-  AccordionSummary,
-  AccordionDetails,
   Stack,
 } from '@mui/material';
 import {
   ChevronLeft,
   ChevronRight,
   Add,
-  Edit,
-  Delete,
-  ExpandMore,
   Home,
 } from '@mui/icons-material';
 import SymptomCard from './../../components/SymptomCard';
@@ -52,6 +40,9 @@ import { useTranslations } from 'next-intl';
 const getHealthSummary = async (sessionId: string | null) => {
   // Simulate API delay
   await new Promise(resolve => setTimeout(resolve, 500));
+  
+  // sessionId would be used in real API call
+  console.log('Fetching health summary for session:', sessionId);
   
   // Return mock data similar to Flutter's default
   return {
@@ -111,8 +102,9 @@ export default function SymptomsPage({ sessionId }: SymptomsPageProps) {
   const [editHistoryDialogOpen, setEditHistoryDialogOpen] = useState(false);
   const [editingIndex, setEditingIndex] = useState<number | null>(null);
   
-  const { darkMode, toggleDarkMode, language, setLanguage } = useSettings();
+  const { darkMode, fontSize } = useSettings();
   const theme = useTheme();
+  const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
   const router = useRouter();
   const tSymptoms = useTranslations('symptoms');
   const tMedicalHistory = useTranslations('medicalHistory');
@@ -204,7 +196,7 @@ export default function SymptomsPage({ sessionId }: SymptomsPageProps) {
     } finally {
       setIsLoading(false);
     }
-  }, [sessionId]);
+  }, [sessionId, tSymptoms]);
 
   useEffect(() => {
     fetchHealthSummary();
@@ -436,20 +428,13 @@ export default function SymptomsPage({ sessionId }: SymptomsPageProps) {
         position="static"
         elevation={0}
         sx={{
-          py: 1,
+          py: { xs: 0.5, sm: 1 },
           backgroundColor: theme => theme.palette.background.paper, // appbar of symptoms page uses paper
         }}
       >
-        <Container maxWidth="lg">
-          <Stack direction="row" alignItems="center" spacing={2}>
-            {/* Home button */}
-            <Tooltip title="Zur Startseite">
-              <IconButton
-                onClick={() => router.push('welcome')}
-              >
-                <Home />
-              </IconButton>
-            </Tooltip>
+        <Container maxWidth={false} sx={{ px: { xs: 1, sm: 2 } }}>
+          <Stack direction="row" alignItems="center" spacing={{ xs: 1, sm: 2 }}>
+            {/* Home button removed per request */}
             
             {/* Left arrow for Krankengeschichte page */}
             {activeTab === 1 && (
@@ -467,7 +452,7 @@ export default function SymptomsPage({ sessionId }: SymptomsPageProps) {
               <Box
                 sx={{
                   position: 'relative',
-                  borderRadius: 24,
+                  borderRadius: { xs: 16, sm: 24 },
                   p: 0.5,
                   mx: 'auto',
                   maxWidth: 600,
@@ -481,7 +466,7 @@ export default function SymptomsPage({ sessionId }: SymptomsPageProps) {
                     bottom: 4,
                     left: activeTab === 0 ? 4 : '50%',
                     right: activeTab === 1 ? 4 : '50%',
-                    borderRadius: 20,
+                    borderRadius: { xs: 12, sm: 20 },
                     transition: 'all 0.25s ease-in-out',
                     backgroundColor: theme.palette.button.bg, // or any color like '#e0e0e0'
                     boxShadow: darkMode
@@ -501,8 +486,9 @@ export default function SymptomsPage({ sessionId }: SymptomsPageProps) {
                       border: 'none',
                       background: 'none',
                       cursor: 'pointer',
-                      py: 1,
-                      borderRadius: 16,
+                      py: { xs: 0.75, sm: 1 },
+                      px: { xs: 0.5, sm: 1 },
+                      borderRadius: { xs: 12, sm: 16 },
                        transition: 'background-color 0.2s',
                        backgroundColor: hoveredTab === 0 
                          ? 'rgba(0, 0, 0, 0.08)' 
@@ -517,10 +503,15 @@ export default function SymptomsPage({ sessionId }: SymptomsPageProps) {
                   >
                     <Typography
                       sx={{
-                        fontSize: 18,
+                        fontSize: `${fontSize}px`,
                         fontWeight: 700,
+                        textAlign: 'center',
+                        hyphens: 'auto',
+                        overflowWrap: 'break-word',
+                        lineHeight: 1.2,
                         //color: theme => theme.palette.text.primary,
                       }}
+                      lang="de"
                     >
                       {tSymptoms('symptomsTab')}
                     </Typography>
@@ -535,8 +526,9 @@ export default function SymptomsPage({ sessionId }: SymptomsPageProps) {
                       border: 'none',
                       background: 'none',
                       cursor: 'pointer',
-                      py: 1,
-                      borderRadius: 16,
+                      py: { xs: 0.75, sm: 1 },
+                      px: { xs: 0.5, sm: 1 },
+                      borderRadius: { xs: 12, sm: 16 },
                       transition: 'background-color 0.2s',
                        backgroundColor: hoveredTab === 1 
                          ? 'rgba(0, 0, 0, 0.08)' 
@@ -551,10 +543,15 @@ export default function SymptomsPage({ sessionId }: SymptomsPageProps) {
                   >
                     <Typography
                       sx={{
-                        fontSize: 18,
+                        fontSize: `${fontSize}px`,
                         fontWeight: 700,
+                        textAlign: 'center',
+                        hyphens: 'auto',
+                        overflowWrap: 'break-word',
+                        lineHeight: 1.2,
                         //color: theme => theme.palette.text.primary,
                       }}
+                      lang="de"
                     >
                       {tMedicalHistory('medicalHistoryTab')}
                     </Typography>
@@ -580,7 +577,17 @@ export default function SymptomsPage({ sessionId }: SymptomsPageProps) {
         </Container>
       </AppBar>
 
-      <Container maxWidth="lg" sx={{ py: 3, pb: 15 }}>
+      <Container 
+        maxWidth={false} 
+        sx={{ 
+          py: { xs: 2, sm: 3 }, 
+          px: { xs: 2, sm: 3 }, 
+          pb: { xs: 14, sm: 11 },
+          overflowX: 'hidden',
+          width: '100%',
+          boxSizing: 'border-box'
+        }}
+      >
         {/* Symptoms Tab Content */}
         {activeTab === 0 && jsonData && (
           <Stack spacing={2}>
@@ -629,14 +636,13 @@ export default function SymptomsPage({ sessionId }: SymptomsPageProps) {
         )}
       </Container>
 
-      {/* FAB for adding items */}
-            {/* FAB for adding items - CENTERED */}
+      {/* FAB for adding items - CENTERED */}
       <Box sx={{ 
         position: 'fixed', 
-        bottom: 24, 
+        bottom: { xs: 80, sm: 24 }, 
         left: '50%',
         transform: 'translateX(-50%)',
-        zIndex: 1000,
+        zIndex: 1300,
       }}>
         <Tooltip
           title={activeTab === 0 
@@ -648,8 +654,8 @@ export default function SymptomsPage({ sessionId }: SymptomsPageProps) {
             sx={{
               color: theme.palette.text.primary,
               bgcolor: theme.palette.primary.main, // background color
-              width: 60,
-              height: 60,
+              width: { xs: 56, sm: 60 },
+              height: { xs: 56, sm: 60 },
               boxShadow: '4px 6px 18px rgba(100, 160, 255, 0.35)',
 
               '&:hover': {
@@ -664,7 +670,7 @@ export default function SymptomsPage({ sessionId }: SymptomsPageProps) {
               }
             }}
           >
-            <Add sx={{ fontSize: 32 }} />
+            <Add sx={{ fontSize: { xs: 28, sm: 32 } }} />
           </Fab>
         </Tooltip>
       </Box>
@@ -698,45 +704,51 @@ export default function SymptomsPage({ sessionId }: SymptomsPageProps) {
         onClose={() => setAddHistoryDialogOpen(false)}
         maxWidth="sm"
         fullWidth
+        fullScreen={isMobile}
       >
-        <DialogTitle>{tMedicalHistory('addHistory')}</DialogTitle>
-        <DialogContent>
-          <Stack spacing={2} sx={{ mt: 1 }}>
+        <DialogTitle sx={{ pb: { xs: 1, sm: 2 } }}>{tMedicalHistory('addHistory')}</DialogTitle>
+        <DialogContent sx={{ pt: { xs: 1, sm: 2 } }}>
+          <Stack spacing={{ xs: 2, sm: 2 }} sx={{ mt: { xs: 0.5, sm: 1 } }}>
             <TextField
               label={tMedicalHistory('condition')}
               fullWidth
               value={newHistory.condition}
               onChange={(e) => setNewHistory({...newHistory, condition: e.target.value})}
+              size={isMobile ? 'small' : 'medium'}
             />
             <TextField
               label={tMedicalHistory('since')}
               fullWidth
               value={newHistory.since}
               onChange={(e) => setNewHistory({...newHistory, since: e.target.value})}
+              size={isMobile ? 'small' : 'medium'}
             />
             <TextField
               label={tMedicalHistory('medication')}
               fullWidth
               multiline
-              rows={2}
+              rows={isMobile ? 2 : 2}
               value={newHistory.medication}
               onChange={(e) => setNewHistory({...newHistory, medication: e.target.value})}
+              size={isMobile ? 'small' : 'medium'}
             />
             <TextField
               label={tMedicalHistory('notes')}
               fullWidth
               multiline
-              rows={3}
+              rows={isMobile ? 2 : 3}
               value={newHistory.notes}
               onChange={(e) => setNewHistory({...newHistory, notes: e.target.value})}
+              size={isMobile ? 'small' : 'medium'}
             />
           </Stack>
         </DialogContent>
-        <DialogActions>
-          <Button onClick={() => setAddHistoryDialogOpen(false)}>{tMedicalHistory('cancel')}</Button>
+        <DialogActions sx={{ px: { xs: 2, sm: 3 }, py: { xs: 1.5, sm: 2 } }}>
+          <Button onClick={() => setAddHistoryDialogOpen(false)} size={isMobile ? 'small' : 'medium'}>{tMedicalHistory('cancel')}</Button>
           <Button 
             onClick={handleAddHistory}
             variant="contained"
+            size={isMobile ? 'small' : 'medium'}
           >
             {tMedicalHistory('add')}
           </Button>
@@ -753,51 +765,57 @@ export default function SymptomsPage({ sessionId }: SymptomsPageProps) {
         }}
         maxWidth="sm"
         fullWidth
+        fullScreen={isMobile}
       >
-        <DialogTitle>{tMedicalHistory('editHistory')}</DialogTitle>
-        <DialogContent>
-          <Stack spacing={2} sx={{ mt: 1 }}>
+        <DialogTitle sx={{ pb: { xs: 1, sm: 2 } }}>{tMedicalHistory('editHistory')}</DialogTitle>
+        <DialogContent sx={{ pt: { xs: 1, sm: 2 } }}>
+          <Stack spacing={{ xs: 2, sm: 2 }} sx={{ mt: { xs: 0.5, sm: 1 } }}>
             <TextField
               label={tMedicalHistory('condition')}
               fullWidth
               value={newHistory.condition}
               onChange={(e) => setNewHistory({...newHistory, condition: e.target.value})}
+              size={isMobile ? 'small' : 'medium'}
             />
             <TextField
               label={tMedicalHistory('since')}
               fullWidth
               value={newHistory.since}
               onChange={(e) => setNewHistory({...newHistory, since: e.target.value})}
+              size={isMobile ? 'small' : 'medium'}
             />
             <TextField
               label={tMedicalHistory('medication')}
               fullWidth
               multiline
-              rows={2}
+              rows={isMobile ? 2 : 2}
               value={newHistory.medication}
               onChange={(e) => setNewHistory({...newHistory, medication: e.target.value})}
+              size={isMobile ? 'small' : 'medium'}
             />
             <TextField
               label={tMedicalHistory('notes')}
               fullWidth
               multiline
-              rows={3}
+              rows={isMobile ? 2 : 3}
               value={newHistory.notes}
               onChange={(e) => setNewHistory({...newHistory, notes: e.target.value})}
+              size={isMobile ? 'small' : 'medium'}
             />
           </Stack>
         </DialogContent>
-        <DialogActions>
+        <DialogActions sx={{ px: { xs: 2, sm: 3 }, py: { xs: 1.5, sm: 2 } }}>
           <Button onClick={() => {
             setEditHistoryDialogOpen(false);
             setEditingIndex(null);
             setNewHistory({ condition: '', since: '', notes: '', medication: '' });
-          }}>
+          }} size={isMobile ? 'small' : 'medium'}>
             {tMedicalHistory('cancel')}
           </Button>
           <Button 
             onClick={handleUpdateHistory}
             variant="contained"
+            size={isMobile ? 'small' : 'medium'}
           >
             {tMedicalHistory('update')}
           </Button>

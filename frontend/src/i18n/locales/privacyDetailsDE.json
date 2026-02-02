@@ -1,0 +1,45 @@
+{
+  "sections": [
+    {
+      "heading": "1. Einverständniserklärung zur Nutzung von Lumee",
+      "content": "Lumee erfasst Ihre Angaben (Symptome, Beschwerden), damit sich das medizinische Personal optimal auf Ihre Behandlung vorbereiten kann. Die Nutzung ist freiwillig und Ihre Daten sind sicher verschlüsselt."
+    },
+    {
+      "heading": "2. Zweck der Datenverarbeitung",
+      "content": "Behandlungsvorbereitung: Lumee dient der Erhebung von Informationen zur Ersteinschätzung und zur Vorbereitung Ihrer medizinischen Versorgung. Ihre Angaben werden dem behandelnden medizinischen Personal digital zur Verfügung gestellt.\n\n Optionale Nutzung (falls aktiviert): Eine darüber hinausgehende Nutzung anonymisierter oder pseudonymisierter Daten zu Zwecken der Qualitätssicherung, Statistik oder Forschung erfolgt nur, sofern Sie hierzu eine separate Einwilligung erteilt haben."
+    },
+    {
+      "heading": "§2 Welche Daten werden verarbeitet?",
+      "content": "Je nach Ihren Angaben werden insbesondere folgende Kategorien verarbeitet:\n\nGesundheitsdaten: Symptome, Schmerzstärke, Dauer der Beschwerden, Vorerkrankungen, Medikamente, Allergien sowie relevante Ereignisse (z. B. Unfallhergang).\n\nOrganisationsdaten: Zeitstempel der Eingabe, Fall- oder Vorgangsnummer, Wartebereich.\n\nIdentifikationsdaten: Name oder Geburtsdatum werden nur erhoben, wenn dies für die sichere Zuordnung zu Ihrer Behandlungsakte zwingend erforderlich ist.\n\nHinweis: Bitte geben Sie nur Informationen an, die für Ihre aktuelle Versorgung notwendig sind."
+    },
+    {
+      "heading": "§3 Rechtsgrundlagen (Art. 9 DSGVO)",
+      "content": "Gesundheitsdaten unterliegen als „besondere Kategorien personenbezogener Daten“ einem hohen Schutz. Die Verarbeitung erfolgt auf Basis:\n\nIhrer ausdrücklichen Einwilligung (Art. 9 Abs. 2 lit. a DSGVO) durch die Nutzung der Anwendung. Der Erforderlichkeit zur medizinischen Diagnostik und Behandlung (Art. 9 Abs. 2 lit. h DSGVO) unter der Verantwortung von Fachpersonal.\n\n(Optional) Geeigneter Garantien für Forschung/Statistik (Art. 9 Abs. 2 lit. j DSGVO)."
+    },
+    {
+     "heading": "§4 Freiwilligkeit und Widerruf",
+     "content": "Die Nutzung von Lumee ist freiwillig. Wenn Sie die Nutzung ablehnen, entstehen Ihnen keinerlei Nachteile bei der Behandlung oder Wartezeit; die Datenerhebung erfolgt in diesem Fall persönlich durch das Personal. Sie können Ihre Einwilligung jederzeit mit Wirkung für die Zukunft widerrufen. Die Rechtmäßigkeit der bis zum Widerruf erfolgten Verarbeitung bleibt unberührt."
+    },
+    {
+     "heading": "§5 Empfänger / Auftragsverarbeitung / externe KI-Dienste",
+     "content": "Auftragsverarbeitung: Für den technischen Betrieb (Hosting) setzen wir spezialisierte Dienstleister ein, die streng an unsere Weisungen gebunden und über Verträge zur Auftragsverarbeitung (Art. 28 DSGVO) abgesichert sind.\n\nKI-Dienste: Sofern KI-Dienste (z. B. Sprachmodelle) zur Strukturierung der Daten genutzt werden, werden Ihre Daten pseudonymisiert übertragen. Die Anbieter sind vertraglich verpflichtet, diese Daten weder dauerhaft zu speichern noch für das Training eigener Modelle zu verwenden.\n\nDrittländer: Eine Übermittlung in Länder außerhalb der EU erfolgt nur unter Einhaltung des durch die DSGVO geforderten Schutzniveaus (z. B. durch EU-Standardvertragsklauseln)."
+    },
+    {
+     "heading": "§6 Schutzmaßnahmen",
+     "content": "Zum Schutz Ihrer Daten setzen wir modernste Sicherheitsstandards ein:\n\n Ende-zu-Ende-Verschlüsselung bei der Übertragung (TLS/HTTPS).\n\nVerschlüsselte Speicherung auf zertifizierten Servern.\n\nStrikte Zugriffskontrolle: Nur autorisiertes medizinisches Personal hat Zugriff.\n\nLogging: Jeder Zugriff auf sensible Daten wird revisionssicher protokolliert.\n\nSecurity by Design: Regelmäßige Sicherheitsupdates und Schulungen des Personals.\n\nDatenminimierung und Speicherung nur so lange wie notwendig"
+    },
+    {
+     "heading": "§7 Speicherdauer",
+     "content": "Ihre Daten werden nur so lange gespeichert, wie es für die Behandlung und die gesetzlichen Dokumentationspflichten (gemäß § 630f BGB i. d. R. 10 Jahre) erforderlich ist. Danach werden die Daten gelöscht oder vollständig anonymisiert."
+    },
+    {
+     "heading": "§8 Ihre Rechte",
+     "content": "Ihnen stehen die Rechte auf Auskunft, Berichtigung, Löschung, Einschränkung der Verarbeitung, Datenübertragbarkeit sowie ein Widerspruchsrecht zu (Art. 15–21 DSGVO). \n Zudem haben Sie das Recht auf Beschwerde bei einer Datenschutzaufsichtsbehörde (Art. 77 DSGVO).\n\n Kontakt: Bei Fragen wenden Sie sich bitte an unseren Datenschutzbeauftragten unter: [Hier Kontaktdaten einfügen]."
+    },
+    {
+        "heading": "Verantwortliche Stelle",
+        "content": "Verantwortlich (Art. 4 Nr. 7 DSGVO):\n\n [Krankenhausname, Anschrift] \n\n Datenschutzbeauftragte*r: \n\n [Kontakt (E-Mail/Telefon)]"
+    }
+  ],
+  "fullText": "Oder fügen Sie hier den kompletten ungefilterten Text ein, wenn Sie keine Abschnitte möchten. Dieser Text kann beliebig lang sein und unterstützt Zeilenumbrüche mit \\n\\n für Absätze."
+}
