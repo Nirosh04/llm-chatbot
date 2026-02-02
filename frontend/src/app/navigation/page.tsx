@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useState } from 'react';
+import { useTranslations } from 'next-intl';
 import {
   Select,
   MenuItem,
@@ -17,6 +18,9 @@ import { destinations } from './destinations';
 
 export default function NavigationPage() {
   const theme = useTheme();
+  const tNav = useTranslations('navigation');
+  const tDest = useTranslations('destinations');
+  
   // State to track the currently selected destination
   const [selectedDestination, setSelectedDestination] = useState<string>(
     destinations[0].id
@@ -71,15 +75,15 @@ export default function NavigationPage() {
       >
         {/* Starting point information */}
         <Typography variant="body2" sx={{ color: theme.palette.text.primary, fontSize: '0.9rem' }}>
-          📍 Startpunkt: Eingang Zentrale Notaufnahme Campus Charité Mitte
+          {tNav('startPoint')}
         </Typography>
 
         <FormControl sx={{ minWidth: 300 }}>
-          <InputLabel>Ziel auswählen</InputLabel>
+          <InputLabel>{tNav('selectDestination')}</InputLabel>
           {/* Dropdown selector for hospital destinations */}
           <Select
             value={selectedDestination}
-            label="Ziel auswählen"
+            label={tNav('selectDestination')}
             onChange={(e) => setSelectedDestination(e.target.value)}
             MenuProps={{
               PaperProps: {
@@ -92,7 +96,7 @@ export default function NavigationPage() {
             {/* Map available destinations to menu items */}
             {destinations.map((dest) => (
               <MenuItem key={dest.id} value={dest.id}>
-                {dest.label}
+                {tDest(dest.labelKey.split('.')[1])}
               </MenuItem>
             ))}
           </Select>
@@ -106,7 +110,7 @@ export default function NavigationPage() {
               onChange={(e) => setIsAccessible(e.target.checked)}
             />
           }
-          label="Barrierefrei"
+          label={tNav('barrierFree')}
         />
       </Box>
 

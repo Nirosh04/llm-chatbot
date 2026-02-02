@@ -9,6 +9,7 @@
   "tabs": {
     "chat": "Chat",
     "info": "Info",
+    "navigation": "Navigation",
     "settings": "Settings"
   },
   "chat": {
@@ -95,5 +96,17 @@
     "rightLeg": "Right Leg",
     "leftFoot": "Left Foot",
     "rightFoot": "Right Foot"
+  },
+  "navigation": {
+    "startPoint": "📍 Starting point: Central emergency entrance Campus Charité Mitte",
+    "selectDestination": "Select destination",
+    "barrierFree": "Barrier-free"
+  },
+  "destinations": {
+    "xray": "X-ray Diagnostics",
+    "intensiveCare": "Intensive Care",
+    "gynecology": "Gynecology",
+    "ent": "ENT",
+    "restroom": "Restroom"
   }
 }
