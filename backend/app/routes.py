@@ -13,6 +13,7 @@ from services.session_service import SessionService
 from services.ollama_service import OllamaService
 from database import DatabaseService
 import logging
+from datetime import datetime
 
 logger = logging.getLogger(__name__)
 
@@ -58,11 +59,14 @@ async def reset_conversation(session_id: str):
     """Reset conversation history for a session."""
     return await session_service.reset_session(session_id)
 
-# GET ".../api/sessions/{session_id}/summary"
-@session_router.get("/{session_id}/summary", response_model=FrontendSampler, response_model_by_alias=True)
+@session_router.get("/{session_id}/summary", response_model=SummaryResponse)
 async def generate_summary(session_id: str):
     """Generate a summary of the patient's anamnesis."""
-    return await session_service.fetch_user_sampler(session_id)
+    sampler = await session_service.fetch_user_sampler(session_id)
+    return {
+        "summary": sampler,
+        "created_at": datetime.now()
+    }
 
 # GET ".../health"
 @health_router.get("/health")

@@ -10,9 +10,9 @@ import privacyDetailsDE from '@/i18n/locales/privacyDetailsDE.json'
 import privacyDetailsEN from '@/i18n/locales/privacyDetailsEN.json'
 import Image from 'next/image'
 import imgFreiiwillig from '../../../assets/1_freiwillig.png'
-import imgAerzte from '../../../assets/2_Ärzte.png'
+import imgAerzte from '../../../assets/2_aerzte.png'
 import imgFilter from '../../../assets/3_filter.png'
-import imgGeschuetzt from '../../../assets/4_geschützt.png'
+import imgGeschuetzt from '../../../assets/4_geschuetzt.png'
 import imgSettings from '../../../assets/settings.png'
 import imgAktuelleBeschwerden from '../../../assets/aktuellebeschwerden1.png'
 import imgKrankengeschichte from '../../../assets/krankengeschichte1.png'
@@ -28,7 +28,7 @@ export default function WalkthroughClient({ initialStep }: Props) {
   const isMobile = useMediaQuery(theme.breakpoints.down('sm'))
   const { darkMode, toggleDarkMode, language } = useSettings()
   const t = useTranslations('walkthrough')
-  
+
   const privacyDetails = language === 'de' ? privacyDetailsDE : privacyDetailsEN
   // Reduce image size by ~20%
   const imageSize = isMobile ? 256 : 480
@@ -121,20 +121,20 @@ export default function WalkthroughClient({ initialStep }: Props) {
   }
 
   return (
-    <Box sx={{ 
-      minHeight: '100vh', 
-      display: 'flex', 
-      flexDirection: 'column', 
+    <Box sx={{
+      minHeight: '100vh',
+      display: 'flex',
+      flexDirection: 'column',
       pb: 10,
       overflowX: 'hidden',
       width: '100%'
     }}>
-      <Container maxWidth={false} sx={{ 
-        flex: 1, 
-        display: 'flex', 
-        alignItems: 'center', 
-        justifyContent: 'center', 
-        py: { xs: 4, sm: 6 }, 
+      <Container maxWidth={false} sx={{
+        flex: 1,
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        py: { xs: 4, sm: 6 },
         px: { xs: 2, sm: 3 }
       }}>
         <Stack spacing={{ xs: 2, sm: 3 }} sx={{ width: '100%', textAlign: 'center' }}>
@@ -146,20 +146,20 @@ export default function WalkthroughClient({ initialStep }: Props) {
           )}
 
           {/* Step 1: language, dark mode, font size */}
-              {step === 1 && (
-                <Box sx={{ mt: 2, display: 'flex', flexDirection: 'column', gap: 2, alignItems: 'center' }}>
-                  {/* Settings image below the step 1 text */}
-                  <Box sx={{ width: '100%' }}>
-                    <Image
-                      src={imgSettings}
-                      alt="settings"
-                      width={imageSize}
-                      height={imageSize}
-                      style={{ width: '100%', height: 'auto', display: 'block' }}
-                    />
-                  </Box>
-                </Box>
-              )}
+          {step === 1 && (
+            <Box sx={{ mt: 2, display: 'flex', flexDirection: 'column', gap: 2, alignItems: 'center' }}>
+              {/* Settings image below the step 1 text */}
+              <Box sx={{ width: '100%' }}>
+                <Image
+                  src={imgSettings}
+                  alt="settings"
+                  width={imageSize}
+                  height={imageSize}
+                  style={{ width: '100%', height: 'auto', display: 'block' }}
+                />
+              </Box>
+            </Box>
+          )}
 
           {/* Step 4: Aktuelle Beschwerden - use same rendering as step 1 (responsive image) */}
           {step === 4 && (
@@ -324,14 +324,14 @@ export default function WalkthroughClient({ initialStep }: Props) {
       </Container>
 
       {/* Footer: back (left), progress (center), next/start (right) */}
-      <Box sx={{ 
-        position: 'fixed', 
-        bottom: { xs: 8, sm: 16 }, 
-        left: { xs: 8, sm: 16 }, 
-        right: { xs: 8, sm: 16 }, 
+      <Box sx={{
+        position: 'fixed',
+        bottom: { xs: 8, sm: 16 },
+        left: { xs: 8, sm: 16 },
+        right: { xs: 8, sm: 16 },
         pb: 'env(safe-area-inset-bottom)', // Platz für Home Indicator
-        display: 'flex', 
-        alignItems: 'center', 
+        display: 'flex',
+        alignItems: 'center',
         justifyContent: 'space-between',
         flexWrap: { xs: 'wrap', sm: 'nowrap' },
         gap: { xs: 1, sm: 0 }
@@ -365,8 +365,8 @@ export default function WalkthroughClient({ initialStep }: Props) {
       </Box>
 
       {/* Details Dialog */}
-      <Dialog 
-        open={detailsOpen} 
+      <Dialog
+        open={detailsOpen}
         onClose={() => setDetailsOpen(false)}
         maxWidth="md"
         fullWidth

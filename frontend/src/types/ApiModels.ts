@@ -1,4 +1,6 @@
 
+import { HealthSummary } from './PatientMedicalData';
+
 // src/service/api_models.ts
 
 // Response types
@@ -15,6 +17,7 @@ export interface LLMResponse {
 }
 
 export interface SummaryResponse {
-  summary: string;
-  created_at: string;
+  summary: HealthSummary;
 }
+
+

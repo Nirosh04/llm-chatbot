@@ -118,7 +118,7 @@ export default function TabMain() {
     if (sliderOpen) {
       const painText = `${tChat('painLevel')}: ${painLevel}/10`;
       const painPattern = new RegExp(`${tChat('painLevel')}:\\s*\\d+/10`);
-      
+
       setInputText(prev => {
         if (painPattern.test(prev)) {
           // Replace existing pain level
@@ -141,7 +141,7 @@ export default function TabMain() {
         // Add or update body location
         const bodyText = `${label}: ${selectedBodyPart}`;
         const simplePattern = new RegExp(`${label}:\\s*[^|.,!?]+`);
-        
+
         setInputText(prev => {
           if (simplePattern.test(prev)) {
             // Replace existing location
@@ -160,9 +160,9 @@ export default function TabMain() {
 
   const handleSendMessage = async (message?: string) => {
     console.log('1. handleSendMessage called');
-    
+
     const messageToSend = message || inputText.trim();
-    
+
     if (!messageToSend || isLoading) {
       console.log('2. Early return - input empty or loading');
       return;
@@ -260,19 +260,23 @@ export default function TabMain() {
   };
 
   const loadHealthSummary = async () => {
-  let id = sessionId;
+    let id = sessionId;
 
-  if (!id) {
-    id = await createSession();
-    setSessionId(id);
-    console.log('[health] created session:', id);
-  }
+    if (!id) {
+      id = await createSession();
+      setSessionId(id);
+      console.log('[health] created session:', id);
+    }
 
-  const response = await getHealthSummary(id);
-  console.log('[health] summary received');
-
-  setHealthSummaryText(response.ai_summary);
-};
+    try {
+      const response = await getHealthSummary(id);
+      console.log('[health] summary received');
+      setHealthSummaryText(JSON.stringify(response, null, 2));
+    } catch (e: any) {
+      console.error('[health] error:', e.message);
+      setHealthSummaryText(`Error: ${e.message}`);
+    }
+  };
 
 
   const resetConversation = async () => {
@@ -334,14 +338,14 @@ export default function TabMain() {
                 }}
               >
                 <MessageList messages={messages} isLoading={isLoading} />
-              <div ref={messagesEndRef} />
+                <div ref={messagesEndRef} />
               </Box>
             </Container>
 
             {/* Input area */}
             <Box
               sx={{
-                padding: {xs: 0.5, sm: 1},
+                padding: { xs: 0.5, sm: 1 },
                 display: 'flex',
                 flexDirection: 'column',
                 gap: 1,
@@ -388,7 +392,7 @@ export default function TabMain() {
                       <Button
                         size="small"
                         onClick={handleSendPainLevel}
-                      disabled={isLoading}
+                        disabled={isLoading}
                         sx={{ textTransform: 'none' }}
                       >
                         {tChat('send')}
@@ -408,8 +412,8 @@ export default function TabMain() {
                       border: theme => `1px solid ${theme.palette.divider}`,
                     }}
                   >
-                    <BodyMap 
-                      onBodyPartSelect={handleBodyPartSelect} 
+                    <BodyMap
+                      onBodyPartSelect={handleBodyPartSelect}
                       highlightLocation={selectedBodyPart || undefined}
                     />
 
@@ -424,7 +428,7 @@ export default function TabMain() {
                       <Button
                         size="small"
                         onClick={handleSendBodyPart}
-                      disabled={isLoading || !selectedBodyPart}
+                        disabled={isLoading || !selectedBodyPart}
                         sx={{ textTransform: 'none' }}
                       >
                         {tChat('send')}
@@ -444,7 +448,7 @@ export default function TabMain() {
                     startIcon={<PainIcon />}
                     variant={sliderOpen ? 'contained' : 'outlined'}
                     size="small"
-                    sx={{ 
+                    sx={{
                       textTransform: 'none',
                       borderRadius: '20px',
                     }}
@@ -452,7 +456,7 @@ export default function TabMain() {
                     {tChat('painLevel')}
                   </Button>
                 </Tooltip>
-                
+
                 <Tooltip title={tChat('selectBodyPart')}>
                   <Button
                     onClick={() => {
@@ -461,7 +465,7 @@ export default function TabMain() {
                     startIcon={<BodyIcon />}
                     variant={bodyMapOpen ? 'contained' : 'outlined'}
                     size="small"
-                    sx={{ 
+                    sx={{
                       textTransform: 'none',
                       borderRadius: '20px',
                     }}
@@ -490,7 +494,7 @@ export default function TabMain() {
                     disabled={!inputText.trim() || isLoading}
                     sx={{
                       borderRadius: '20px',
-                      padding: {xs: '10px', sm: '12px' },
+                      padding: { xs: '10px', sm: '12px' },
                       backgroundColor: theme => theme.palette.primary.main,
                       '&:hover': {
                         backgroundColor: theme => theme.palette.primary.main,
@@ -498,7 +502,7 @@ export default function TabMain() {
                       },
                     }}
                   >
-                    <SendIcon sx={{ fontSize: { xs: '1.2rem', sm: '1.5rem' } }}/>
+                    <SendIcon sx={{ fontSize: { xs: '1.2rem', sm: '1.5rem' } }} />
                   </IconButton>
                 </Tooltip>
               </Box>
@@ -509,7 +513,7 @@ export default function TabMain() {
         {activeTab === 1 && (
           <SymptomsPage sessionId={sessionId} />
         )}
-        
+
         {activeTab === 2 && (
           <NavigationPage />
         )}
@@ -524,138 +528,138 @@ export default function TabMain() {
                 alignItems: 'center',
               }}
             >
-            <List
-            sx={{
-              width: '100%',
-              maxWidth: 600,
-              display: 'flex',
-              flexDirection: 'column',
-              alignItems: 'center', // centers all ListItems horizontally
-              gap: 1,               // optional: space between items
-              '& .MuiListItemText-primary': {
-                fontSize: `${fontSize}px`,
-              },
-              '& .MuiMenuItem-root': {
-                fontSize: `${fontSize}px`,
-              },
-            }}>
+              <List
+                sx={{
+                  width: '100%',
+                  maxWidth: 600,
+                  display: 'flex',
+                  flexDirection: 'column',
+                  alignItems: 'center', // centers all ListItems horizontally
+                  gap: 1,               // optional: space between items
+                  '& .MuiListItemText-primary': {
+                    fontSize: `${fontSize}px`,
+                  },
+                  '& .MuiMenuItem-root': {
+                    fontSize: `${fontSize}px`,
+                  },
+                }}>
 
-          {/* Language Selector */}
-          <ListItem>
-            <ListItemText primary={tSettings('language')} />
-            <Select value={language} onChange={e => setLanguage(e.target.value)} sx={{ minWidth: 100 }}>
-              <MenuItem value="de">{tSettings('german')}</MenuItem>
-              <MenuItem value="en">{tSettings('english')}</MenuItem>
-            </Select>
-          </ListItem>
+                {/* Language Selector */}
+                <ListItem>
+                  <ListItemText primary={tSettings('language')} />
+                  <Select value={language} onChange={e => setLanguage(e.target.value)} sx={{ minWidth: 100 }}>
+                    <MenuItem value="de">{tSettings('german')}</MenuItem>
+                    <MenuItem value="en">{tSettings('english')}</MenuItem>
+                  </Select>
+                </ListItem>
 
-          {/* Font size slider */}
-          <ListItem sx={{ width: '100%', flexDirection: 'column', alignItems: 'stretch' }}>
-            <Box sx={{ width: '100%' }}>
-              <Box sx={{ display: 'flex', justifyContent: 'flex-start' }}>
-                <ListItemText primary={tSettings('selectFontSize')} />
-              </Box>
-              <Box sx={{ px: 3, mt: 1 }}>
-                <Slider
-                  min={12}
-                  max={20}
-                  step={2}
-                  marks={[
-                    { value: 12, label: tSettings('verySmall') },
-                    { value: 14, label: tSettings('small') },
-                    { value: 16, label: tSettings('medium') },
-                    { value: 18, label: tSettings('large') },
-                    { value: 20, label: tSettings('veryLarge') }
-                  ]}
-                  value={fontSize}
-                  onChange={(_, v) => setFontSize(Array.isArray(v) ? v[0] : v)}
-                  sx={{ 
-                    width: '100%',
-                    mb: 2,
-                    '& .MuiSlider-markLabel': {
-                      fontSize: theme.typography.pxToRem(fontSize * 0.75),
-                      whiteSpace: 'normal',
-                      width: '60px',
-                      textAlign: 'center',
-                      color: theme.palette.primary.main
-                    },
-                    '& .MuiSlider-markLabelActive': {
-                      color: theme.palette.primary.main
-                    },
-                    [`& .MuiSlider-markLabel[data-index="${(fontSize - 12) / 2}"]`]: {
-                      color: theme.palette.text.primary
-                    }
-                  }}
-                />
-              </Box>
-            </Box>
-          </ListItem>
+                {/* Font size slider */}
+                <ListItem sx={{ width: '100%', flexDirection: 'column', alignItems: 'stretch' }}>
+                  <Box sx={{ width: '100%' }}>
+                    <Box sx={{ display: 'flex', justifyContent: 'flex-start' }}>
+                      <ListItemText primary={tSettings('selectFontSize')} />
+                    </Box>
+                    <Box sx={{ px: 3, mt: 1 }}>
+                      <Slider
+                        min={12}
+                        max={20}
+                        step={2}
+                        marks={[
+                          { value: 12, label: tSettings('verySmall') },
+                          { value: 14, label: tSettings('small') },
+                          { value: 16, label: tSettings('medium') },
+                          { value: 18, label: tSettings('large') },
+                          { value: 20, label: tSettings('veryLarge') }
+                        ]}
+                        value={fontSize}
+                        onChange={(_, v) => setFontSize(Array.isArray(v) ? v[0] : v)}
+                        sx={{
+                          width: '100%',
+                          mb: 2,
+                          '& .MuiSlider-markLabel': {
+                            fontSize: theme.typography.pxToRem(fontSize * 0.75),
+                            whiteSpace: 'normal',
+                            width: '60px',
+                            textAlign: 'center',
+                            color: theme.palette.primary.main
+                          },
+                          '& .MuiSlider-markLabelActive': {
+                            color: theme.palette.primary.main
+                          },
+                          [`& .MuiSlider-markLabel[data-index="${(fontSize - 12) / 2}"]`]: {
+                            color: theme.palette.text.primary
+                          }
+                        }}
+                      />
+                    </Box>
+                  </Box>
+                </ListItem>
 
 
-          {/* Dark Mode Toggle */}
-          <ListItem>
-            <ListItemText primary={tSettings('darkMode')} />
-            <Switch checked={darkMode} onChange={toggleDarkMode} />
-          </ListItem>
-  
+                {/* Dark Mode Toggle */}
+                <ListItem>
+                  <ListItemText primary={tSettings('darkMode')} />
+                  <Switch checked={darkMode} onChange={toggleDarkMode} />
+                </ListItem>
 
-          {/* Test - Create Session */}
-          <ListItem>
-            <Button
-              onClick={async () => {
-                const newSessionId = await createSession();
-                console.log ('Session created:', newSessionId);
-                setSessionId(newSessionId);
-              }}
-            >
-              <ListItemIcon>
-                <HomeIcon />
-              </ListItemIcon>
-              <ListItemText primary="Test - Create session" />
-            </Button>
-          </ListItem>
 
-          {/* Test - Health Summary */}
-          <ListItem>
-            <Button onClick={loadHealthSummary}>
-              <ListItemIcon>
-                <HomeIcon />
-              </ListItemIcon>
-              <ListItemText primary="Test health summary" />
-            </Button>
-          </ListItem>
+                {/* Test - Create Session */}
+                <ListItem>
+                  <Button
+                    onClick={async () => {
+                      const newSessionId = await createSession();
+                      console.log('Session created:', newSessionId);
+                      setSessionId(newSessionId);
+                    }}
+                  >
+                    <ListItemIcon>
+                      <HomeIcon />
+                    </ListItemIcon>
+                    <ListItemText primary="Test - Create session" />
+                  </Button>
+                </ListItem>
 
-          {/* Test - Reset Conversation */}
-          <ListItem>
-            <Button onClick={resetConversation}>
-              <ListItemIcon>
-                <HomeIcon />
-              </ListItemIcon>
-              <ListItemText primary="Test Reset conversation" />
-            </Button>
-          </ListItem>
+                {/* Test - Health Summary */}
+                <ListItem>
+                  <Button onClick={loadHealthSummary}>
+                    <ListItemIcon>
+                      <HomeIcon />
+                    </ListItemIcon>
+                    <ListItemText primary="Test health summary" />
+                  </Button>
+                </ListItem>
 
-          {/* Profile */}
-          <ListItem>
-            <Button>
-              <ListItemIcon>
-                <PersonIcon />
-              </ListItemIcon>
-              <ListItemText primary="Profile" />
-            </Button>
-          </ListItem>
+                {/* Test - Reset Conversation */}
+                <ListItem>
+                  <Button onClick={resetConversation}>
+                    <ListItemIcon>
+                      <HomeIcon />
+                    </ListItemIcon>
+                    <ListItemText primary="Test Reset conversation" />
+                  </Button>
+                </ListItem>
 
-          {/* Logout */}
-          <ListItem>
-            <Button onClick={() => setLogoutOpen(true)}>
-              <ListItemIcon>
-                <LogoutIcon />
-              </ListItemIcon>
-              <ListItemText primary={tSettings('logout')} />
-            </Button>
-          </ListItem>
-        </List>
-      
+                {/* Profile */}
+                <ListItem>
+                  <Button>
+                    <ListItemIcon>
+                      <PersonIcon />
+                    </ListItemIcon>
+                    <ListItemText primary="Profile" />
+                  </Button>
+                </ListItem>
+
+                {/* Logout */}
+                <ListItem>
+                  <Button onClick={() => setLogoutOpen(true)}>
+                    <ListItemIcon>
+                      <LogoutIcon />
+                    </ListItemIcon>
+                    <ListItemText primary={tSettings('logout')} />
+                  </Button>
+                </ListItem>
+              </List>
+
             </Box>
           </Container>
         )}
@@ -665,7 +669,7 @@ export default function TabMain() {
 
   return (
     <Box sx={{ display: 'flex', height: '100vh', overflow: 'hidden' }}>
-      
+
       {/* Main Content */}
       <Box sx={{ flex: 1, display: 'flex', flexDirection: 'column', minHeight: 0 }}>
         {/* AppBar */}
@@ -677,7 +681,7 @@ export default function TabMain() {
             flexShrink: 0, // Prevent AppBar from shrinking
           }}
         >
-          
+
           {/* Tabs */}
           <Tabs
             value={activeTab}
@@ -713,41 +717,41 @@ export default function TabMain() {
               },
             }}
           >
-            <Tab 
-              icon={<ChatIcon />} 
-              label={tTabs('chat')} 
-              sx={{ 
+            <Tab
+              icon={<ChatIcon />}
+              label={tTabs('chat')}
+              sx={{
                 '& .MuiTab-iconWrapper': { mb: 0.5 },
                 hyphens: 'auto',
-              }} 
-              lang="de" 
-            />
-            <Tab 
-              icon={<PersonIcon />} 
-              label={tTabs('info')} 
-              sx={{ 
-                '& .MuiTab-iconWrapper': { mb: 0.5 },
-                hyphens: 'auto',
-              }} 
-              lang="de" 
-            />
-            <Tab 
-              icon={<NavigationIcon />} 
-              label={tTabs('navigation')} 
-              sx={{ 
-                '& .MuiTab-iconWrapper': { mb: 0.5 },
-                hyphens: 'auto',
-              }} 
+              }}
               lang="de"
             />
-            <Tab 
-              icon={<SettingsIcon />} 
-              label={tTabs('settings')} 
-              sx={{ 
+            <Tab
+              icon={<PersonIcon />}
+              label={tTabs('info')}
+              sx={{
                 '& .MuiTab-iconWrapper': { mb: 0.5 },
                 hyphens: 'auto',
-              }} 
-              lang="de" 
+              }}
+              lang="de"
+            />
+            <Tab
+              icon={<NavigationIcon />}
+              label={tTabs('navigation')}
+              sx={{
+                '& .MuiTab-iconWrapper': { mb: 0.5 },
+                hyphens: 'auto',
+              }}
+              lang="de"
+            />
+            <Tab
+              icon={<SettingsIcon />}
+              label={tTabs('settings')}
+              sx={{
+                '& .MuiTab-iconWrapper': { mb: 0.5 },
+                hyphens: 'auto',
+              }}
+              lang="de"
             />
           </Tabs>
         </AppBar>

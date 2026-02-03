@@ -5,6 +5,7 @@ import {
   LLMResponse,
   SummaryResponse,
 } from '@/types/ApiModels';
+import { HealthSummary } from '@/types/PatientMedicalData';
 
 // Get API base URL from environment variable or use default
 const API_BASE_URL = 'http://127.0.0.1:5000';
@@ -90,32 +91,28 @@ export const getLLMResponseFromServer = async (
 /**
  * Get health summary for a session
  * @param sessionId - The session ID
- * @returns Object containing summary and creation timestamp
+ * @returns Object containing the health summary
  */
 export const getHealthSummary = async (
   sessionId: string | null
-): Promise<{ ai_summary: string; created_at: string }> => {
+): Promise<HealthSummary> => {
   try {
     const response = await fetch(`${API_BASE_URL}/api/sessions/${sessionId}/summary`);
+
+    if (!response.ok) {
+      if (response.status === 404) {
+        throw new Error(`Session not found. Status code: ${response.status}`);
+      }
+      if (response.status === 400) {
+        throw new Error(`No messages in session to summarize. Status code: ${response.status}`);
+      }
+      throw new Error(`Failed to fetch session summary. Status code: ${response.status}`);
+    }
+
     const data: SummaryResponse = await response.json();
-
-    if (response.status === 200) {
-      return {
-        ai_summary: data.summary || '',
-        created_at: data.created_at || '',
-      };
-    }
-
-    if (response.status === 404) {
-      throw new Error(`Session not found. Status code: ${response.status}`);
-    }
-    if (response.status === 400) {
-      throw new Error(`No messages in session to summarize. Status code: ${response.status}`);
-    }
-
-    throw new Error(`Failed to fetch session summary. Status code: ${response.status}`);
+    return data.summary;
   } catch (error: any) {
-    console.log('Error in getSessionSummary:', error.message);
+    console.log('Error in getHealthSummary:', error.message);
     throw error;
   }
 };
@@ -150,7 +147,7 @@ export const dummyGetLLMResponseFromServer = async (
 ): Promise<{ ai_response: string }> => {
   // Wait for 2 seconds to simulate API delay
   await new Promise(resolve => setTimeout(resolve, 2000));
-  
+
   // Return Lorem Ipsum text (approx 20 words)
-  return { ai_response: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim."};
+  return { ai_response: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim." };
 };
