@@ -1,5 +1,6 @@
 from fastapi import APIRouter, Depends, HTTPException
 from services.states.sampler_state import SamplerState
+from services.states.frontend_sampler import FrontendSampler
 from models import (
     Message,
     ResetResponse, 
@@ -58,7 +59,7 @@ async def reset_conversation(session_id: str):
     return await session_service.reset_session(session_id)
 
 # GET ".../api/sessions/{session_id}/summary"
-@session_router.get("/{session_id}/summary", response_model=SamplerState)
+@session_router.get("/{session_id}/summary", response_model=FrontendSampler, response_model_by_alias=True)
 async def generate_summary(session_id: str):
     """Generate a summary of the patient's anamnesis."""
     return await session_service.fetch_user_sampler(session_id)
