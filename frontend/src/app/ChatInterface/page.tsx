@@ -1,4 +1,3 @@
-
 // app/ChatInterface/page.tsx - Main page w tabs
 
 "use client";
@@ -185,35 +184,37 @@ export default function TabMain() {
     setIsLoading(true);
     console.log('4. Loading set to true');
 
-    let currentSessionId = sessionId; // get current sessionId
-    if (!currentSessionId) {
-      console.log('5. Creating new session');
-      //currentSessionId = '1111111';  // Dummy ID
-      currentSessionId = await createSession();
-      setSessionId(currentSessionId);
+    try {
+      let currentSessionId = sessionId;
+      if (!currentSessionId) {
+        console.log('5. Creating new session');
+        currentSessionId = await createSession();
+        setSessionId(currentSessionId);
+      }
+
+      console.log('6. Calling getLLMResponseFromServer (JSON)');
+      const response = await getLLMResponseFromServer(currentSessionId, newMessage.text);
+
+      console.log('7. Got response:', response);
+
+      const aiMessage: ChatMessage = {
+        id: (Date.now() + 1).toString(),
+        text: response.ai_response,
+        isMe: false,
+      };
+
+      console.log('8. Adding AI message');
+      setMessages((prev: ChatMessage[]) => [...prev, aiMessage]);
+    } catch (e: any) {
+      const msg = e?.message || 'Unbekannter Fehler beim Abrufen der Antwort.';
+      setMessages((prev: ChatMessage[]) => [
+        ...prev,
+        { id: (Date.now() + 1).toString(), text: `Fehler: ${msg}`, isMe: false },
+      ]);
+    } finally {
+      setIsLoading(false);
+      console.log('10. Loading set to false');
     }
-
-    console.log('6. Calling (dummy)GetLLMResponseFromServer');
-    const response = await getLLMResponseFromServer(
-      currentSessionId,
-      newMessage.text
-    );
-    
-    console.log('7. Got response:', response);
-
-    const aiMessage: ChatMessage = {
-      id: (Date.now() + 1).toString(),
-      text: response.ai_response,
-      isMe: false,
-    };
-
-    console.log('8. Adding AI message');
-    setMessages(prev => {
-      console.log('9. Current messages before adding AI:', prev);
-      return [...prev, aiMessage];
-    });
-    setIsLoading(false);
-    console.log('10. Loading set to false');
   };
 
 

@@ -1,4 +1,5 @@
 from fastapi import APIRouter, Depends, HTTPException
+from services.states.sampler_state import SamplerState
 from models import (
     Message,
     ResetResponse, 
@@ -31,18 +32,11 @@ async def create_session():
     session_id = session_service.create_session()
     return {"session_id": session_id}
 
-# TODO: Change "get-llm-response" in the frontend and then change
-# POST ".../api/sessions/{session_id}/message"
+# JSON default (non-streaming)
 @session_router.post("/{session_id}/get-llm-response", response_model=ModelReply)
-async def send_message(
-    session_id: str,
-    message: Message
-):
-    """Send patient message and receive AI reply from Ollama."""
-    result = await session_service.process_message(
-        session_id, 
-        message.content, 
-    )
+async def send_message(session_id: str, message: Message):
+    """Send patient message and receive AI reply as JSON."""
+    result = await session_service.process_message(session_id, message.content)
     return result
 
 # GET ".../api/sessions/{session_id}"
@@ -64,10 +58,10 @@ async def reset_conversation(session_id: str):
     return await session_service.reset_session(session_id)
 
 # GET ".../api/sessions/{session_id}/summary"
-@session_router.get("/{session_id}/summary", response_model=SummaryResponse)
+@session_router.get("/{session_id}/summary", response_model=SamplerState)
 async def generate_summary(session_id: str):
     """Generate a summary of the patient's anamnesis."""
-    return await session_service.generate_summary(session_id)
+    return await session_service.fetch_user_sampler(session_id)
 
 # GET ".../health"
 @health_router.get("/health")

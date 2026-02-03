@@ -1,191 +1,113 @@
 import uuid
 import logging
-from fastapi import HTTPException
 from typing import Dict
-from database import DatabaseService
-from services.ollama_service import OllamaService
-from services.vector_service import VectorService
-from settings import settings
+from fastapi import HTTPException
+from services.states.sampler_state import SamplerState
 from services.agent_graph_service import app as agent_app
 
 logger = logging.getLogger(__name__)
 
 class SessionService:
-    """Service for managing patient sessions."""
-    
-    def __init__(self):
-        self.db = DatabaseService()
-        self.model = OllamaService()
-        self.vector = VectorService()
+    """
+    DB-free session service.
+    LangGraph memory (thread_id) is the single source of truth.
+    """
 
-    
     def create_session(self) -> str:
-        """Create a new patient session."""
-        try:
-            session_id = str(uuid.uuid4())
-            self.db.create_session(session_id)
-            logger.info(f"Created new session: {session_id}")
+        session_id = str(uuid.uuid4())
+        logger.info(f"Created new session: {session_id}")
+        return session_id
 
-            return session_id
-        except Exception as e:
-            logger.error(f"Error creating session: {e}")
-            raise HTTPException(
-                status_code=500, 
-                detail="Failed to create session"
-            )
-    
     async def process_message(
-        self, 
-        session_id: str, 
+        self,
+        session_id: str,
         message_content: str
     ) -> Dict:
         """
-        Process a user message and get AI response.
-        Args:
-            session_id: The session ID
-            message_content: User's message content
-        Returns:
-            Dict with reply, model, and tokens_used
+        Process ONE user turn.
+        Exactly one assistant message is returned.
         """
         try:
-            # Validate session exists
-            if not self.db.session_exists(session_id):
-                raise HTTPException(
-                    status_code=404, 
-                    detail="Session not found"
-                )
-            self.db.save_message(session_id, message_content, is_ai=False)
-            history = self.db.get_conversation_history(
-                session_id, 
-                limit=settings.CONVERSATION.MAX_HISTORY
-            )
-            # ai_result = await self.model.chat(history)
-
-            config = {"configurable": {"thread_id": session_id}}
-    
             input_state = {
-                "messages": [{"role": "user", "content": message_content}] 
+                "messages": [{"role": "user", "content": message_content}],
+                "has_extracted_this_turn": False,
+            }
+
+            config = {
+                "configurable": {
+                    "thread_id": session_id  # LangGraph memory key
+                }
             }
 
             ai_result = await agent_app.ainvoke(input_state, config=config)
-            # ai_response = ai_result["content"]
             logger.info("AI result: %s", ai_result)
-            ai_response = ai_result["messages"][-1]['content']
-            self.db.save_message(session_id, ai_response, is_ai=True)
-            self.db.update_session_timestamp(session_id)
-            logger.info(
-                f"Processed message for session: {session_id} "
-            )
-            return {
-                "reply": ai_response,
-                "tokens_used": ai_result.get("tokens")
-            }
-        except HTTPException:
-            raise
-        except Exception as e:
-            logger.error(f"Error processing message: {e}")
-            raise HTTPException(
-                status_code=500, 
-                detail="Failed to process message"
-            )
-    
-    def get_session_details(self, session_id: str) -> Dict:
-        """Get session details with all messages."""
-        try:
-            session_data = self.db.get_session_details(session_id)
-            if not session_data:
-                raise HTTPException(
-                    status_code=404, 
-                    detail="Session not found"
-                )
-            return {
-                "session_id": session_data["session_id"],
-                "messages": [
-                    {
-                        "id": str(msg["id"]),
-                        "content": msg["content"],
-                        "is_ai": msg["is_ai"],
-                        "created_at": msg["created_at"]
-                    }
-                    for msg in session_data["messages"]
+
+            response = {}
+
+            type = ai_result.get("message_type", "medical")
+            if type == "navigation":
+                response['reply'] = ai_result.get("navigation_message", "Here is some navigation info.")
+                response['navigation'] = True
+            elif type == "offtopic":
+                response['reply'] = ai_result.get("offtopic_message", "Let's talk about something else.")
+            else: 
+                messages = ai_result.get("messages", [])
+                assistant_msgs = [
+                    m for m in messages if m.get("role") == "assistant"
                 ]
-            }
-        except HTTPException:
-            raise
+
+                if not assistant_msgs:
+                    raise RuntimeError("No assistant message produced")
+
+                # Exactly one assistant message per turn (invariant)
+                response['reply'] = assistant_msgs[-1]["content"]
+
+            return response
         except Exception as e:
-            logger.error(f"Error retrieving session: {e}")
+            logger.exception("Error processing message")
             raise HTTPException(
-                status_code=500, 
-                detail="Failed to retrieve session"
+                status_code=500,
+                detail=str(e),
             )
     
-    def delete_session(self, session_id: str) -> Dict:
-        """Delete a session."""
+    async def fetch_user_sampler(self, session_id: str) -> SamplerState:
+        """
+        Fetch the current user's SamplerState data directly from memory 
+        without triggering the agents.
+        """
+        logger.info(f"Fetching sampler data for session: {session_id}")
+
         try:
-            affected_rows = self.db.delete_session(session_id)
-            if affected_rows == 0:
-                raise HTTPException(
-                    status_code=404, 
-                    detail="Session not found"
-                )
-            logger.info(f"Deleted session: {session_id}")
-            return {"deleted": True, "session_id": session_id}
-        except HTTPException:
-            raise
+            config = {
+                "configurable": {
+                    "thread_id": session_id
+                }
+            }
+
+            state_snapshot = await agent_app.aget_state(config)
+            
+            logger.info(f"State snapshot: {state_snapshot}")
+
+            current_values = state_snapshot.values
+            
+            sampler_data = current_values.get("sampler_data", {})
+                
+            return sampler_data
+
         except Exception as e:
-            logger.error(f"Error deleting session: {e}")
+            logger.exception("Error fetching sampler data")
             raise HTTPException(
-                status_code=500, 
-                detail="Failed to delete session"
+                status_code=500,
+                detail=str(e),
             )
-    
+
     async def reset_session(self, session_id: str) -> Dict:
-        """Reset conversation history for a session."""
-        try:
-            if not self.db.session_exists(session_id):
-                raise HTTPException(
-                    status_code=404, 
-                    detail="Session not found"
-                )
-            self.db.clear_messages(session_id)
-            logger.info(f"Reset session: {session_id}")
-            return {
-                "reset": True,
-                "session_id": session_id,
-                "message": "Conversation history has been reset."
-            }
-        except HTTPException:
-            raise
-        except Exception as e:
-            logger.error(f"Error resetting session: {e}")
-            raise HTTPException(
-                status_code=500, 
-                detail="Failed to reset session"
-            )
-        
-    async def generate_summary(self, session_id: str) -> Dict:
-        """Generate a summary of the patient's anamnesis."""
-        try:
-            if not self.db.session_exists(session_id):
-                raise HTTPException(
-                    status_code=404, 
-                    detail="Session not found"
-                )
-            messages = self.db.get_conversation_history(
-                session_id,
-                limit=settings.CONVERSATION.MAX_HISTORY
-            )
-            summary_result = await self.model.summarize(messages)
-            logger.info(f"Generated summary for session: {session_id}")
-            return {
-                "summary": summary_result["summary"],
-                "created_at": summary_result["created_at"]
-            }
-        except HTTPException:
-            raise
-        except Exception as e:
-            logger.error(f"Error generating summary: {e}")
-            raise HTTPException(
-                status_code=500, 
-                detail="Failed to generate summary"
-            )
+        """
+        Reset = forget the thread.
+        MemorySaver clears automatically when thread_id changes.
+        """
+        logger.info(f"Reset session: {session_id}")
+        return {
+            "reset": True,
+            "session_id": session_id,
+        }

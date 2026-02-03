@@ -10,6 +10,7 @@ class SessionResponse(BaseModel):
 
 class ModelReply(BaseModel):
     reply: str
+    navigation: Optional[bool] = False
     tokens_used: Optional[int] = None
 
 class MessageResponse(BaseModel):

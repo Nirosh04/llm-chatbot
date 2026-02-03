@@ -1,26 +1,103 @@
 from datetime import datetime, timezone
 import httpx
-from typing import List, Dict
+from typing import List, Dict, AsyncIterator
 from fastapi import HTTPException
+from fastapi.responses import StreamingResponse
 import logging
+import json
 from settings import settings
 
 logger = logging.getLogger(__name__)
 
 class OllamaService:
-    """Service for interacting with Ollama API."""        
-    
+    """Service for interacting with Ollama API."""
+
+    async def _stream_chat_request(self, payload: Dict) -> AsyncIterator[str]:
+        """Internal: streams Ollama /api/chat JSON-lines as SSE token events."""
+        try:
+            async with httpx.AsyncClient(timeout=settings.OLLAMA.TIMEOUT) as client:
+                async with client.stream(
+                    "POST",
+                    f"{settings.OLLAMA.URL}/api/chat",
+                    json=payload,
+                ) as response:
+                    if response.status_code != 200:
+                        body = await response.aread()
+                        logger.error("Ollama stream error: %s", body.decode("utf-8", "ignore"))
+                        raise HTTPException(status_code=500, detail="Ollama API error")
+
+                    async for line in response.aiter_lines():
+                        if not line:
+                            continue
+                        try:
+                            ev = json.loads(line)
+                        except Exception:
+                            continue
+
+                        token = (ev.get("message") or {}).get("content")
+                        if token:
+                            yield f"data: {token}\n\n"
+
+                        if ev.get("done") is True:
+                            break
+        except httpx.TimeoutException:
+            logger.error("Ollama stream timeout")
+            raise HTTPException(status_code=504, detail="AI model timeout")
+
+    def stream_invoke(self, message: str, format: dict = None) -> StreamingResponse:
+        """Public: stream a single user message via SSE."""
+        payload = {
+            "model": settings.OLLAMA.MODEL,
+            "messages": [{"role": "user", "content": message}],
+            "stream": True,
+            "options": {
+                "temperature": settings.OLLAMA.TEMPERATURE,
+                "num_predict": settings.OLLAMA.MAX_TOKENS,
+            },
+        }
+        if format is not None:
+            payload["format"] = format
+
+        return StreamingResponse(
+            self._stream_chat_request(payload),
+            media_type="text/event-stream",
+            headers={
+                "Cache-Control": "no-cache",
+                "Connection": "keep-alive",
+                "X-Accel-Buffering": "no",
+            },
+        )
+
     async def chat(
-        self, 
-        messages: List[Dict[str, str]]
-    ) -> Dict[str, any]:
+        self,
+        messages: List[Dict[str, str]],
+        stream: bool = False,
+    ):
         """
         Send a chat request to Ollama.
-        Args:
-            messages: List of conversation messages
-        Returns:
-            Dict with content, model, and token count
+
+        If stream=True, returns a StreamingResponse (SSE).
         """
+        if stream:
+            payload = {
+                "model": settings.OLLAMA.MODEL,
+                "messages": [{"role": "system", "content": settings.OLLAMA.PROMPT}, *messages],
+                "stream": True,
+                "options": {
+                    "temperature": settings.OLLAMA.TEMPERATURE,
+                    "num_predict": settings.OLLAMA.MAX_TOKENS,
+                },
+            }
+            return StreamingResponse(
+                self._stream_chat_request(payload),
+                media_type="text/event-stream",
+                headers={
+                    "Cache-Control": "no-cache",
+                    "Connection": "keep-alive",
+                    "X-Accel-Buffering": "no",
+                },
+            )
+
         try:
             async with httpx.AsyncClient(timeout=settings.OLLAMA.TIMEOUT) as client:
                 ollama_messages = [
@@ -67,20 +144,32 @@ class OllamaService:
             )
     
     async def invoke(
-        self, 
+        self,
+        prompt: str,
         message: str,
-        format: dict = None
-    ) -> Dict[str, any]:
+        format: dict = None,
+        stream: bool = False,
+    ):
         """
         Send a single chat request to Ollama.
-        Args:
-            message: Single message
-        Returns:
-            Dict with content, model, and token count
+
+        If stream=True, returns a StreamingResponse (SSE).
         """
+        if stream:
+            return self.stream_invoke(message, format=format)
+
         try:
             async with httpx.AsyncClient(timeout=settings.OLLAMA.TIMEOUT) as client:
-                ollama_messages = [{"role": "user", "content": message}]
+                ollama_messages = [
+                    {
+                        "role": "system",
+                        "content": prompt
+                    },
+                    {
+                        "role": "user",
+                        "content": message
+                    }
+                ]
                 payload = {
                     "model": settings.OLLAMA.MODEL,
                     "messages": ollama_messages,
@@ -94,6 +183,8 @@ class OllamaService:
                 if format is not None:
                     payload["format"] = format
 
+                logger.info(f"\n\nOllama invoke payload: {payload}")
+
                 response = await client.post(
                     f"{settings.OLLAMA.URL}/api/chat",
                     json=payload
@@ -104,7 +195,10 @@ class OllamaService:
                         status_code=500, 
                         detail="Ollama API error"
                     )
+                
+                
                 result = response.json()
+                logger.info(f"Ollama actual response: {result}\n\n")
                 return {
                     "content": result["message"]["content"],
                     "tokens": result.get("eval_count", 0)
@@ -153,7 +247,7 @@ class OllamaService:
                     "stream": False,
                     "options": {
                         "temperature": settings.OLLAMA.SUMMARY_TEMPERATURE,
-                        "num_predict": settings.OLLAMA.MAX_TOKENS
+                        "num_predict": min(settings.OLLAMA.MAX_TOKENS, 2048)
                     }
                 }
                 response = await client.post(

@@ -36,11 +36,15 @@ class Settings(BaseModel):
         URL: str = os.getenv("OLLAMA_HOST","http://localhost:11434")
         MODEL: str = os.getenv("OLLAMA_MODEL","llama3.2")
         PROMPT: str = Prompts.SYSTEM_PROMPT_3
-        TEMPERATURE: float = 0.7
-        MAX_TOKENS: int = 100000
-        TIMEOUT: float = 3600.0
+        TEMPERATURE: float = float(os.getenv("OLLAMA_TEMPERATURE", "0.7"))
+
+        # NOTE: Die bisherigen Defaults (100000 Tokens / 3600s) führen oft zu "hängt ewig".
+        # Diese Defaults sind bewusst konservativer und können über ENV überschrieben werden.
+        MAX_TOKENS: int = int(os.getenv("OLLAMA_MAX_TOKENS", "1024"))
+        TIMEOUT: float = float(os.getenv("OLLAMA_TIMEOUT", "120"))
+
         SUMMARY_PROMPT: str = Prompts.SUMMARY_PROMPT_1
-        SUMMARY_TEMPERATURE: float = 0.5
+        SUMMARY_TEMPERATURE: float = float(os.getenv("OLLAMA_SUMMARY_TEMPERATURE", "0.5"))
 
     # ------------------------------------------------------------
     # SSH Tunnel
@@ -61,14 +65,6 @@ class Settings(BaseModel):
     class Conversation(BaseModel):
         MAX_HISTORY: int = 20
 
-    # ------------------------------------------------------------
-    # Qdrant
-    # ------------------------------------------------------------
-    class Qdrant(BaseModel):
-        VECTOR_SIZE: int = 384
-        HOST: str = os.getenv("QDRANT_HOST", "qdrant")
-        PORT: int = int(os.getenv("QDRANT_PORT", "6333"))
-
     # Instantiate subsections
     DEPLOYMENT: Deployment = Deployment()
     DATABASE: Database = Database()
@@ -76,6 +72,5 @@ class Settings(BaseModel):
     OLLAMA: Ollama = Ollama()
     CONVERSATION: Conversation = Conversation()
     SSH: Ssh = Ssh()
-    QDRANT: Qdrant = Qdrant()
 
 settings = Settings()
