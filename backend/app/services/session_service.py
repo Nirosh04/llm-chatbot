@@ -4,6 +4,7 @@ from typing import Dict
 from fastapi import HTTPException
 from services.states.sampler_state import SamplerState
 from services.agent_graph_service import app as agent_app
+from services.states.frontend_sampler import convert_mid_to_frontend_sampler, FrontendSampler
 
 logger = logging.getLogger(__name__)
 
@@ -61,7 +62,6 @@ class SessionService:
 
                 # Exactly one assistant message per turn (invariant)
                 response['reply'] = assistant_msgs[-1]["content"]
-
             return response
         except Exception as e:
             logger.exception("Error processing message")
@@ -70,7 +70,7 @@ class SessionService:
                 detail=str(e),
             )
     
-    async def fetch_user_sampler(self, session_id: str) -> SamplerState:
+    async def fetch_user_sampler(self, session_id: str) -> FrontendSampler:
         """
         Fetch the current user's SamplerState data directly from memory 
         without triggering the agents.
@@ -88,11 +88,13 @@ class SessionService:
             
             logger.info(f"State snapshot: {state_snapshot}")
 
-            current_values = state_snapshot.values
+            current_values = state_snapshot.values if state_snapshot else {}
             
             sampler_data = current_values.get("sampler_data", {})
                 
-            return sampler_data
+            converted_data = convert_mid_to_frontend_sampler(sampler_data)
+                
+            return converted_data
 
         except Exception as e:
             logger.exception("Error fetching sampler data")

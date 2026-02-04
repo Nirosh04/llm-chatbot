@@ -1,6 +1,7 @@
+from services.states.frontend_sampler import FrontendSampler
 from pydantic import BaseModel
 from datetime import datetime
-from typing import List, Optional
+from typing import List, Optional, Union
 
 class Message(BaseModel):
     content: str
@@ -33,5 +34,5 @@ class ResetResponse(BaseModel):
     message: str
 
 class SummaryResponse(BaseModel):
-    summary: str
+    summary: Optional[Union[FrontendSampler, str]] = None
     created_at: datetime

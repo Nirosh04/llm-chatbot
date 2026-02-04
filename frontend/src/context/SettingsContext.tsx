@@ -25,8 +25,9 @@ export const SettingsProvider = ({ children }: { children: ReactNode }) => {
 
   // Load translations for a given language
   const loadTranslations = async (lang: string) => {
+    const lowerLang = lang.toLowerCase();
     try {
-      const msgs = await import(`../i18n/locales/${lang}.json`);
+      const msgs = await import(`../i18n/locales/${lowerLang}.json`);
       setTranslations(msgs.default);
     } catch (error) {
       console.error('Failed to load locales:', error);
@@ -71,7 +72,7 @@ export const SettingsProvider = ({ children }: { children: ReactNode }) => {
 
     // Load initial language
     setLanguage(storedLanguage);
-    
+
     setHydrated(true);
   }, []);
 
