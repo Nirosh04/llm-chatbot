@@ -8,7 +8,10 @@ import {
 import { HealthSummary } from '@/types/PatientMedicalData';
 
 // Get API base URL from environment variable or use default
-const API_BASE_URL = 'http://127.0.0.1:5000';
+// Ensure mobile devices can reach the backend when accessed via the host's IP address
+const API_BASE_URL = typeof window !== 'undefined' 
+  ? `http://${window.location.hostname}:5000` 
+  : 'http://127.0.0.1:5000';
 
 /**
  * Check server connection and signal
