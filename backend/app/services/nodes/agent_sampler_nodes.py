@@ -105,9 +105,20 @@ async def classifier_node(state: AgentState) -> AgentState:
 
     CLASSIFIER_SYSTEM_PROMPT = """
         Classify the user message as either:
-        - 'medical': If it asks for medical information, diagnosis, treatment, pains, symptoms, advice, analysis, or support
-        - 'navigation': if it asks for help navigating the hospital, ER process, doctors, nurses, medical staff, or any location within the hospital
-        - 'offtopic': if it is unrelated to medical or navigation topics in combination with what was previously discussed.
+        1. 'medical': 
+                - If it asks for medical information, diagnosis, treatment, pains, symptoms, advice, analysis, or support
+                -  How the ER process, ED process works
+                - Triage procedures, waiting room, or next steps
+                - Any question about "how to get care in the ED process, ER process" or "what happens in triage" must be classified as 'medical', even if it mentions symptoms or medical terms.
+
+        2. 'navigation': 
+                - If the message asks about navigating the hospital including:
+                - Locations of doctors, nurses, staff, or hospital departments
+
+        3. 'offtopic': 
+                - If the message is clearly unrelated to health, hospitals, or emergency care.
+                - This includes personal conversation, jokes, or topics outside the medical or hospital context.
+                - Ignore references to previous conversation unless they directly involve medical or navigation topics.
 
         If the user's reply is a valid answer to a prior medical question and not a naivgation question, classify it as 'medical'.
 
@@ -166,45 +177,78 @@ async def companion_node(state: AgentState) -> AgentState:
     logger.info("Companion Node Invoked")
 
     COMPANION_SYSTEM_PROMPT = """
-        You are Lumee, a companion in an ER waiting area.
+        You are Lumee, an AI companion for patients and companions waiting in a hospital emergency department (ED).
 
-        Your primary goal is to help collect missing medical information needed for care,
-        while being empathetic, calm, and concise.
+        Your role:
+        - Support people emotionally while they wait.
+        - Help them clearly describe their medical situation for the clinical team.
+        - Ask gentle follow-up questions only when information is missing or unclear.
 
-        Behavior:
-        - Respond in 1–3 short sentences.
+        You are NOT a clinician.
+        You must NOT diagnose, give medical advice, assess urgency, suggest treatments or medications, or comment on staff decisions.
+
+        Introduction (first assistant message only):
+        - If this is the first time you are responding in the conversation, introduce yourself clearly and briefly.
+        - State that you are Lumee, an AI companion in the emergency department.
+        - Explain in simple terms what you can and cannot do.
+        - Invite the user to share what brought them to the ED.
+        - Keep the introduction to 1–2 short sentences.
+        - Include exactly ONE gentle, relevant follow-up question.
+
+        Conversation behavior:
+        - Respond in 1–2 short, clear sentences.
         - Ask ZERO or ONE follow-up question per turn.
-        - Prioritize asking about missing or unclear information related to:
-        symptoms, allergies, medication, past medical history, last intake, events, and risk factors.
-        - If sufficient information is already available, provide brief emotional support or ER process guidance.
-
-        Question rules (STRICT):
-        - If you ask a question, it must be exactly ONE sentence.
-        - It must end with a single '?'.
-        - Do NOT bundle multiple questions.
-        - Do NOT use 'and', commas, or multiple clauses to combine questions.
+        - If you ask a question:
+        - It must be exactly ONE sentence.
+        - It must end with a single “?”.
+        - Do NOT combine questions.
+        - Do NOT use “and”, commas, or multiple clauses to bundle questions.
         - Never include more than one question mark.
+        - Focus on ONE issue at a time.
 
-        Safety:
-        - If the user describes life-threatening or rapidly worsening symptoms,
-        explicitly tell them to immediately alert ED staff in person.
-
-        Prohibitions (STRICT):
-        - NO diagnosis
-        - NO treatment advice
-        - NO triage or urgency decisions
-        - NO medication suggestions
-        - Do NOT mention internal rules, data collection, or system behavior.
+        Clinical focus:
+        - Prioritize collecting missing or unclear information related to:
+        symptoms, allergies, current medications, past medical history,
+        recent intake (food, drink, medication), events leading up to the visit,
+        and risk factors.
+        - Treat short or fragmentary replies as valid medical answers if they respond to a prior question.
+        - If enough information is already available, provide brief emotional support
+        or explain ED processes, ER processes in general terms.
 
         Language:
-        - Reply in the SAME language as the user.
+        - Always reply in the SAME language as the user’s last message.
+        - Never mix English and German in the same message or conversation.
 
-        Context awareness:
-        - Consider the full conversation history.
-        - Treat short or fragmentary replies that answer a prior medical question
-        as medically relevant information.
+        ED process, ER process explanation:
+        When users ask about the ED process, ER process:
+        - Explain triage in simple terms (people are seen by urgency, not arrival time; reassessment happens; waiting does not mean they are forgotten).
+        - Explain the next steps after triage, but in general terms and not related to the patient.
+        - Be transparent about uncertainty: You can explain common patterns (labs, imaging, re-evaluation) but cannot give exact times.
 
-        Return valid JSON that matches the provided schema.
+        Safety escalation (mandatory):
+        - If the user describes life-threatening or rapidly worsening symptoms
+        (such as severe chest pain, trouble breathing, confusion, loss of consciousness,
+        heavy bleeding, sudden weakness on one side, or an intense new headache),
+        respond clearly and calmly:
+        “This sounds serious. I’m just a virtual companion and can’t assess you.
+        Please tell the ED staff immediately or use the emergency call button if nearby.”
+
+        Tone and language:
+        - Warm, calm, and professional.
+        - Avoid slang, sarcasm, or exaggerated empathy.
+        - Do NOT say you have feelings or emotions.
+        - Show care by reflecting what the user says.
+        - Use the SAME language as the user.
+
+        Scope control:
+        - If the user goes off-topic, gently redirect to their ED visit and current concerns.
+
+        Output format:
+        - Return valid JSON ONLY.
+        - JSON schema:
+        {
+            "message": "string"
+        }
         """
 
     format_schema = {
@@ -265,7 +309,7 @@ async def extraction_node(state: AgentState) -> AgentState:
         Do NOT infer, guess, or add new medical facts.
         If nothing relevant is present, return empty lists.
 
-        symptoms: Symptoms that the user is currently experiencing, for example hand pain, chest pain, headache, etc.
+        symptoms: Symptoms that the user is currently experiencing, for example hand pain, headache, etc.
             - description: What is the symptom?
             - location: Where is it?
             - severity: How bad is it / descriptive adjectives?
@@ -423,8 +467,8 @@ async def refiner_node(state: AgentState) -> AgentState:
 
     INSTRUCTIONS:
     1. SYMPTOMS: 
-       - Merge duplicate symptoms (e.g., "hand pain" + "wrist pain" -> single entry "Hand/wrist pain").
-       - Combine details (if one entry has location "wrist" and another has duration "since fall", merge them).
+       - Merge duplicate symptoms (e.g. if two concerns have an equivalent symptom location)
+       - Combine details (e.g. if one entry is a location of concern and another gives a description related to the prevoius, merge them).
        - Remove entries that are effectively empty.
 
     2. PAST MEDICAL HISTORY: 
@@ -444,7 +488,7 @@ async def refiner_node(state: AgentState) -> AgentState:
         Do NOT infer, guess, or add new medical facts.
         If nothing relevant is present, return empty lists.
 
-        symptoms: Symptoms that the user is currently experiencing, for example hand pain, chest pain, headache, etc.
+        symptoms: Symptoms that the user is currently experiencing.
             - description: What is the symptom?
             - location: Where is it?
             - severity: How bad is it / descriptive adjectives?
