@@ -132,13 +132,21 @@
     },
     "step3": {
       "title": "Symptome einfach erfassen",
-      "description": "Neben allgemeinen Informationen kann Lumee auch Ihre Beschwerden Schritt für Schritt erfassen.\n\nWählen Sie Art des Schmerzes, die betroffene Körperstelle, die Intensität und die Dauer aus.\n\nZusätzlich können Sie Allergien, Medikamente und Ihre Krankengeschichte angeben.\n\nLumee stellt keine Diagnosen – aber Lumee unterstützt, beruhigt und erklärt."
+      "description": "Neben allgemeinen Informationen kann Lumee auch Ihre Beschwerden Schritt für Schritt erfassen.\n\nWählen Sie Art des Schmerzes, die betroffene Körperstelle, die Intensität und die Dauer aus.\nZusätzlich können Sie Allergien, Medikamente und Ihre Krankengeschichte angeben.\n\nLumee stellt keine Diagnosen – aber Lumee unterstützt, beruhigt und erklärt."
     },
     "step4": {
-      "title": "Ihre Symptomübersicht",
-      "description": "Behalten Sie den Überblick über <b>aktuelle Beschwerden</b> und vervollständigen Sie Ihre <b>Krankengeschichte</b> – alles an einem Ort."
+      "title": "Gesundheitsprofil - Aktuelle Beschwerden",
+      "description": "Behalten Sie den Überblick über alle Beschwerden, die Sie Lumee mitgeteilt haben, und ergänzen Sie neue Angaben bei Bedarf."
     },
     "step5": {
+      "title": "Gesundheitsprofil - Krankengeschichte",
+      "description":"Tragen Sie Allergien, chronische Erkrankungen und weitere medizinische Informationen ein, die für Ihre Behandlung wichtig sind."
+    },
+    "step6": {
+      "title": "Navigation",
+      "description": "Sie suchen das WC oder den Weg zur Röntgendiagnostik?\nDie Navigation hilft Ihnen dabei, sich in der Klinik zurecht zu finden.\n\nWählen Sie ihr Ziel einfach aus dem Menü aus - Lumee zeigt Ihnen den Weg."
+    },
+    "step7": {
       "title": "Ihre Daten bei Lumee",
       "description": "",
       "bulletPoints": [
@@ -168,7 +176,7 @@
       "responsible": "Verantwortlich (Art. 4 Nr. 7 DSGVO): [Krankenhausname, Anschrift]",
       "dataProtection": "Datenschutzbeauftragte*r: [Kontakt (E-Mail/Telefon)]"
     },
-    "step6": {
+    "step8": {
       "title": "Kein Problem — wir sind für Sie da!",
       "description": "Sie haben sich gegen die Nutzung von Lumee entschieden. Das ist völlig in Ordnung. Bitte nehmen Sie im Wartebereich Platz und gedulden Sie sich noch etwas, bis Sie aufgerufen werden.",
       "important": "Wichtig: Sollte sich Ihr Zustand verschlimmern, wenden Sie sich bitte umgehend an das Krankenhauspersonal.",

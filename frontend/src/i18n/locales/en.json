@@ -131,13 +131,21 @@
     },
     "step3": {
       "title": "Symptom Intake Made Easy",
-      "description": "In addition to general information, Lumee can also help you record your symptoms step by step.\n\nSelect the type of pain, the affected body area, the intensity, and the duration.\n\nYou can also add allergies, medications, and your medical history.\n\nLumee does not provide diagnoses — but Lumee supports, reassures, and explains."
+      "description": "In addition to general information, Lumee can also help you record your symptoms step by step.\nSelect the type of pain, the affected body area, the intensity, and the duration.\nYou can also add allergies, medications, and your medical history.\n\nLumee does not provide diagnoses — but Lumee supports, reassures, and explains."
     },
     "step4": {
-      "title": "Your Symptom Overview",
-      "description": "Keep track of your current symptoms and complete your medical history — all in one place."
+      "title": "Medical Profile - Concerns",
+      "description": "Keep track of all symptoms you’ve shared with Lumee and add new information whenever needed."
     },
     "step5": {
+      "title": "Medical Profile - Medical History",
+      "description": "Enter allergies, chronic conditions, and other relevant medical details that may be important for your care."
+    },
+    "step6": {
+      "title": "Navigation",
+      "description": "Looking for the restroom or the way to radiology?\nNavigation helps you find your way around the hospital.\n\nSimply choose your destination from the menu — Lumee will show you the way."
+    },
+    "step7": {
       "title": "Your data at Lumee",
       "description": "",
       "bulletPoints": [
@@ -167,7 +175,7 @@
       "responsible": "Responsible (Art. 4 No. 7 DSGVO): [Hospital Name, Address]",
       "dataProtection": "Data Protection Officer: [Contact (Email/Phone)]"
     },
-    "step6": {
+    "step8": {
       "title": "No problem — we are here for you!",
       "description": "You have chosen not to use Lumee. That is perfectly fine. Please wait in the seating area until your name is called.",
       "important": "Important: If your condition worsens, please contact the hospital staff immediately.",
