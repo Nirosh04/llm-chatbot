@@ -1,7 +1,7 @@
 ﻿'use client';
 
 import { Box, Typography, ToggleButton, ToggleButtonGroup, useTheme } from '@mui/material';
-import { useState, useMemo } from 'react';
+import { useState, useMemo, useEffect } from 'react';
 import { useTranslations } from 'next-intl';
 import {
   BODY_PART_PATHS,
@@ -88,6 +88,19 @@ export default function BodyMap({
 
   // Find the highlighted part ID from the location string (supports any language)
   const highlightedPartId = highlightLocation ? findBodyPartIdFromLocation(highlightLocation) : null;
+
+  // Auto-switch view when highlighted part is back-only (upperBack, lowerBack)
+  useEffect(() => {
+    if (highlightedPartId) {
+      const isBackOnlyPart = BACK_BODY_PART_IDS.includes(highlightedPartId) && 
+                             !FRONT_BODY_PART_IDS.includes(highlightedPartId);
+      if (isBackOnlyPart) {
+        setView('back');
+      } else if (FRONT_BODY_PART_IDS.includes(highlightedPartId)) {
+        setView('front');
+      }
+    }
+  }, [highlightedPartId]);
 
   const handleBodyPartClick = (part: BodyPart) => {
     if (isDisplayMode || !onBodyPartSelect) return;

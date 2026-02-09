@@ -73,15 +73,32 @@ export default function TabMain() {
 
   console.log('=== PAGE.TSX fontSize:', fontSize);
 
-  const [messages, setMessages] = useState<ChatMessage[]>(() => [{
-    id: 'welcome',
-    text: tChat('firstMessage'),
-    isMe: false,
-  }]);
+  const [messages, setMessages] = useState<ChatMessage[]>(() => {
+    if (typeof window !== 'undefined') {
+      const savedMessages = sessionStorage.getItem('chatMessages');
+      if (savedMessages) {
+        try {
+          return JSON.parse(savedMessages);
+        } catch (e) {
+          console.error('Failed to parse saved messages:', e);
+        }
+      }
+    }
+    return [{
+      id: 'welcome',
+      text: tChat('firstMessage'),
+      isMe: false,
+    }];
+  });
   const [inputText, setInputText] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const [activeTab, setActiveTab] = useState(0);
-  const [sessionId, setSessionId] = useState<string | null>(null);
+  const [sessionId, setSessionId] = useState<string | null>(() => {
+    if (typeof window !== 'undefined') {
+      return sessionStorage.getItem('sessionId');
+    }
+    return null;
+  });
   const [, setHealthSummaryText] = useState(
     "No Health summary was requested yet"
   );
@@ -91,6 +108,20 @@ export default function TabMain() {
   const [painLevel, setPainLevel] = useState(5);
   const [bodyMapOpen, setBodyMapOpen] = useState(false);
   const [selectedBodyPart, setSelectedBodyPart] = useState<string | null>(null);
+
+  // Dynamic viewport height to handle mobile keyboard
+  const [viewportHeight, setViewportHeight] = useState('100vh');
+
+  useEffect(() => {
+    const updateHeight = () => {
+      setViewportHeight(`${window.visualViewport?.height ?? window.innerHeight}px`);
+    };
+
+    updateHeight();
+    const target = window.visualViewport ?? window;
+    target.addEventListener('resize', updateHeight);
+    return () => target.removeEventListener('resize', updateHeight);
+  }, []);
 
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const scrollableContainerRef = useRef<HTMLDivElement>(null);
@@ -102,6 +133,18 @@ export default function TabMain() {
   useEffect(() => {
     scrollToBottom();
   }, [messages]);
+
+  // Persist messages to sessionStorage
+  useEffect(() => {
+    sessionStorage.setItem('chatMessages', JSON.stringify(messages));
+  }, [messages]);
+
+  // Persist sessionId to sessionStorage
+  useEffect(() => {
+    if (sessionId) {
+      sessionStorage.setItem('sessionId', sessionId);
+    }
+  }, [sessionId]);
 
   // Auto-scroll to top when slider opens
   useEffect(() => {
@@ -225,22 +268,8 @@ export default function TabMain() {
     }
   };
 
-  const handleSendPainLevel = async () => {
-    const painMessage = `${tChat('painLevel')}: ${painLevel}/10`;
-    setSliderOpen(false);
-    await handleSendMessage(painMessage);
-  };
-
   const handleBodyPartSelect = (bodyPart: string | null) => {
     setSelectedBodyPart(bodyPart);
-  };
-
-  const handleSendBodyPart = async () => {
-    if (!selectedBodyPart) return;
-
-    const bodyMessage = `${tChat('painLocation')}: ${selectedBodyPart}`;
-    setBodyMapOpen(false);
-    await handleSendMessage(bodyMessage);
   };
 
   const handleCancelPainSlider = () => {
@@ -282,7 +311,11 @@ export default function TabMain() {
   const resetConversation = async () => {
     if (sessionId) {
       await resetConversationRequest(sessionId);
-      setMessages([]);
+      setMessages([{
+        id: 'welcome',
+        text: tChat('firstMessage'),
+        isMe: false,
+      }]);
     }
   };
 
@@ -292,7 +325,16 @@ export default function TabMain() {
         await resetConversationRequest(sessionId);
       }
       setSessionId(null);
-      setMessages([]);
+      // Clear sessionStorage
+      if (typeof window !== 'undefined') {
+        sessionStorage.removeItem('sessionId');
+        sessionStorage.removeItem('chatMessages');
+      }
+      setMessages([{
+        id: 'welcome',
+        text: tChat('firstMessage'),
+        isMe: false,
+      }]);
       setLogoutOpen(false);
       // Navigate to welcome/start page
       window.location.href = '/welcome';
@@ -312,8 +354,7 @@ export default function TabMain() {
           display: 'flex',
           flexDirection: 'column',
           minHeight: 0, // Important for proper scrolling
-          overflow: 'auto', // Allow scroll everywhere
-
+          overflow: 'hidden',
         }}
       >
         {activeTab === 0 && (
@@ -324,17 +365,25 @@ export default function TabMain() {
               flex: 1,
               minHeight: 0, // Important for scrolling
               overflow: 'hidden',
-
             }}
           >
             {/* Messages area */}
-            <Container maxWidth={false} sx={{ flex: 1, display: 'flex', flexDirection: 'column', px: 0 }}>
+            <Container maxWidth={false} sx={{ 
+              flex: 1, 
+              display: 'flex', 
+              flexDirection: 'column', 
+              px: 0, 
+              minHeight: 0,
+              overflow: 'hidden',
+            }}>
               <Box               // Parent component
                 sx={{
                   flex: 1,
+                  minHeight: 0,
                   overflowY: 'auto',
                   overflowX: 'hidden', // Prevent horizontal scrolling
                   padding: { xs: 1, sm: 2 },
+                  overscrollBehavior: 'contain', // Keep scroll within this box
                 }}
               >
                 <MessageList messages={messages} isLoading={isLoading} />
@@ -391,8 +440,8 @@ export default function TabMain() {
                       </Button>
                       <Button
                         size="small"
-                        onClick={handleSendPainLevel}
-                        disabled={isLoading}
+                        onClick={() => handleSendMessage()}
+                        disabled={isLoading || !inputText.trim()}
                         sx={{ textTransform: 'none' }}
                       >
                         {tChat('send')}
@@ -427,8 +476,8 @@ export default function TabMain() {
                       </Button>
                       <Button
                         size="small"
-                        onClick={handleSendBodyPart}
-                        disabled={isLoading || !selectedBodyPart}
+                        onClick={() => handleSendMessage()}
+                        disabled={isLoading || !selectedBodyPart || !inputText.trim()}
                         sx={{ textTransform: 'none' }}
                       >
                         {tChat('send')}
@@ -668,8 +717,18 @@ export default function TabMain() {
   };
 
   return (
-    <Box sx={{ display: 'flex', height: '100vh', overflow: 'hidden' }}>
-
+    <Box sx={{ 
+      display: 'flex', 
+      height: viewportHeight,
+      overflow: 'hidden',
+      position: 'fixed', // Ensure it stays at the top of the visual viewport
+      top: 0,
+      left: 0,
+      right: 0,
+      width: '100%',
+      touchAction: 'none', // Prevent browser-level bounce/scroll
+    }}>
+      
       {/* Main Content */}
       <Box sx={{ flex: 1, display: 'flex', flexDirection: 'column', minHeight: 0 }}>
         {/* AppBar */}

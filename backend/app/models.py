@@ -31,7 +31,6 @@ class HealthStatus(BaseModel):
 class ResetResponse(BaseModel):
     reset: bool
     session_id: str
-    message: str
 
 class SummaryResponse(BaseModel):
     summary: Optional[Union[FrontendSampler, str]] = None
