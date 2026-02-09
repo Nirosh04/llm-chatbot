@@ -9,34 +9,81 @@ import { useTranslations } from 'next-intl'
 import privacyDetailsDE from '@/i18n/locales/privacyDetailsDE.json'
 import privacyDetailsEN from '@/i18n/locales/privacyDetailsEN.json'
 import Image from 'next/image'
-import imgFreiiwillig from '../../../assets/1_freiwillig.png'
-import imgAerzte from '../../../assets/2_aerzte.png'
-import imgFilter from '../../../assets/3_filter.png'
-import imgGeschuetzt from '../../../assets/4_geschuetzt.png'
-import imgSettings from '../../../assets/settings.png'
-import imgAktuelleBeschwerden from '../../../assets/aktuellebeschwerden1.png'
-import imgKrankengeschichte from '../../../assets/krankengeschichte1.png'
-import imgChatPage from '../../../assets/chatpage.png'
+import imgFreiiwilligDE from '../../../assets/1_freiwillig.png'
+import imgAerzteDE from '../../../assets/2_aerzte.png'
+import imgFilterDE from '../../../assets/3_filter.png'
+import imgGeschuetztDE from '../../../assets/4_geschuetzt.png'
+import imgSettingsDE from '../../../assets/einstellungen_walkthrough.png'
+import imgAktuelleBeschwerdenDE from '../../../assets/aktuellebeschwerden_walkthrough.png'
+import imgKrankengeschichteDE from '../../../assets/krankengeschichte_walkthrough.png'
+import imgChatPageDE from '../../../assets/chat_de_walkthrough.png'
+import imgNavigationDE from '../../../assets/navi_de_walkthrough.png'
+import imgFreiiwilligEN from '../../../assets/en/1_freiwillig.png'
+import imgAerzteEN from '../../../assets/en/2_aerzte.png'
+import imgFilterEN from '../../../assets/en/3_filter.png'
+import imgGeschuetztEN from '../../../assets/en/4_geschuetzt.png'
+import imgSettingsEN from '../../../assets/en/settings_walkthrough.png'
+import imgAktuelleBeschwerdenEN from '../../../assets/en/concerns_walkthrough.png'
+import imgKrankengeschichteEN from '../../../assets/en/medicalhistory_walkthrough.png'
+import imgChatPageEN from '../../../assets/en/chat_en_walkthrough.png'
+import imgNavigationEN from '../../../assets/en/navi_en_walkthrough.png'
 
 interface Props {
   initialStep: number
 }
 
+type LocaleKey = 'de' | 'en'
+
+type LocalizedImage = {
+  de: typeof imgSettingsDE
+  en?: typeof imgSettingsDE
+}
+
+const walkthroughImageVariants: Record<string, LocalizedImage> = {
+  settings: { de: imgSettingsDE, en: imgSettingsEN },
+  chat: { de: imgChatPageDE, en: imgChatPageEN },
+  complaints: { de: imgAktuelleBeschwerdenDE, en: imgAktuelleBeschwerdenEN },
+  history: { de: imgKrankengeschichteDE, en: imgKrankengeschichteEN },
+  navigation: { de: imgNavigationDE, en: imgNavigationEN }
+}
+
+const privacySlideVariants: LocalizedImage[] = [
+  { de: imgFreiiwilligDE, en: imgFreiiwilligEN },
+  { de: imgAerzteDE, en: imgAerzteEN },
+  { de: imgFilterDE, en: imgFilterEN },
+  { de: imgGeschuetztDE, en: imgGeschuetztEN }
+]
+
 export default function WalkthroughClient({ initialStep }: Props) {
   const router = useRouter()
   const theme = useTheme()
   const isMobile = useMediaQuery(theme.breakpoints.down('sm'))
-  const { darkMode, toggleDarkMode, language } = useSettings()
+  const { darkMode, toggleDarkMode, language, fontSize } = useSettings()
   const t = useTranslations('walkthrough')
+  const resolvedLocale: LocaleKey = language === 'de' ? 'de' : 'en'
+  const getLocalizedImage = React.useCallback(
+    (variant: LocalizedImage) => variant[resolvedLocale] ?? variant.de,
+    [resolvedLocale]
+  )
+  const privacyImages = React.useMemo(
+    () => privacySlideVariants.map((variant) => getLocalizedImage(variant)),
+    [getLocalizedImage]
+  )
 
   const privacyDetails = language === 'de' ? privacyDetailsDE : privacyDetailsEN
-  // Reduce image size by ~20%
-  const imageSize = isMobile ? 256 : 480
+  // Image size scales with font size
+  const baseImageSize = isMobile ? 256 : 480
+  const imageSize = Math.round(baseImageSize * (fontSize / 16))
   // Make the slideshow card more squashed vertically (75% of width)
   const boxHeight = Math.round(imageSize * 0.75)
+  // Calculate scaled font sizes
+  const scaleFactor = fontSize / 16
+  const headingSize = { xs: `${scaleFactor * 2}rem`, sm: `${scaleFactor * 2.5}rem` }
+  const bodySize = `${scaleFactor * 1.125}rem`
+  const smallTextSize = `${scaleFactor * 1}rem`
 
-  const totalSteps = 7 // includes added medical profile pages and decline as step 7
-  const progressCount = Math.min(6, totalSteps) // number of walkthrough steps shown in dots
+  const totalSteps = 8 // includes navigation, privacy, and decline
+  const progressCount = Math.min(7, totalSteps) // number of walkthrough steps shown in dots
   const [step, setStep] = React.useState<number>(Math.max(1, Math.min(totalSteps, initialStep)))
 
   // preserve originals so we can revert when going back to Welcome
@@ -73,16 +120,8 @@ export default function WalkthroughClient({ initialStep }: Props) {
       description: t('step3.description')
     },
     {
-      title: language === 'de' ? 'Gesundheitsprofil - Aktuelle Beschwerden' : 'Medical Profile - Concerns',
-      description: language === 'de'
-        ? 'Behalten Sie den Überblick über alle Beschwerden, die Sie Lumee mitgeteilt haben, und ergänzen Sie neue Angaben bei Bedarf.'
-        : 'Keep track of all symptoms you’ve shared with Lumee and add new information whenever needed.'
-    },
-    {
-      title: language === 'de' ? 'Gesundheitsprofil - Krankengeschichte' : 'Medical Profile - Medical History',
-      description: language === 'de'
-        ? 'Tragen Sie Allergien, chronische Erkrankungen und weitere medizinische Informationen ein, die für Ihre Behandlung wichtig sind.'
-        : 'Enter allergies, chronic conditions, and other relevant medical details that may be important for your care.'
+      title: t('step4.title'),
+      description: t('step4.description')
     },
     {
       title: t('step5.title'),
@@ -91,6 +130,14 @@ export default function WalkthroughClient({ initialStep }: Props) {
     {
       title: t('step6.title'),
       description: t('step6.description')
+    },
+    {
+      title: t('step7.title'),
+      description: t('step7.description')
+    },
+    {
+      title: t('step8.title'),
+      description: t('step8.description')
     }
   ]
 
@@ -138,12 +185,13 @@ export default function WalkthroughClient({ initialStep }: Props) {
         px: { xs: 2, sm: 3 }
       }}>
         <Stack spacing={{ xs: 2, sm: 3 }} sx={{ width: '100%', textAlign: 'center' }}>
-          <Typography variant="h4" sx={{ fontSize: { xs: '1.5rem', sm: '2rem' }, wordBreak: 'break-word' }}>{stepData[step - 1].title}</Typography>
-          {step <= 5 && (
-            <Typography variant="body1" sx={{ whiteSpace: 'pre-line', fontSize: { xs: '0.9rem', sm: '1rem' }, wordBreak: 'break-word' }}>
+          <Typography variant="h4" sx={{ fontSize: headingSize, wordBreak: 'break-word' }}>{stepData[step - 1].title}</Typography>
+          {step <= 6 && (
+            <Typography variant="body1" sx={{ whiteSpace: 'pre-line', fontSize: bodySize, wordBreak: 'break-word' }}>
               {stepData[step - 1].description}
             </Typography>
           )}
+
 
           {/* Step 1: language, dark mode, font size */}
           {step === 1 && (
@@ -151,7 +199,7 @@ export default function WalkthroughClient({ initialStep }: Props) {
               {/* Settings image below the step 1 text */}
               <Box sx={{ width: '100%' }}>
                 <Image
-                  src={imgSettings}
+                  src={getLocalizedImage(walkthroughImageVariants.settings)}
                   alt="settings"
                   width={imageSize}
                   height={imageSize}
@@ -160,28 +208,13 @@ export default function WalkthroughClient({ initialStep }: Props) {
               </Box>
             </Box>
           )}
-
-          {/* Step 4: Aktuelle Beschwerden - use same rendering as step 1 (responsive image) */}
-          {step === 4 && (
-            <Box sx={{ mt: 2, display: 'flex', flexDirection: 'column', gap: 2, alignItems: 'center' }}>
-              <Box sx={{ width: '100%' }}>
-                <Image
-                  src={imgAktuelleBeschwerden}
-                  alt="aktuellebeschwerden"
-                  width={imageSize}
-                  height={imageSize}
-                  style={{ width: '100%', height: 'auto', display: 'block' }}
-                />
-              </Box>
-            </Box>
-          )}
-
+          
           {/* Step 2: Chat page image */}
           {step === 2 && (
             <Box sx={{ mt: 2, display: 'flex', flexDirection: 'column', gap: 2, alignItems: 'center' }}>
               <Box sx={{ width: '100%' }}>
                 <Image
-                  src={imgChatPage}
+                  src={getLocalizedImage(walkthroughImageVariants.chat)}
                   alt="chatpage"
                   width={imageSize}
                   height={imageSize}
@@ -196,8 +229,23 @@ export default function WalkthroughClient({ initialStep }: Props) {
             <Box sx={{ mt: 2, display: 'flex', flexDirection: 'column', gap: 2, alignItems: 'center' }}>
               <Box sx={{ width: '100%' }}>
                 <Image
-                  src={imgChatPage}
+                  src={getLocalizedImage(walkthroughImageVariants.chat)}
                   alt="chatpage"
+                  width={imageSize}
+                  height={imageSize}
+                  style={{ width: '100%', height: 'auto', display: 'block' }}
+                />
+              </Box>
+            </Box>
+          )}
+        
+          {/* Step 4: Aktuelle Beschwerden - use same rendering as step 1 (responsive image) */}
+          {step === 4 && (
+            <Box sx={{ mt: 2, display: 'flex', flexDirection: 'column', gap: 2, alignItems: 'center' }}>
+              <Box sx={{ width: '100%' }}>
+                <Image
+                  src={getLocalizedImage(walkthroughImageVariants.complaints)}
+                  alt="aktuellebeschwerden"
                   width={imageSize}
                   height={imageSize}
                   style={{ width: '100%', height: 'auto', display: 'block' }}
@@ -211,7 +259,7 @@ export default function WalkthroughClient({ initialStep }: Props) {
             <Box sx={{ mt: 2, display: 'flex', flexDirection: 'column', gap: 2, alignItems: 'center' }}>
               <Box sx={{ width: '100%' }}>
                 <Image
-                  src={imgKrankengeschichte}
+                  src={getLocalizedImage(walkthroughImageVariants.history)}
                   alt="krankengeschichte"
                   width={imageSize}
                   height={imageSize}
@@ -220,7 +268,24 @@ export default function WalkthroughClient({ initialStep }: Props) {
               </Box>
             </Box>
           )}
+
+          {/* Step 6: Navigation */}
           {step === 6 && (
+            <Box sx={{ mt: 2, display: 'flex', flexDirection: 'column', gap: 2, alignItems: 'center' }}>
+              <Box sx={{ width: '100%' }}>
+                <Image
+                  src={getLocalizedImage(walkthroughImageVariants.navigation)}
+                  alt="navigation"
+                  width={imageSize}
+                  height={imageSize}
+                  style={{ width: '100%', height: 'auto', display: 'block' }}
+                />
+              </Box>
+            </Box>
+          )}
+
+          {/* Step 7: Privacy Consent (Datenschutz) */}
+          {step === 7 && (
             <Box sx={{ mt: 2, textAlign: 'left' }}>
               <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 2, mb: 2 }}>
                 <IconButton
@@ -247,12 +312,7 @@ export default function WalkthroughClient({ initialStep }: Props) {
                 >
                   <Box sx={{ height: Math.round(imageSize * 0.5), display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
                     <Image
-                      src={[
-                        imgFreiiwillig,
-                        imgAerzte,
-                        imgFilter,
-                        imgGeschuetzt,
-                      ][currentSlide]}
+                      src={privacyImages[currentSlide]}
                       alt={`privacy_${currentSlide + 1}`}
                       width={imageSize}
                       height={imageSize}
@@ -260,8 +320,8 @@ export default function WalkthroughClient({ initialStep }: Props) {
                     />
                   </Box>
                   <Box sx={{ px: 1, py: 1, flexGrow: 1, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                    <Typography variant="body1" sx={{ whiteSpace: 'pre-line', textAlign: 'center', lineHeight: 1.3 }}>
-                      {(t.raw('step5.imageCaptions') as string[])[currentSlide]}
+                    <Typography variant="body1" sx={{ whiteSpace: 'pre-line', textAlign: 'center', lineHeight: 1.3, fontSize: bodySize }}>
+                      {(t.raw('step7.imageCaptions') as string[])[currentSlide]}
                     </Typography>
                   </Box>
                 </Box>
@@ -276,47 +336,47 @@ export default function WalkthroughClient({ initialStep }: Props) {
               </Box>
 
               <Box sx={{ mt: 1 }}>
-                <label style={{ display: 'block', marginBottom: 8 }}>
+                <label style={{ display: 'block', marginBottom: 8, fontSize: bodySize }}>
                   <input id="mandatory" type="checkbox" checked={mandatoryChecked} onChange={(e) => setMandatoryChecked(e.target.checked)} />
-                  {' '}{t('step5.mandatoryConsent')}
+                  {' '}{t('step7.mandatoryConsent')}
                   {!mandatoryChecked && (
-                    <span style={{ color: 'red', marginLeft: 8 }}>{t('step5.mandatoryRequired')}</span>
+                    <span style={{ color: 'red', marginLeft: 8 }}>{t('step7.mandatoryRequired')}</span>
                   )}
                 </label>
 
-                <label style={{ display: 'block', marginBottom: 8 }}>
+                <label style={{ display: 'block', marginBottom: 8, fontSize: bodySize }}>
                   <input id="optional" type="checkbox" checked={optionalChecked} onChange={(e) => setOptionalChecked(e.target.checked)} />
-                  {' '}{t('step5.optionalConsent')}
+                  {' '}{t('step7.optionalConsent')}
                 </label>
 
                 <Box sx={{ display: 'flex', flexDirection: { xs: 'column', sm: 'row' }, gap: 2, mt: 2 }}>
-                  <Button variant="outlined" onClick={() => setDetailsOpen(true)} fullWidth={true} sx={{ minWidth: { sm: 'auto' } }}>{t('step5.showDetails')}</Button>
-                  <Button variant="text" color="error" onClick={() => goToStep(7)} fullWidth={true} sx={{ minWidth: { sm: 'auto' } }}>{t('step5.decline')}</Button>
+                  <Button variant="outlined" onClick={() => setDetailsOpen(true)} fullWidth={true} sx={{ minWidth: { sm: 'auto' } }}>{t('step7.showDetails')}</Button>
+                  <Button variant="text" color="error" onClick={() => goToStep(8)} fullWidth={true} sx={{ minWidth: { sm: 'auto' } }}>{t('step7.decline')}</Button>
                   <Button variant="contained" onClick={() => {
                     if (mandatoryChecked) {
                       if (typeof document !== 'undefined') document.documentElement.style.fontSize = origFontRef.current || ''
                       router.push('/ChatInterface')
                     }
-                  }} disabled={!mandatoryChecked} fullWidth={true} sx={{ minWidth: { sm: 'auto' } }}>{t('step5.acceptAndStart')}</Button>
+                  }} disabled={!mandatoryChecked} fullWidth={true} sx={{ minWidth: { sm: 'auto' } }}>{t('step7.acceptAndStart')}</Button>
                 </Box>
 
-                <Box sx={{ mt: 3, fontSize: '0.9rem', color: 'text.secondary' }}>
-                  <div><strong>{t('step5.responsibleParty')}</strong></div>
-                  <div>{t('step5.responsible')}</div>
-                  <div>{t('step5.dataProtection')}</div>
+                <Box sx={{ mt: 3, fontSize: smallTextSize, color: 'text.secondary' }}>
+                  <div><strong>{t('step7.responsibleParty')}</strong></div>
+                  <div>{t('step7.responsible')}</div>
+                  <div>{t('step7.dataProtection')}</div>
                 </Box>
               </Box>
             </Box>
           )}
 
-          {/* Step 7: Decline screen (moved) */}
-          {step === 7 && (
+          {/* Step 8: Decline screen */}
+          {step === 8 && (
             <Box sx={{ mt: 2 }}>
-              <Typography variant="body1" sx={{ mt: 2 }}>{t('step6.description')}</Typography>
+              <Typography variant="body1" sx={{ mt: 2, fontSize: bodySize }}>{t('step8.description')}</Typography>
               {/* Highlight the important note */}
-              <Typography variant="body1" sx={{ mt: 2, fontWeight: 600 }}>{t('step6.important')}</Typography>
+              <Typography variant="body1" sx={{ mt: 2, fontWeight: 600, fontSize: bodySize }}>{t('step8.important')}</Typography>
               <Box sx={{ display: 'flex', gap: 2, justifyContent: 'center', mt: 4 }}>
-                <Button variant="outlined" onClick={() => router.push('/welcome')}>{t('step6.backToWelcome')}</Button>
+                <Button variant="outlined" onClick={() => router.push('/welcome')}>{t('step8.backToWelcome')}</Button>
               </Box>
             </Box>
           )}
@@ -356,8 +416,8 @@ export default function WalkthroughClient({ initialStep }: Props) {
           })}
         </Box>
 
-        {/* Right side: show Next for steps 1-5; for step 6 (privacy) buttons are inside the content; for step 7 nothing here */}
-        {step <= 5 ? (
+        {/* Right side: show Next for steps 1-6; for step 7 (privacy) buttons are inside the content; for step 8 nothing here */}
+        {step <= 6 ? (
           <Button variant="contained" onClick={handleNext} size={isMobile ? 'small' : 'medium'} sx={{ order: { xs: 2, sm: 3 } }}>{t('next')}</Button>
         ) : (
           <Box sx={{ width: { xs: 0, sm: 96 }, order: { xs: 2, sm: 3 } }} />
@@ -372,32 +432,33 @@ export default function WalkthroughClient({ initialStep }: Props) {
         fullWidth
         fullScreen={isMobile}
       >
-        <DialogTitle>{t('step5.detailsTitle')}</DialogTitle>
+        <DialogTitle>{t('step7.detailsTitle')}</DialogTitle>
         <DialogContent>
           {/* Option 1: Strukturierte Abschnitte anzeigen */}
           {privacyDetails.sections && privacyDetails.sections.length > 0 ? (
             <Box sx={{ mt: 2 }}>
               {privacyDetails.sections.map((section, idx) => (
                 <Box key={idx} sx={{ mb: 3 }}>
-                  <Typography variant="h6" sx={{ mb: 1, fontWeight: 600 }}>
+                  <Typography variant="h6" sx={{ mb: 1, fontWeight: 600, fontSize: `${scaleFactor * 1.5}rem` }}>
                     {section.heading}
                   </Typography>
-                  <Typography variant="body1" sx={{ whiteSpace: 'pre-line' }}>
+                  <Typography variant="body1" sx={{ whiteSpace: 'pre-line', fontSize: bodySize }}>
                     {section.content}
                   </Typography>
                 </Box>
               ))}
+
             </Box>
           ) : (
             /* Option 2: Volltext anzeigen */
-            <Typography variant="body1" sx={{ whiteSpace: 'pre-line', mt: 2 }}>
-              {privacyDetails.fullText || t('step5.detailsText')}
+            <Typography variant="body1" sx={{ whiteSpace: 'pre-line', mt: 2, fontSize: bodySize }}>
+              {privacyDetails.fullText || t('step7.detailsText')}
             </Typography>
           )}
         </DialogContent>
         <DialogActions>
           <Button onClick={() => setDetailsOpen(false)} variant="contained">
-            {t('step5.closeDetails')}
+            {t('step7.closeDetails')}
           </Button>
         </DialogActions>
       </Dialog>
