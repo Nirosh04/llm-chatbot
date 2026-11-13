@@ -1,3 +1,10 @@
+# Environment files
+.env
+.env.*
+!.env.example
+
+
+
 # Docker Compose Secrets
 .env.local
 
